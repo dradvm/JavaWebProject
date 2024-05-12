@@ -1,0 +1,5 @@
+com\JavaWebProject\JavaWebProject\controllers\MyController.class
+com\JavaWebProject\JavaWebProject\JavaWebProjectApplication.class
+com\JavaWebProject\JavaWebProject\repositories\CustomerRepository.class
+com\JavaWebProject\JavaWebProject\models\Customers.class
+com\JavaWebProject\JavaWebProject\services\CustomerService.class
