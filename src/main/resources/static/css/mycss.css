@@ -5,9 +5,14 @@
     font-size: 16px;
 }
 
+:root {
+    --main-bg-color: #00d675;
+    --sub-bg-color: #85ffc8;
+}
+
 .item-nav {
     display: flex;
-    padding: 1rem;
+    padding: 0.6rem;
     cursor: pointer;
 }
 
@@ -17,7 +22,7 @@
 
 .item-nav.item-nav-selected {
     border-radius: 8px;
-    background-color: #00d675;
+    background-color: var(--main-bg-color);
 }
 
 .item-nav.item-nav.item-nav-selected>div {
@@ -26,10 +31,34 @@
 
 .item-nav:hover {
     border-radius: 8px;
-    background-color: #85ffc8;
+    background-color: var(--sub-bg-color);
 }
 
 .item-nav.item-nav-selected:hover {
     border-radius: 8px;
-    background-color: #00d675;
+    background-color: var(--main-bg-color);
+}
+
+.bg-main {
+    background-color: var(--main-bg-color);
+}
+
+.bg-sub {
+    background-color: var(--sub-bg-color);
+}
+
+.text-main {
+    color: var(--main-bg-color);
+}
+
+.text-sub {
+    color: var(--sub-bg-color);
+}
+
+.fs-7 {
+    font-size: .8rem;
+}
+
+.fs-8 {
+    font-size: .6rem;
 }
