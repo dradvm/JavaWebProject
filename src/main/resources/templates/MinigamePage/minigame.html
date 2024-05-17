@@ -1,0 +1,44 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Spin Wheel</title>
+</head>
+
+<body>
+    <div class="wheel-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/spin-wheel@4.3.2/dist/spin-wheel-iife.js"></script>
+    <script>
+        async function init() {
+            // 1. Configure the wheel's properties:
+            const props = {
+                items: [
+                    {
+                        label: 'one',
+                    },
+                    {
+                        label: 'two',
+                    },
+                    {
+                        label: 'three',
+                    },
+                ]
+            }
+
+            // 2. Decide where you want it to go:
+            const container = document.querySelector('.wheel-container');
+
+            // 3. Create the wheel in the container and initialise it with the props:
+            const wheel = new Wheel(container, props);
+            const winningItemIndex = await fetchWinningItemIndex();
+            const duration = 4000;
+            const easing = easing.cubicOut;
+            wheel.spinToItem(winningItemIndex, duration, true, 2, 1, easing)
+        }
+        init()
+    </script>
+</body>
+
+</html>

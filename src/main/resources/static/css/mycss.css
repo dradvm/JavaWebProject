@@ -1,5 +1,5 @@
 * {
-    box-sizing: border-box;
+    box-sizing: border-box !important;
     padding: 0;
     margin: 0;
     font-size: 16px;
@@ -8,6 +8,60 @@
 :root {
     --main-bg-color: #00d675;
     --sub-bg-color: #85ffc8;
+    --main-bg-hover-color: #01b463;
+    --main-bg-active-color: #029251;
+}
+
+.my-input-form input,
+.my-input-form input:focus,
+.my-input-form input:focus-visible,
+.my-input-form span {
+    border: 0 !important;
+    border-bottom: 1px solid black !important;
+    outline: 0 !important;
+    background-color: transparent !important;
+    box-shadow: 0 0 0 0 black !important;
+    border-radius: 0px !important;
+}
+
+
+.my-input-form input::placeholder {
+    color: #bbb;
+    font-size: .8rem;
+}
+
+.my-input-form input:focus::placeholder {
+    color: transparent;
+    transition: .2s;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+.my-btn {
+    cursor: pointer;
+}
+
+.my-btn:hover {
+    background-color: var(--main-bg-hover-color);
+    transition: .2s;
+}
+
+.my-btn:active {
+    background-color: var(--main-bg-active-color);
+}
+
+.menu-item-nav {
+    cursor: pointer;
+    color: black;
+}
+
+.menu-item-nav:hover {
+    color: var(--main-bg-color);
+    transition: .2s;
 }
 
 .item-nav {
@@ -49,6 +103,15 @@
 
 .text-main {
     color: var(--main-bg-color);
+}
+
+.text-main-hover:hover {
+    color: var(--main-bg-hover-color);
+    transition: .1s;
+}
+
+.text-main-active:active {
+    color: var(--main-bg-active-color);
 }
 
 .text-sub {
