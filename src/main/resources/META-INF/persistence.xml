@@ -6,10 +6,27 @@
     <class>com.JavaWebProject.JavaWebProject.OrderDetails</class>
     <class>com.JavaWebProject.JavaWebProject.Customers</class>
     <class>com.JavaWebProject.JavaWebProject.Orders</class>
-    <class>com.JavaWebProject.JavaWebProject.models.Customers</class>
     <class>com.JavaWebProject.JavaWebProject.models.Orders</class>
     <class>com.JavaWebProject.JavaWebProject.models.OrderDetails</class>
     <class>com.JavaWebProject.JavaWebProject.models.Products</class>
+    <class>com.JavaWebProject.JavaWebProject.models.Dish</class>
+    <class>com.JavaWebProject.JavaWebProject.models.BannerType</class>
+    <class>com.JavaWebProject.JavaWebProject.models.District</class>
+    <class>com.JavaWebProject.JavaWebProject.models.CatererRank</class>
+    <class>com.JavaWebProject.JavaWebProject.models.MinigameReward</class>
+    <class>com.JavaWebProject.JavaWebProject.models.Customer</class>
+    <class>com.JavaWebProject.JavaWebProject.models.Caterer</class>
+    <class>com.JavaWebProject.JavaWebProject.models.Admin</class>
+    <class>com.JavaWebProject.JavaWebProject.models.VoucherType</class>
+    <class>com.JavaWebProject.JavaWebProject.models.Notification</class>
+    <class>com.JavaWebProject.JavaWebProject.models.Voucher</class>
+    <class>com.JavaWebProject.JavaWebProject.models.Report</class>
+    <class>com.JavaWebProject.JavaWebProject.models.Banner</class>
+    <class>com.JavaWebProject.JavaWebProject.models.DeliveryAddress</class>
+    <class>com.JavaWebProject.JavaWebProject.models.Feedback</class>
+    <class>com.JavaWebProject.JavaWebProject.models.CateringOrder</class>
+    <class>com.JavaWebProject.JavaWebProject.models.CatererRating</class>
+    <class>com.JavaWebProject.JavaWebProject.models.City</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=Assignment;encrypt=true;trustServerCertificate=true;"/>
       <property name="javax.persistence.jdbc.user" value="sa"/>

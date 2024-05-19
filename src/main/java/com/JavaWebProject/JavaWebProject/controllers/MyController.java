@@ -20,7 +20,7 @@ public class MyController {
     private CustomerService customerService;
     @GetMapping("/hello")
     public String hello(ModelMap model) {
-        model.addAttribute("name", customerService.getCustomerById("admin").getUsername());
+        model.addAttribute("name", customerService.getCustomerById("ndhunga22008@cusc.ctu.edu.vn").getFullName());
         return "hello";
     }
 }

@@ -4,7 +4,7 @@
  */
 package com.JavaWebProject.JavaWebProject.services;
 
-import com.JavaWebProject.JavaWebProject.models.Customers;
+import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.repositories.CustomerRepository;
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +20,11 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public List<Customers> getAllCustomers() {
-        return (List<Customers>) customerRepository.findAll();
+    public List<Customer> getAllCustomers() {
+        return (List<Customer>) customerRepository.findAll();
     }
 
-    public Customers getCustomerById(String username) {
-        return customerRepository.findByUsername(username);
+    public Customer getCustomerById(String username) {
+        return customerRepository.findByCustomerEmail(username);
     }
 }

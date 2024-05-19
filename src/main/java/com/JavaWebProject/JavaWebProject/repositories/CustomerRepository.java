@@ -4,7 +4,7 @@
  */
 package com.JavaWebProject.JavaWebProject.repositories;
 
-import com.JavaWebProject.JavaWebProject.models.Customers;
+import com.JavaWebProject.JavaWebProject.models.Customer;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
@@ -12,7 +12,8 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author DELL
  */
-public interface CustomerRepository extends CrudRepository<Customers, Long> {
+public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
-    Customers findByUsername(String username);
+    Customer findByCustomerEmail(String customerEmail);
+
 }
