@@ -65,14 +65,13 @@
                                         style="width: 34px; height: 34px; background-color: #3CD755;">
                                         <i class="fs-7 fa-regular fa-bell text-white"></i>
                                     </div>
-                                    <div class="fs-5 fw-bold">
-                                        10
+                                    <div class="fs-5 fw-bold" th:text="${newCatererToday}">
                                     </div>
                                     <div class="">
                                         New Caterer
                                     </div>
                                     <div class="fs-7 text-danger">
-                                        +ádadasdad
+                                        ${newCatererToday}
                                     </div>
                                 </div>
                             </div>
@@ -82,14 +81,14 @@
                                         style="width: 34px; height: 34px; background-color: #BF83FF;">
                                         <i class="fs-7 fa-solid fa-user-plus text-white"></i>
                                     </div>
-                                    <div class="fs-5 fw-bold">
+                                    <div class="fs-5 fw-bold"  th:text="${newCustomerToday}">
                                         10
                                     </div>
                                     <div class="">
                                         New Customer
                                     </div>
                                     <div class="fs-7 text-danger">
-                                        +ádadasdad
+                                        ${newCustomerToday}
                                     </div>
                                 </div>
                             </div>

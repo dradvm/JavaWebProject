@@ -4,13 +4,11 @@
  */
 package com.JavaWebProject.JavaWebProject.services;
 
-import com.JavaWebProject.JavaWebProject.models.Customer;
-import com.JavaWebProject.JavaWebProject.repositories.CustomerRepository;
+import com.JavaWebProject.JavaWebProject.repositories.CatererRepository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
-import java.util.List;
-import java.util.Optional;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,26 +17,25 @@ import org.springframework.stereotype.Service;
  * @author DELL
  */
 @Service
-public class CustomerService {
+public class CatererService {
     @Autowired
-    private CustomerRepository customerRepository;
-
-
-    public int getNewCustomerByDay(LocalDate date) {
-        return customerRepository.countByCreateDate(date);
+    private CatererRepository catererRepository;
+    
+    public int getNewCatererByDay(LocalDate date) {
+        return catererRepository.countByCreateDate(date);
     }
-    public int getNewCustomerByMonth(Month month) {
+    public int getNewCatererByMonth(Month month) {
         int year = LocalDate.now().getYear();
         if (month.getValue() > LocalDate.now().getMonthValue()) {
             year--;
         }
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = YearMonth.of(year, month).atEndOfMonth();
-        return customerRepository.countByCreateDateBetween(startDate, endDate);
+        return catererRepository.countByCreateDateBetween(startDate, endDate);
     }
-    public int getNewCustomerByYear(int year) {
+    public int getNewCatererByYear(int year) {
         LocalDate startDate = LocalDate.of(year, 1, 1);
         LocalDate endDate = LocalDate.of(year, 12, 31);
-        return customerRepository.countByCreateDateBetween(startDate, endDate);
+        return catererRepository.countByCreateDateBetween(startDate, endDate);
     }
 }

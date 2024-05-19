@@ -4,12 +4,15 @@
  */
 package com.JavaWebProject.JavaWebProject.controllers;
 
+import com.JavaWebProject.JavaWebProject.services.CatererService;
+import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -26,21 +29,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {  
+    @Autowired
+    private CatererService catererService;
+    @Autowired
+    private CustomerService customerService;
+    
+    
     private ArrayList<LocalDate> days;
     private ArrayList<Month> months;
     private ArrayList<Integer> years;
     private String[] labelsDay;
     private String[] labelsMonth;
     private String[] labelsYear;
+    private LocalDate today;
     @GetMapping(value = "/dashboard")
-    public String adminPage(Model model) {
+    public String adminPage(ModelMap model) {
         days = new ArrayList<>();
         months = new ArrayList<>();
         years = new ArrayList<>();
+        today = LocalDate.now();
         for (int i = 6; i >=0; i--) {
-            days.add(LocalDate.now().minusDays(i));
-            months.add(LocalDate.now().getMonth().minus(i));
-            years.add(LocalDate.now().getYear() - i);
+            days.add(today.minusDays(i));
+            months.add(today.getMonth().minus(i));
+            years.add(today.getYear() - i);
         }
         labelsDay = days.stream().map(day -> 
             String.valueOf(day.getDayOfMonth())+
@@ -53,6 +64,10 @@ public class AdminController {
         labelsYear = years.stream().map(year ->
             String.valueOf(year)
         ).toArray(String[]::new);
+        int newCatererToday = catererService.getNewCatererByDay(LocalDate.now());
+        int newCustomerToday = customerService.getNewCustomerByDay(LocalDate.now());
+        model.addAttribute("newCatererToday", newCatererToday);
+        model.addAttribute("newCustomerToday", newCustomerToday);
         return "AdminPage/admindashboard";
     }
     @GetMapping("/lineChart")
@@ -60,24 +75,32 @@ public class AdminController {
     public Map<String, Object> getDataLineChart(@RequestParam("selectedValue") String selectedValue) {
         // Xử lý logic dựa trên selectedValue
         Map<String, Object> data = new HashMap<>();
+        ArrayList<Integer> dataChart = new ArrayList<>();
         switch (selectedValue) {
             case "Day":
                 data.put("labels", labelsDay);
-                data.put("data", new int[]{100, 50, 100});
+                for (LocalDate day : days) {
+                    dataChart.add(catererService.getNewCatererByDay(day) + customerService.getNewCustomerByDay(day) );
+                }
                 break;
             case "Month":
                 data.put("labels", labelsMonth);
-                data.put("data", new int[]{40, 200, 60});
+                for (Month month : months) {
+                    dataChart.add(catererService.getNewCatererByMonth(month) + customerService.getNewCustomerByMonth(month));
+                }
                 break;
             case "Year":
                 data.put("labels", labelsYear);
-                data.put("data", new int[]{70, 500, 90});
+                for (int year : years) {
+                    dataChart.add(catererService.getNewCatererByYear(year) + customerService.getNewCustomerByYear(year));
+                }
                 break;
             default:
                 data.put("labels", new String[]{});
                 data.put("data", new int[]{});
                 break;
         }
+        data.put("data", dataChart.stream().mapToInt(Integer::intValue).toArray());
         return data; // Chỉ trả về fragment cần cập nhật
     }
     @GetMapping("/polarAreaChart")

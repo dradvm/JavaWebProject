@@ -4,8 +4,9 @@
  */
 package com.JavaWebProject.JavaWebProject.repositories;
 
-import com.JavaWebProject.JavaWebProject.models.Customer;
+import com.JavaWebProject.JavaWebProject.models.Caterer;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
@@ -13,8 +14,7 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author DELL
  */
-public interface CustomerRepository extends CrudRepository<Customer, Long> {
-
+public interface CatererRepository extends CrudRepository<Caterer, Long> {
     int countByCreateDate(LocalDate createDate);
     int countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
 }

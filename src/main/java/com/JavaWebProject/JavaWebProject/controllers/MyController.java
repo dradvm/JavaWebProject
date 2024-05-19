@@ -4,7 +4,11 @@
  */
 package com.JavaWebProject.JavaWebProject.controllers;
 
+import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,10 +21,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MyController {
     @Autowired
-    private CustomerService customerService;
+    private CatererService catererService;
     @GetMapping("/hello")
     public String hello(ModelMap model) {
-        model.addAttribute("name", customerService.getCustomerById("ndhunga22008@cusc.ctu.edu.vn").getFullName());
+//        model.addAttribute("name", catererService.getNewCustomerByDay(LocalDate.of(2022, 1, 1)));
         return "hello";
     }
 }

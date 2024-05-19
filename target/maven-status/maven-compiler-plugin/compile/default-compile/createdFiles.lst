@@ -6,12 +6,14 @@ com\JavaWebProject\JavaWebProject\models\Notification.class
 com\JavaWebProject\JavaWebProject\controllers\CustomerController.class
 com\JavaWebProject\JavaWebProject\models\Feedback.class
 com\JavaWebProject\JavaWebProject\models\Dish.class
+com\JavaWebProject\JavaWebProject\services\CatererService.class
 com\JavaWebProject\JavaWebProject\models\OrderDetailsPK.class
 com\JavaWebProject\JavaWebProject\models\VoucherType.class
 com\JavaWebProject\JavaWebProject\models\District.class
 com\JavaWebProject\JavaWebProject\models\OrderDetails.class
 com\JavaWebProject\JavaWebProject\models\BannerType.class
 com\JavaWebProject\JavaWebProject\services\CustomerService.class
+com\JavaWebProject\JavaWebProject\repositories\CatererRepository.class
 com\JavaWebProject\JavaWebProject\controllers\MinigameController.class
 com\JavaWebProject\JavaWebProject\models\Banner.class
 com\JavaWebProject\JavaWebProject\controllers\MyController.class
