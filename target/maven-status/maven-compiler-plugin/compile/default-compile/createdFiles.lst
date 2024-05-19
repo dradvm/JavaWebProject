@@ -1,7 +1,9 @@
 com\JavaWebProject\JavaWebProject\controllers\MainController.class
 com\JavaWebProject\JavaWebProject\controllers\AdminController.class
+com\JavaWebProject\JavaWebProject\controllers\CustomerController.class
 com\JavaWebProject\JavaWebProject\models\Customers.class
 com\JavaWebProject\JavaWebProject\services\CustomerService.class
+com\JavaWebProject\JavaWebProject\controllers\MinigameController.class
 com\JavaWebProject\JavaWebProject\controllers\MyController.class
 com\JavaWebProject\JavaWebProject\repositories\CustomerRepository.class
 com\JavaWebProject\JavaWebProject\JavaWebProjectApplication.class

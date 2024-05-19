@@ -32,7 +32,7 @@ public class AdminController {
     private String[] labelsDay;
     private String[] labelsMonth;
     private String[] labelsYear;
-    @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+    @GetMapping(value = "/dashboard")
     public String adminPage(Model model) {
         days = new ArrayList<>();
         months = new ArrayList<>();
