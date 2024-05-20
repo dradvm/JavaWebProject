@@ -9,7 +9,11 @@ com\JavaWebProject\JavaWebProject\services\MinigameRewardService.class
 com\JavaWebProject\JavaWebProject\models\Dish.class
 com\JavaWebProject\JavaWebProject\services\CatererService.class
 com\JavaWebProject\JavaWebProject\models\OrderDetailsPK.class
+<<<<<<< HEAD
 com\JavaWebProject\JavaWebProject\services\PaymentService.class
+=======
+com\JavaWebProject\JavaWebProject\services\AdminService.class
+>>>>>>> 1036a975d3fdde849f70e6b38410336413320847
 com\JavaWebProject\JavaWebProject\models\VoucherType.class
 com\JavaWebProject\JavaWebProject\models\District.class
 com\JavaWebProject\JavaWebProject\models\OrderDetails.class
@@ -23,7 +27,11 @@ com\JavaWebProject\JavaWebProject\repositories\CustomerRepository.class
 com\JavaWebProject\JavaWebProject\models\CatererRank.class
 com\JavaWebProject\JavaWebProject\models\PaymentHistory.class
 com\JavaWebProject\JavaWebProject\models\DeliveryAddress.class
+<<<<<<< HEAD
 com\JavaWebProject\JavaWebProject\repositories\PaymentTypeRepository.class
+=======
+com\JavaWebProject\JavaWebProject\repositories\AdminRepository.class
+>>>>>>> 1036a975d3fdde849f70e6b38410336413320847
 com\JavaWebProject\JavaWebProject\models\Customer.class
 com\JavaWebProject\JavaWebProject\models\MinigameReward.class
 com\JavaWebProject\JavaWebProject\JavaWebProjectApplication.class
@@ -33,5 +41,6 @@ com\JavaWebProject\JavaWebProject\models\Admin.class
 com\JavaWebProject\JavaWebProject\models\CatererRating.class
 com\JavaWebProject\JavaWebProject\repositories\PaymentHistoryRepository.class
 com\JavaWebProject\JavaWebProject\models\PaymentType.class
+com\JavaWebProject\JavaWebProject\controllers\AuthController.class
 com\JavaWebProject\JavaWebProject\repositories\MinigameRewardRepository.class
 com\JavaWebProject\JavaWebProject\models\CateringOrder.class

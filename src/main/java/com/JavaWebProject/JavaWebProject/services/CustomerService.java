@@ -9,8 +9,6 @@ import com.JavaWebProject.JavaWebProject.repositories.CustomerRepository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +21,9 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
+    public Customer findByCustomerEmail(String customerEmail) {
+        return customerRepository.findByCustomerEmail(customerEmail);
+    }
 
     public int getNewCustomerByDay(LocalDate date) {
         return customerRepository.countByCreateDate(date);

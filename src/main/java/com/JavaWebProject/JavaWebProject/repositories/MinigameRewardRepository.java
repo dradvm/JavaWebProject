@@ -12,6 +12,6 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author DELL
  */
-public interface MinigameRewardRepository extends CrudRepository<MinigameReward, Long> {
+public interface MinigameRewardRepository extends CrudRepository<MinigameReward, Integer> {
     List<MinigameReward> findAll();
 }
