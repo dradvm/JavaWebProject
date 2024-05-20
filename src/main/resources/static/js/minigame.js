@@ -21,7 +21,7 @@ const centerX = width / 2
 const centerY = height / 2
 const radius = width / 2
 
-// let items = document.getElementsByTagName("textarea")[0].value.split("\n");
+// let items = document.getElementsByTagName("textarea")[0].split("\n");
 let items = []
 
 $(document).ready(function () {
@@ -43,29 +43,8 @@ let colors = [
     { r: 0, g: 214, b: 117 }
 ]
 
-function randomByWeight(items) {
-    let total = 0
-
-    // Sum total of weights
-    items.forEach(item => {
-        total += item.weight
-    })
-
-    // Random a number between [1, total]
-    const random = Math.ceil(Math.random() * total) // [1,total]
-    // Seek cursor to find which area the random is in
-    let cursor = 0
-    for (let i = 0; i < items.length; i++) {
-        cursor += items[i].weight
-        if (cursor >= random) {
-            return items[i].value
-        }
-    }
-    return "never go here"
-}
-
 function createWheel() {
-    // items = document.getElementsByTagName("textarea")[0].value.split("\n");
+    // items = document.getElementsByTagName("textarea")[0].split("\n");
     step = 360 / items.length
     draw()
 }
@@ -108,10 +87,10 @@ function draw() {
 
         ctx.fillStyle = "#fff";
         ctx.font = 'bold 16px Segoe UI Semibold';
-        ctx.fillText(items[i].value, 120, 10);
+        ctx.fillText(items[i], 120, 10);
         ctx.restore();
 
-        itemDegs[items[i].value] =
+        itemDegs[items[i]] =
         {
             "startDeg": startDeg,
             "endDeg": endDeg
@@ -167,10 +146,20 @@ function spin() {
     currentDeg = 0
     createWheel()
     draw();
-    winItem = randomByWeight(items)
-    maxRotation = (360 * 10) - 90 - itemDegs[winItem].endDeg + randomRange(1, itemDegs[winItem].endDeg - itemDegs[winItem].startDeg - 1)
-    itemDegs = {}
-    // startTime = null
-    pause = false
-    window.requestAnimationFrame(animate);
+    $(document).ready(function () {
+        $.ajax({
+            type: 'GET',
+            url: '/minigame/spin',
+            success: function (response) {
+                console.log(response)
+                winItem = response
+                maxRotation = (360 * 10) - 90 - itemDegs[winItem].endDeg + randomRange(1, itemDegs[winItem].endDeg - itemDegs[winItem].startDeg - 1)
+                itemDegs = {}
+                // startTime = null
+                pause = false
+                window.requestAnimationFrame(animate);
+            }
+        });
+    })
+
 }

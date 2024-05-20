@@ -52,6 +52,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Caterer.findByCreateDate", query = "SELECT c FROM Caterer c WHERE c.createDate = :createDate")})
 public class Caterer implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "CreateDate", columnDefinition = "DATETIME")
+    private LocalDate createDate;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
+    private Collection<PaymentHistory> paymentHistoryCollection;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -114,10 +121,6 @@ public class Caterer implements Serializable {
     @Column(name = "Birthday")
     @Temporal(TemporalType.DATE)
     private Date birthday;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CreateDate", columnDefinition = "DATETIME")
-    private LocalDate createDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
     private Collection<Banner> bannerCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
@@ -268,13 +271,6 @@ public class Caterer implements Serializable {
         this.birthday = birthday;
     }
 
-    public LocalDate getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDate createDate) {
-        this.createDate = createDate;
-    }
 
     @XmlTransient
     public Collection<Banner> getBannerCollection() {
@@ -360,6 +356,23 @@ public class Caterer implements Serializable {
     @Override
     public String toString() {
         return "com.JavaWebProject.JavaWebProject.models.Caterer[ catererEmail=" + catererEmail + " ]";
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
+    }
+
+    @XmlTransient
+    public Collection<PaymentHistory> getPaymentHistoryCollection() {
+        return paymentHistoryCollection;
+    }
+
+    public void setPaymentHistoryCollection(Collection<PaymentHistory> paymentHistoryCollection) {
+        this.paymentHistoryCollection = paymentHistoryCollection;
     }
     
 }

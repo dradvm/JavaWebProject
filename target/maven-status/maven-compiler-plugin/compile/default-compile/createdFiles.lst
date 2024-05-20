@@ -3,8 +3,10 @@ com\JavaWebProject\JavaWebProject\models\Caterer.class
 com\JavaWebProject\JavaWebProject\controllers\MainController.class
 com\JavaWebProject\JavaWebProject\controllers\AdminController.class
 com\JavaWebProject\JavaWebProject\models\Notification.class
+com\JavaWebProject\JavaWebProject\repositories\OrderRepository.class
 com\JavaWebProject\JavaWebProject\controllers\CustomerController.class
 com\JavaWebProject\JavaWebProject\models\Feedback.class
+com\JavaWebProject\JavaWebProject\services\MinigameRewardService.class
 com\JavaWebProject\JavaWebProject\models\Dish.class
 com\JavaWebProject\JavaWebProject\services\CatererService.class
 com\JavaWebProject\JavaWebProject\models\OrderDetailsPK.class
@@ -19,6 +21,7 @@ com\JavaWebProject\JavaWebProject\models\Banner.class
 com\JavaWebProject\JavaWebProject\controllers\MyController.class
 com\JavaWebProject\JavaWebProject\repositories\CustomerRepository.class
 com\JavaWebProject\JavaWebProject\models\CatererRank.class
+com\JavaWebProject\JavaWebProject\models\PaymentHistory.class
 com\JavaWebProject\JavaWebProject\models\DeliveryAddress.class
 com\JavaWebProject\JavaWebProject\models\Customer.class
 com\JavaWebProject\JavaWebProject\models\MinigameReward.class
@@ -27,4 +30,5 @@ com\JavaWebProject\JavaWebProject\models\Report.class
 com\JavaWebProject\JavaWebProject\models\City.class
 com\JavaWebProject\JavaWebProject\models\Admin.class
 com\JavaWebProject\JavaWebProject\models\CatererRating.class
+com\JavaWebProject\JavaWebProject\repositories\MinigameRewardRepository.class
 com\JavaWebProject\JavaWebProject\models\CateringOrder.class

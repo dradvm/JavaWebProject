@@ -27,6 +27,7 @@
     <class>com.JavaWebProject.JavaWebProject.models.CateringOrder</class>
     <class>com.JavaWebProject.JavaWebProject.models.CatererRating</class>
     <class>com.JavaWebProject.JavaWebProject.models.City</class>
+    <class>com.JavaWebProject.JavaWebProject.models.PaymentHistory</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://localhost:1433;databaseName=Assignment;encrypt=true;trustServerCertificate=true;"/>
       <property name="javax.persistence.jdbc.user" value="sa"/>

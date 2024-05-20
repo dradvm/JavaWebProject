@@ -11,13 +11,16 @@ C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\J
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\OrderDetailsPK.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\City.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Banner.java
+C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\MinigameRewardService.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Customer.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Admin.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\JavaWebProjectApplication.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\District.java
+C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\MinigameRewardRepository.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\MainController.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Caterer.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\CateringOrder.java
+C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\PaymentHistory.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\AdminController.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\DeliveryAddress.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\MinigameController.java
@@ -25,6 +28,7 @@ C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\J
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\CustomerService.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\BannerType.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\CatererRepository.java
+C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\OrderRepository.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Report.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\CustomerRepository.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\CustomerController.java

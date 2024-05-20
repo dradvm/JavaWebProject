@@ -4,11 +4,15 @@
  */
 package com.JavaWebProject.JavaWebProject.controllers;
 
+import com.JavaWebProject.JavaWebProject.models.MinigameReward;
+import com.JavaWebProject.JavaWebProject.services.MinigameRewardService;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,30 +27,37 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/minigame")
 public class MinigameController {
+    @Autowired
+    private MinigameRewardService minigameRewardService;
+    private List<MinigameReward> data;
     @GetMapping("")
     public String minigamePage() {
+        data = minigameRewardService.getAllMinigameReward();
         return "/MinigamePage/minigame";
     }
     
     @GetMapping("/getDataOfWheel")
     @ResponseBody
-    public List<Map<String, Object>> getDataOfWheel() {
-        Map<String, Object> obj1 = new HashMap<>();
-        Map<String, Object> obj2 = new HashMap<>();
-        Map<String, Object> obj3 = new HashMap<>();
-        Map<String, Object> obj4 = new HashMap<>();
-        Map<String, Object> obj5 = new HashMap<>();
-        obj1.put("value", 100);
-        obj1.put("weight", 100);
-        obj2.put("value", 10000);
-        obj2.put("weight", 1);
-        obj3.put("value", 200);
-        obj3.put("weight", 50);
-        obj4.put("value", 1000);
-        obj4.put("weight", 5);
-        obj5.put("value", 500);
-        obj5.put("weight", 10);
-        return Arrays.asList(obj1, obj2, obj3, obj4, obj5,obj1, obj2, obj3, obj4, obj5);
+    public Object getDataOfWheel() {
+        return data.stream().mapToDouble((minigameReward) -> minigameReward.getPoint()).toArray();
+    }
+    
+    @GetMapping("/spin")
+    @ResponseBody
+    public int getValueSpin() {
+        int total = 0;
+        for (MinigameReward minigameReward : data) {
+            total+=minigameReward.getWeight();
+        }
+        double random = Math.ceil(Math.random() * total);
+        double cursor = 0;
+        for (int i = 0; i< data.size(); i++) {
+            cursor += data.get(i).getWeight();
+            if (cursor >= random) {
+                return (int) data.get(i).getPoint();
+            }
+        }
+        return 0;
     }
     
     @PostMapping("/update")
