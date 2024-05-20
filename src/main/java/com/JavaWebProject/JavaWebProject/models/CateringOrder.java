@@ -93,10 +93,6 @@ public class CateringOrder implements Serializable {
     @NotNull
     @Column(name = "Value")
     private double value;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CostOfOrder")
-    private double costOfOrder;
     @Size(max = 200)
     @Column(name = "Note")
     private String note;
@@ -124,7 +120,7 @@ public class CateringOrder implements Serializable {
         this.orderID = orderID;
     }
 
-    public CateringOrder(Integer orderID, String orderAddress, Date orderTime, Date createDate, String orderState, int numOfTables, double serviceFee, double value, double costOfOrder) {
+    public CateringOrder(Integer orderID, String orderAddress, Date orderTime, Date createDate, String orderState, int numOfTables, double serviceFee, double value) {
         this.orderID = orderID;
         this.orderAddress = orderAddress;
         this.orderTime = orderTime;
@@ -133,7 +129,6 @@ public class CateringOrder implements Serializable {
         this.numOfTables = numOfTables;
         this.serviceFee = serviceFee;
         this.value = value;
-        this.costOfOrder = costOfOrder;
     }
 
     public Integer getOrderID() {
@@ -216,13 +211,6 @@ public class CateringOrder implements Serializable {
         this.value = value;
     }
 
-    public double getCostOfOrder() {
-        return costOfOrder;
-    }
-
-    public void setCostOfOrder(double costOfOrder) {
-        this.costOfOrder = costOfOrder;
-    }
 
     public String getNote() {
         return note;
