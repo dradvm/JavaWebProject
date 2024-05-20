@@ -29,16 +29,16 @@
                                         <i class="fs-7 fa-solid fa-hand-holding-dollar text-white"></i>
                                     </div>
                                     <!--                                        <div class="fs-4 fw-bold"
-                                    th:text="${#numbers.formatDecimal(1000000, 0, 'COMMA', 0, 'POINT')}">
+                                    >
                                 </div>-->
-                                    <div class="fs-5 fw-bold">
-                                        1.000.000
+                                    <div class="fs-5 fw-bold"
+                                        th:text="${#numbers.formatDecimal(revenueToday, 0, 'COMMA', 0, 'POINT')}+'$'">
                                     </div>
                                     <div class="">
                                         Today Revenue
                                     </div>
-                                    <div class="fs-7 text-danger">
-                                        +ádadasdad
+                                    <div th:class="'fs-7 ' + ${gapPercentRevenue >= 0 ? 'text-primary' : 'text-danger'} "
+                                        th:text="${gapPercentRevenue >= 0 ? '+' + gapPercentRevenue : '-' + gapPercentRevenue} + '%'">
                                     </div>
                                 </div>
                             </div>
@@ -48,14 +48,13 @@
                                         style="width: 34px; height: 34px; background-color: #FF947A;">
                                         <i class="fs-7 fa-solid fa-file-contract text-white"></i>
                                     </div>
-                                    <div class="fs-5 fw-bold">
-                                        20
+                                    <div class="fs-5 fw-bold" th:text="${newOrderToday}">
                                     </div>
                                     <div class="">
                                         Total Order
                                     </div>
-                                    <div class="fs-7 text-danger">
-                                        +ádadasdad
+                                    <div th:class="'fs-7 ' + ${gapPercentOrder >= 0 ? 'text-primary' : 'text-danger'} "
+                                        th:text="${gapPercentOrder >= 0 ? '+' + gapPercentOrder : '-' + gapPercentOrder} + '%'">
                                     </div>
                                 </div>
                             </div>
@@ -70,8 +69,8 @@
                                     <div class="">
                                         New Caterer
                                     </div>
-                                    <div class="fs-7 text-danger">
-                                        ${newCatererToday}
+                                    <div th:class="'fs-7 ' + ${gapPercentCaterer >= 0 ? 'text-primary' : 'text-danger'} "
+                                        th:text="${gapPercentCaterer >= 0 ? '+' + gapPercentCaterer : '-' + gapPercentCaterer} + '%'">
                                     </div>
                                 </div>
                             </div>
@@ -81,14 +80,14 @@
                                         style="width: 34px; height: 34px; background-color: #BF83FF;">
                                         <i class="fs-7 fa-solid fa-user-plus text-white"></i>
                                     </div>
-                                    <div class="fs-5 fw-bold"  th:text="${newCustomerToday}">
+                                    <div class="fs-5 fw-bold" th:text="${newCustomerToday}">
                                         10
                                     </div>
                                     <div class="">
                                         New Customer
                                     </div>
-                                    <div class="fs-7 text-danger">
-                                        ${newCustomerToday}
+                                    <div th:class="'fs-7 ' + ${gapPercentCustomer >= 0 ? 'text-primary' : 'text-danger'} "
+                                        th:text="${gapPercentCustomer >= 0 ? '+' + gapPercentCustomer : '-' + gapPercentCustomer} + '%'">
                                     </div>
                                 </div>
                             </div>

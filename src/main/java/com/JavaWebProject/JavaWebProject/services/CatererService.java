@@ -28,6 +28,17 @@ public class CatererService {
     public int getNewCatererByDay(LocalDate date) {
         return catererRepository.countByCreateDate(date);
     }
+    public float getGapPercentCatererByDay(LocalDate date) {
+        float currentValue = getNewCatererByDay(date);
+        float oldValue = getNewCatererByDay(date.minusDays(1));
+        if (oldValue == 0) {
+            if (currentValue == 0) {
+                return 0;
+            }
+            return 1;
+        }
+        return ((currentValue/oldValue) - 1) * 100;
+    }
     public int getNewCatererByMonth(Month month) {
         int year = LocalDate.now().getYear();
         if (month.getValue() > LocalDate.now().getMonthValue()) {

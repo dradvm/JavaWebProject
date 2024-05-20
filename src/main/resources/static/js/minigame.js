@@ -126,7 +126,6 @@ function animate() {
                 url: '/minigame/update',
                 data: { value: winItem },
                 success: function (response) {
-                    console.log(response)
                     winItem = 0
                 }
             });

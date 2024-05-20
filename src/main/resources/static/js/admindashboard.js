@@ -23,7 +23,8 @@ $(document).ready(function () {
         type: 'GET',
         url: '/admin/polarAreaChart',
         success: function (response) {
-            initPolarAreaChart(response)
+            console.log(response)
+            initPolarAreaChart(response.labels, response.data)
         }
     });
 
@@ -34,6 +35,7 @@ $(document).ready(function () {
             url: '/admin/barChart',
             data: { selectedValue: selectedValue },
             success: function (response) {
+                console.log(response)
                 if (!barChart) {
                     initBarChart(response.labels, response.datasets)
                 }
@@ -82,11 +84,11 @@ function updateLineChart(labels, data) {
 }
 const ctx2 = document.getElementById('myChart2');
 var polarAreaChart
-function initPolarAreaChart(data) {
+function initPolarAreaChart(labels, data) {
     polarAreaChart = new Chart(ctx2, {
         type: 'polarArea',
         data: {
-            labels: ["Advertise", "Rank", "Commission"],
+            labels: labels,
             datasets: [{
                 data: data,
                 label: '',
