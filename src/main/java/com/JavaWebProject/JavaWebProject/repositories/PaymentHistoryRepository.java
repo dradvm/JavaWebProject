@@ -17,4 +17,5 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface PaymentHistoryRepository extends CrudRepository<PaymentHistory, Long> {
     List<PaymentHistory> findByTypeIDAndPaymentTimeBetween(PaymentType paymentType, LocalDateTime startDate, LocalDateTime endDate);
+    int countByTypeIDAndPaymentTimeBetween(PaymentType paymentType, LocalDateTime startDate, LocalDateTime endDate);
 }

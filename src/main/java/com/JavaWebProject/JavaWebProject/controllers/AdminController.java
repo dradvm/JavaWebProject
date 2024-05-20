@@ -70,8 +70,13 @@ public class AdminController {
         ).collect(Collectors.toCollection(ArrayList::new));
         int newCatererToday = catererService.getNewCatererByDay(LocalDate.now());
         int newCustomerToday = customerService.getNewCustomerByDay(LocalDate.now());
+        int newOrderToday = paymentService.getNewOrderToday();
+        float revenueToday = paymentService.getTotalValueToday();
         model.addAttribute("newCatererToday", newCatererToday);
         model.addAttribute("newCustomerToday", newCustomerToday);
+        model.addAttribute("newOrderToday", newOrderToday);
+        model.addAttribute("revenueToday", revenueToday);
+        
         return "AdminPage/admindashboard";
     }
     @GetMapping("/lineChart")
@@ -111,7 +116,7 @@ public class AdminController {
     @ResponseBody Map<String, Object> getDataPolarAreaChart() {
         Map<String, Object> data = new HashMap<>();
         data.put ("labels", paymentService.getLabelsList());
-        data.put("data", paymentService.getValueByDate(LocalDate.of(2024, 5, 1)).stream().mapToDouble(Float::doubleValue));
+        data.put("data", paymentService.getValueByDate(LocalDate.now()).stream().mapToDouble(Float::doubleValue));
         return data;
     }
     @GetMapping("/barChart")

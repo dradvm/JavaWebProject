@@ -32,6 +32,14 @@ public class PaymentService {
     @Autowired
     private PaymentHistoryRepository paymentHistoryRepository;
     
+    public float getTotalValueToday() {
+        float sum = 0;
+        for (Float item : getValueByDate(LocalDate.now())) {
+            sum+=item;
+        }
+        return sum;
+    }
+    
     public ArrayList<Float> getValueByDate(LocalDate date) {
         List<PaymentType> listLabels = paymentTypeRepository.findAll();
         ArrayList<Float> returnData = new ArrayList<>();
@@ -89,8 +97,12 @@ public class PaymentService {
             set.put("label", paymentType.getDescription());
             set.put("data", data);
             datasets.add(set);
+        
         }
         return datasets;
     }
-    
+    public int getNewOrderToday() {
+        return paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween( paymentTypeRepository.findById(3) ,LocalDateTime.of(LocalDate.now(), LocalTime.MIN), LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
+
+    }
 }
