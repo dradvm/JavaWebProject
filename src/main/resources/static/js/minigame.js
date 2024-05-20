@@ -24,17 +24,18 @@ const radius = width / 2
 // let items = document.getElementsByTagName("textarea")[0].split("\n");
 let items = []
 
-$(document).ready(function () {
-    $.ajax({
-        type: 'GET',
-        url: '/minigame/getDataOfWheel',
-        success: function (response) {
-            items = response
-            console.log(response)
-            draw()
-        }
-    });
-})
+// $(document).ready(function () {
+//     $.ajax({
+//         type: 'GET',
+//         url: '/minigame/getDataOfWheel',
+//         success: function (response) {
+//             items = response
+//             console.log(response)
+//             draw()
+//         }
+//     });
+// })
+items = [1, 2, 3, 4, 5, 6, 7, 8]
 let currentDeg = 0
 let step = 360 / items.length
 let itemDegs = {}
@@ -42,6 +43,7 @@ let colors = [
     { r: 133, g: 255, b: 200 },
     { r: 0, g: 214, b: 117 }
 ]
+draw()
 
 function createWheel() {
     // items = document.getElementsByTagName("textarea")[0].split("\n");
@@ -86,8 +88,8 @@ function draw() {
         ctx.textAlign = "center";
 
         ctx.fillStyle = "#fff";
-        ctx.font = 'bold 16px Segoe UI Semibold';
-        ctx.fillText(items[i], 120, 10);
+        ctx.font = 'bold 20px Segoe UI Semibold';
+        ctx.fillText(items[i], 150, 10);
         ctx.restore();
 
         itemDegs[items[i]] =

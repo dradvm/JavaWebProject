@@ -12,42 +12,15 @@
     <title>TODO supply a title</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        .wheel {
-            display: flex;
-            justify-content: center;
-            position: relative;
-        }
-
-        .center-circle {
-            width: 50px;
-            height: 50px;
-            border-radius: 60px;
-            background-color: #fff;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .triangle {
-            width: 0;
-            height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 30px solid black;
-            position: absolute;
-
-        }
-    </style>
 
 </head>
 
 <body>
-    <header>
-        <div class="container-fuild px-5 py-2 d-flex justify-content-between align-items-center fw-medium">
+    <heder>
+        <div class="container-fuild px-5 py-2 d-flex shadow-sm justify-content-between align-items-center fw-medium">
             <div class="d-flex align-items-center" style="width: 20%;">
                 <div class="d-flex justify-content-between align-items-center" style="cursor: pointer;">
-                    <img src="../static/images/big_logo.png" width="200" />
+                    <!-- <img src="../static/images/big_logo.png" width="200" /> -->
                 </div>
             </div>
             <div class="d-flex justify-content-around" style="width: 60%;">
@@ -65,22 +38,26 @@
                 </button>
             </div>
         </div>
-    </header>
-    <div class="header">
-        <h1>WINNER</h1>
-        <p id="winner">NONE</p>
-    </div>
-    <div class="wheel">
-        <canvas class="" id="canvas" width="300" height="300"></canvas>
-        <div class="center-circle" onclick="spin()">
+    </heder>
+    <div class="position-relative">
+        <img src="../../static/images/bg-spinning-wheel.jpg" class="w-100" alt="">
+        <div class="position-absolute top-0 start-50 translate-middle-x text-white mt-5">
+            <h3>You have: 5 chance</h3>
         </div>
-        <div class="triangle"></div>
+        <div class="wheel position-absolute top-50 start-50 translate-middle">
+            <canvas class="" id="canvas" width="350" height="350"></canvas>
+            <div class="center-circle d-flex align-items-center justify-content-around" onclick="spin()">
+                <div class="fs-4 fw-semibold">GO</div>
+            </div>
+            <div class="triangle"></div>
 
+        </div>
     </div>
     </div>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/minigame.js}"></script>
-    <!-- <script th:src="../../static/js/minigame.js"></script> -->
+    <script src="../../static/js/jquery.min.js"></script>
+    <script src="../../static/js/minigame.js"></script>
 </body>
 
 </html>

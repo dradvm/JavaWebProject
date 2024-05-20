@@ -12,6 +12,32 @@
     --main-bg-active-color: #029251;
 }
 
+.wheel {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.center-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 60px;
+    background-color: #fff;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.triangle {
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 30px solid white;
+    position: absolute;
+
+}
+
 .my-input-form input,
 .my-input-form input:focus,
 .my-input-form input:focus-visible,
