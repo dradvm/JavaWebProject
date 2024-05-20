@@ -67,7 +67,6 @@ public class MinigameController {
         // Trả về response
         Map<String, Object> response = new HashMap<>();
         response.put("status", "success");
-        response.put("receivedNumber", value);
         return response;
     }
 }

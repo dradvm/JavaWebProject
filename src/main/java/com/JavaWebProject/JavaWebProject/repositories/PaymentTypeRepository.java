@@ -4,13 +4,14 @@
  */
 package com.JavaWebProject.JavaWebProject.repositories;
 
-import com.JavaWebProject.JavaWebProject.models.CateringOrder;
+import com.JavaWebProject.JavaWebProject.models.PaymentType;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 /**
  *
  * @author DELL
  */
-public interface OrderRepository extends CrudRepository<CateringOrder, Long> {
-   
+public interface PaymentTypeRepository extends CrudRepository<PaymentType, Long> {
+    List<PaymentType> findAll();
 }
