@@ -358,13 +358,6 @@ public class Caterer implements Serializable {
         return "com.JavaWebProject.JavaWebProject.models.Caterer[ catererEmail=" + catererEmail + " ]";
     }
 
-    public LocalDate getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDate createDate) {
-        this.createDate = createDate;
-    }
 
     @XmlTransient
     public Collection<PaymentHistory> getPaymentHistoryCollection() {
@@ -373,6 +366,14 @@ public class Caterer implements Serializable {
 
     public void setPaymentHistoryCollection(Collection<PaymentHistory> paymentHistoryCollection) {
         this.paymentHistoryCollection = paymentHistoryCollection;
+    }
+
+    public LocalDate getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(LocalDate createDate) {
+        this.createDate = createDate;
     }
     
 }

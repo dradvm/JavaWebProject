@@ -61,6 +61,9 @@ public class PaymentHistory implements Serializable {
     @JoinColumn(name = "CatererEmail", referencedColumnName = "CatererEmail")
     @ManyToOne(optional = false)
     private Caterer catererEmail;
+    @JoinColumn(name = "TypeID", referencedColumnName = "TypeID")
+    @ManyToOne(optional = false)
+    private PaymentType typeID;
 
     public PaymentHistory() {
     }
@@ -114,6 +117,14 @@ public class PaymentHistory implements Serializable {
 
     public void setCatererEmail(Caterer catererEmail) {
         this.catererEmail = catererEmail;
+    }
+
+    public PaymentType getTypeID() {
+        return typeID;
+    }
+
+    public void setTypeID(PaymentType typeID) {
+        this.typeID = typeID;
     }
 
     @Override
