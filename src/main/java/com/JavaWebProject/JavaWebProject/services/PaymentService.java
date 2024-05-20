@@ -31,16 +31,7 @@ public class PaymentService {
     private PaymentTypeRepository paymentTypeRepository;
     @Autowired
     private PaymentHistoryRepository paymentHistoryRepository;
-    
-    public float getTotalValueToday() {
-        float sum = 0;
-        for (Float item : getValueByDate(LocalDate.now())) {
-            sum+=item;
-        }
-        return sum;
-    }
-    
-    public ArrayList<Float> getValueByDate(LocalDate date) {
+    public ArrayList<Float> getValueByDay(LocalDate date) {
         List<PaymentType> listLabels = paymentTypeRepository.findAll();
         ArrayList<Float> returnData = new ArrayList<>();
         LocalDateTime startDate = LocalDateTime.of(date, LocalTime.MIN);
@@ -101,8 +92,37 @@ public class PaymentService {
         }
         return datasets;
     }
-    public int getNewOrderToday() {
-        return paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween( paymentTypeRepository.findById(3) ,LocalDateTime.of(LocalDate.now(), LocalTime.MIN), LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
+    
+    
+    public float getTotalValueByDay(LocalDate date) {
+        float sum = 0;
+        for (Float item : getValueByDay(date)) {
+            sum+=item;
+        }
+        return sum;
+    }
+    public float getGapPercentRevenueByDay(LocalDate date) {
+        float currentValue = getTotalValueByDay(date);
+        float oldValue = getTotalValueByDay(date.minusDays(1));
+        if (oldValue == 0) {
+            return 1;
+        }
+        return ((currentValue/oldValue) - 1) * 100;
+    }
+    
+    public int getNewOrderByDay(LocalDate date) {
+        return paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween( paymentTypeRepository.findById(3) ,LocalDateTime.of(date, LocalTime.MIN), LocalDateTime.of(date, LocalTime.MAX));
 
+    }
+    public float getGapPercentOrderByDay(LocalDate date) {
+       float currentValue = getNewOrderByDay(date);
+       float oldValue = getNewOrderByDay(date.minusDays(1));
+        if (oldValue == 0) {
+            if (currentValue == 0) {
+                return 0;
+            }
+            return 1;
+        }
+       return ((currentValue/oldValue) - 1) * 100;
     }
 }

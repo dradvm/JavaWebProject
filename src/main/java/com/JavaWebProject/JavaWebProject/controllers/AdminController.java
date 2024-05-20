@@ -68,15 +68,14 @@ public class AdminController {
         labelsYear = years.stream().map(year ->
             String.valueOf(year)
         ).collect(Collectors.toCollection(ArrayList::new));
-        int newCatererToday = catererService.getNewCatererByDay(LocalDate.now());
-        int newCustomerToday = customerService.getNewCustomerByDay(LocalDate.now());
-        int newOrderToday = paymentService.getNewOrderToday();
-        float revenueToday = paymentService.getTotalValueToday();
-        model.addAttribute("newCatererToday", newCatererToday);
-        model.addAttribute("newCustomerToday", newCustomerToday);
-        model.addAttribute("newOrderToday", newOrderToday);
-        model.addAttribute("revenueToday", revenueToday);
-        
+        model.addAttribute("newCatererToday",  catererService.getNewCatererByDay(today));
+        model.addAttribute("newCustomerToday", customerService.getNewCustomerByDay(today));
+        model.addAttribute("newOrderToday", paymentService.getNewOrderByDay(today));
+        model.addAttribute("revenueToday", paymentService.getTotalValueByDay(today));
+        model.addAttribute("gapPercentRevenue", paymentService.getGapPercentRevenueByDay(today));
+        model.addAttribute("gapPercentOrder", paymentService.getGapPercentOrderByDay(today));
+        model.addAttribute("gapPercentCustomer", customerService.getGapPercentCustomerByDay(today));
+        model.addAttribute("gapPercentCaterer", catererService.getGapPercentCatererByDay(today));
         return "AdminPage/admindashboard";
     }
     @GetMapping("/lineChart")
@@ -116,7 +115,7 @@ public class AdminController {
     @ResponseBody Map<String, Object> getDataPolarAreaChart() {
         Map<String, Object> data = new HashMap<>();
         data.put ("labels", paymentService.getLabelsList());
-        data.put("data", paymentService.getValueByDate(LocalDate.now()).stream().mapToDouble(Float::doubleValue));
+        data.put("data", paymentService.getValueByDay(LocalDate.now()).stream().mapToDouble(Float::doubleValue));
         return data;
     }
     @GetMapping("/barChart")

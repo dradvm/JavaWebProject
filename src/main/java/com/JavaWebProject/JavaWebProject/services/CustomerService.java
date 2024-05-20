@@ -28,6 +28,17 @@ public class CustomerService {
     public int getNewCustomerByDay(LocalDate date) {
         return customerRepository.countByCreateDate(date);
     }
+    public float getGapPercentCustomerByDay(LocalDate date) {
+        float currentValue = getNewCustomerByDay(date);
+        float oldValue = getNewCustomerByDay(date.minusDays(1));
+        if (oldValue == 0) {
+            if (currentValue == 0) {
+                return 0;
+            }
+            return 1;
+        }
+        return ((currentValue/oldValue) - 1) * 100;
+    }
     public int getNewCustomerByMonth(Month month) {
         int year = LocalDate.now().getYear();
         if (month.getValue() > LocalDate.now().getMonthValue()) {
