@@ -11,6 +11,6 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author DELL
  */
-public interface OrderRepository extends CrudRepository<CateringOrder, Long> {
+public interface OrderRepository extends CrudRepository<CateringOrder, Integer> {
    
 }

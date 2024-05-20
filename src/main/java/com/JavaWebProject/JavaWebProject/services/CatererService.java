@@ -4,11 +4,11 @@
  */
 package com.JavaWebProject.JavaWebProject.services;
 
+import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.repositories.CatererRepository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +20,10 @@ import org.springframework.stereotype.Service;
 public class CatererService {
     @Autowired
     private CatererRepository catererRepository;
+    
+    public Caterer findByCatererEmail(String catererEmail) {
+        return catererRepository.findByCatererEmail(catererEmail);
+    }
     
     public int getNewCatererByDay(LocalDate date) {
         return catererRepository.countByCreateDate(date);

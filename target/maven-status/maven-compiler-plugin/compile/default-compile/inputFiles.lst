@@ -5,6 +5,7 @@ D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Ba
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\CatererRating.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\CustomerController.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Admin.java
+D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\AdminService.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\CatererService.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\CatererRank.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\VoucherType.java
@@ -19,6 +20,7 @@ D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controlle
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\PaymentHistory.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\MinigameRewardRepository.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\AuthController.java
+D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\AdminRepository.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\CustomerRepository.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\City.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\OrderRepository.java
