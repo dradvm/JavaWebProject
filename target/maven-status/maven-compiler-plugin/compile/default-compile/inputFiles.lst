@@ -30,9 +30,12 @@ D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Cu
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\CateringOrder.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\DeliveryAddress.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\JavaWebProjectApplication.java
+D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\FilterService.java
+D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\config\FilterConfig.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\District.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Notification.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Caterer.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Feedback.java
+D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\filters\AdminFilter.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\CatererRepository.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\OrderDetails.java
