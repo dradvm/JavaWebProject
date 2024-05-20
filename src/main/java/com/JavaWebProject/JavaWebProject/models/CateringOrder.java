@@ -46,7 +46,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CateringOrder.findByPointDiscount", query = "SELECT c FROM CateringOrder c WHERE c.pointDiscount = :pointDiscount"),
     @NamedQuery(name = "CateringOrder.findByVoucherDiscount", query = "SELECT c FROM CateringOrder c WHERE c.voucherDiscount = :voucherDiscount"),
     @NamedQuery(name = "CateringOrder.findByValue", query = "SELECT c FROM CateringOrder c WHERE c.value = :value"),
-    @NamedQuery(name = "CateringOrder.findByCostOfOrder", query = "SELECT c FROM CateringOrder c WHERE c.costOfOrder = :costOfOrder"),
     @NamedQuery(name = "CateringOrder.findByNote", query = "SELECT c FROM CateringOrder c WHERE c.note = :note")})
 public class CateringOrder implements Serializable {
 
@@ -210,7 +209,6 @@ public class CateringOrder implements Serializable {
     public void setValue(double value) {
         this.value = value;
     }
-
 
     public String getNote() {
         return note;

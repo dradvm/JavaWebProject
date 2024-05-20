@@ -30,5 +30,6 @@ com\JavaWebProject\JavaWebProject\models\Report.class
 com\JavaWebProject\JavaWebProject\models\City.class
 com\JavaWebProject\JavaWebProject\models\Admin.class
 com\JavaWebProject\JavaWebProject\models\CatererRating.class
+com\JavaWebProject\JavaWebProject\models\PaymentType.class
 com\JavaWebProject\JavaWebProject\repositories\MinigameRewardRepository.class
 com\JavaWebProject\JavaWebProject\models\CateringOrder.class

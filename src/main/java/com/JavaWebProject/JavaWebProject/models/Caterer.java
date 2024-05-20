@@ -18,7 +18,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
@@ -51,13 +50,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Caterer.findByBirthday", query = "SELECT c FROM Caterer c WHERE c.birthday = :birthday"),
     @NamedQuery(name = "Caterer.findByCreateDate", query = "SELECT c FROM Caterer c WHERE c.createDate = :createDate")})
 public class Caterer implements Serializable {
-
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CreateDate", columnDefinition = "DATETIME")
-    private LocalDate createDate;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
-    private Collection<PaymentHistory> paymentHistoryCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -121,6 +113,13 @@ public class Caterer implements Serializable {
     @Column(name = "Birthday")
     @Temporal(TemporalType.DATE)
     private Date birthday;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "CreateDate")
+    @Temporal(TemporalType.DATE)
+    private Date createDate;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
+    private Collection<PaymentHistory> paymentHistoryCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
     private Collection<Banner> bannerCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
@@ -145,7 +144,7 @@ public class Caterer implements Serializable {
         this.catererEmail = catererEmail;
     }
 
-    public Caterer(String catererEmail, String password, double serviceFee, Date rankStartDate, Date rankEndDate, int active, String fullName, String phone, int gender, String address, LocalDate createDate) {
+    public Caterer(String catererEmail, String password, double serviceFee, Date rankStartDate, Date rankEndDate, int active, String fullName, String phone, int gender, String address, Date createDate) {
         this.catererEmail = catererEmail;
         this.password = password;
         this.serviceFee = serviceFee;
@@ -271,6 +270,22 @@ public class Caterer implements Serializable {
         this.birthday = birthday;
     }
 
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
+    }
+
+    @XmlTransient
+    public Collection<PaymentHistory> getPaymentHistoryCollection() {
+        return paymentHistoryCollection;
+    }
+
+    public void setPaymentHistoryCollection(Collection<PaymentHistory> paymentHistoryCollection) {
+        this.paymentHistoryCollection = paymentHistoryCollection;
+    }
 
     @XmlTransient
     public Collection<Banner> getBannerCollection() {
@@ -356,24 +371,6 @@ public class Caterer implements Serializable {
     @Override
     public String toString() {
         return "com.JavaWebProject.JavaWebProject.models.Caterer[ catererEmail=" + catererEmail + " ]";
-    }
-
-
-    @XmlTransient
-    public Collection<PaymentHistory> getPaymentHistoryCollection() {
-        return paymentHistoryCollection;
-    }
-
-    public void setPaymentHistoryCollection(Collection<PaymentHistory> paymentHistoryCollection) {
-        this.paymentHistoryCollection = paymentHistoryCollection;
-    }
-
-    public LocalDate getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDate createDate) {
-        this.createDate = createDate;
     }
     
 }

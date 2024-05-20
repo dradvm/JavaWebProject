@@ -18,7 +18,6 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
@@ -98,8 +97,9 @@ public class Customer implements Serializable {
     private Date birthday;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "CreateDate", columnDefinition = "DATETIME")
-    private LocalDate createDate;
+    @Column(name = "CreateDate")
+    @Temporal(TemporalType.DATE)
+    private Date createDate;
     @JoinColumn(name = "DistrictID", referencedColumnName = "DistrictID")
     @ManyToOne(optional = false)
     private District districtID;
@@ -115,7 +115,7 @@ public class Customer implements Serializable {
         this.customerEmail = customerEmail;
     }
 
-    public Customer(String customerEmail, String password, int active, String fullName, String phone, int gender, String address, LocalDate createDate) {
+    public Customer(String customerEmail, String password, int active, String fullName, String phone, int gender, String address, Date createDate) {
         this.customerEmail = customerEmail;
         this.password = password;
         this.active = active;
@@ -214,11 +214,11 @@ public class Customer implements Serializable {
         this.birthday = birthday;
     }
 
-    public LocalDate getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(LocalDate createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
