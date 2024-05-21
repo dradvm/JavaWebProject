@@ -13,6 +13,11 @@ import com.JavaWebProject.JavaWebProject.services.MailService;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.time.Instant;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -40,6 +45,10 @@ public class AuthController {
     private DistrictService districtService;
     private String role;
     private String username;
+    private Customer newCustomer;
+    private Caterer newCaterer;
+    private Instant expireTime;
+    private int code;
     
     @RequestMapping(value = "/toLogin", method = RequestMethod.GET)
     public String toLogin() {
@@ -89,15 +98,102 @@ public class AuthController {
     
     @RequestMapping(value = "/toSignup", method = RequestMethod.GET)
     public String toSignup(ModelMap model) {
-        Customer customer = new Customer();
-        customer.setDistrictID(new District());
-        Caterer caterer = new Caterer();
-        caterer.setDistrictID(new District());
-        model.addAttribute("customer", customer);
-        model.addAttribute("caterer", customer);
+        newCustomer = null;
+        newCaterer = null;
+        expireTime = null;
+        code = 0;
         model.addAttribute("cityList", cityService.findAll());
         model.addAttribute("districtList", districtService.findAll());
         return "/AuthPage/signup";
+    }
+    
+    @RequestMapping(value = "/signupCustomer", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, String> signupCustomer(
+            @RequestParam("email") String email,
+            @RequestParam("password") String password,
+            @RequestParam("name") String name,
+            @RequestParam("phone") String phone,
+            @RequestParam("gender") int gender,
+            @RequestParam("birthday") String birthday,
+            @RequestParam("address") String address,
+            @RequestParam("district") int district) {
+        Map<String, String> result = new HashMap<>();
+        boolean valid = true;
+        Pattern pattern = Pattern.compile("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))");
+        if (email == null || !pattern.matcher(email).matches()) {
+            valid = false;
+            result.put("email", "fail");
+        }
+        if (password == null || password.trim().length() < 8) {
+            valid = false;
+            result.put("password", "fail");
+        }
+        if (name == null || name.trim().length() == 0) {
+            valid = false;
+            result.put("name", "fail");
+        }
+        pattern = Pattern.compile("^(?:[0-9] ?){7,10}$");
+        if (phone == null || !pattern.matcher(phone).matches()) {
+            valid = false;
+            result.put("phone", "fail");
+        }
+        if (gender != 0 && gender != 1) {
+            valid = false;
+            result.put("gender", "fail");
+        }
+        Date date = new Date();
+        if (birthday != null && birthday.trim().length() > 0) {
+            String[] arr = birthday.split("-");
+            try {
+                int year = Integer.parseInt(arr[0]);
+                int month = Integer.parseInt(arr[1]);
+                int day = Integer.parseInt(arr[2]);
+                date = new Date(year - 1990, month - 1, day);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                date = null;
+                valid = false;
+                result.put("general", "fail");
+            }
+        }
+        if (address == null || address.trim().length() == 0) {
+            valid = false;
+            result.put("address", "fail");
+        }
+        District districtID = districtService.findByDistrictID(district);
+        if (districtID == null) {
+            valid = false;
+            result.put("general", "fail");
+        }
+        if (customerService.findByCustomerEmail(email) != null || catererService.findByCatererEmail(email) != null || adminService.findByAdminUsername(email) != null) {
+            valid = false;
+            result.put("general", "used");
+        }
+        if (!valid) {
+            result.put("status", "Fail");
+        }
+        else {
+            newCustomer = new Customer();
+            newCustomer.setCustomerEmail(email);
+            newCustomer.setPassword(hash(password));
+            newCustomer.setFullName(name);
+            newCustomer.setPoint(0.0);
+            newCustomer.setRollChance(0);
+            newCustomer.setActive(1);
+            newCustomer.setFullName(name);
+            newCustomer.setPhone(phone);
+            newCustomer.setGender(gender);
+            newCustomer.setAddress(address);
+            if (date != null) {
+                newCustomer.setBirthday(date);
+            }
+            newCustomer.setCreateDate(new Date());
+            newCustomer.setDistrictID(districtID);
+            result.put("status", "OK");
+        }
+        return result;
     }
     
     @RequestMapping(value = "/logout", method = RequestMethod.GET)

@@ -22,59 +22,57 @@
             <option value="customer">Customer</option>
             <option value="caterer">Caterer</option>
         </select>
-        <form id="customer-form" th:object="${customer}" action="" method="post">
+        <form id="customer-form">
             <!--Email-->
             <label for="customer-email">
                 Email<span style="color: red;">*</span>
             </label>
-            <input id="customer-email" type="email" th:field="*{customerEmail}"/>
-            <div th:errors="*{customerEmail}"></div>
+            <input id="customer-email" type="email"/>
+            <div id="customer-email-error"></div>
             <!--Password-->
             <label for="customer-password">
                 Password<span style="color: red;">*</span>
             </label>
-            <input id="customer-password" type="password" th:field="*{password}"/>
-            <div th:errors="*{password}"></div>
+            <input id="customer-password" type="password"/>
+            <div id="customer-password-error"></div>
             <!--Full name-->
             <label for="customer-name">
                 Full name<span style="color: red;">*</span>
             </label>
-            <input id="customer-name" type="text" th:field="*{fullName}"/>
-            <div th:errors="*{fullName}"></div>
+            <input id="customer-name" type="text"/>
+            <div id="customer-name-error"></div>
             <!--Phone-->
             <label for="customer-phone">
                 Phone number<span style="color: red;">*</span>
             </label>
-            <input id="customer-phone" type="tel" th:field="*{phone}"/>
-            <div th:errors="*{phone}"></div>
+            <input id="customer-phone" type="tel"/>
+            <div id="customer-phone-error"></div>
             <!--Gender-->
             <label for="customer-gender">
                 Gender<span style="color: red;">*</span>
             </label>
-            <select id="customer-gender" th:field="*{gender}">
-                <option th:value="${0}">Male</option>
-                <option th:value="${1}">Male</option>
+            <select id="customer-gender">
+                <option th:value="0">Male</option>
+                <option th:value="1">Female</option>
             </select>
-            <div th:errors="*{gender}"></div>
             <!--Birthday-->
-            <label for="customer-birthday">Gender</label>
-            <input id="customer-birthday" type="date" th:field="*{birthday}"/>
-            <div th:errors="*{birthday}"></div>
+            <label for="customer-birthday">Birthday</label>
+            <input id="customer-birthday" type="date"/>
+            <div id="customer-birthday-error"></div>
             <!--Address-->
             <label for="customer-address">
                 Address<span style="color: red;">*</span>
             </label>
-            <input id="customer-address" type="text" th:field="*{address}"/>
-            <div th:errors="*{address}"></div>
+            <input id="customer-address" type="text"/>
+            <div id="customer-address-error"></div>
             <!--City-->
             <select id="customer-city" onchange="getDistrictList('customer')">
                 <option th:each="city : ${cityList}" th:value="${city.cityID}">
                     <span th:text="${city.cityName}"></span>
                 </option>
             </select>
-            <span th:text="${cityError}"></span>
             <!--District-->
-            <select id="customer-district" th:field="*{districtID.districtID}">
+            <select id="customer-district">
                 <option th:each="district : ${districtList}" 
                         class="customer-district" 
                         th:city="${district.cityID.cityID}"
@@ -82,9 +80,9 @@
                     <span th:text="${district.districtName}"></span>
                 </option>
             </select>
-            <span th:text="${cityError}"></span>
+            <div id="customer-error"></div>
             <!--Submit-->
-            <button type="submit">Submit</button>
+            <button type="button" onclick="signup('customer')">Submit</button>
         </form>
         <script th:src="@{/js/jquery.min.js}"></script>
         <script th:src="@{/js/signup.js}"></script>
