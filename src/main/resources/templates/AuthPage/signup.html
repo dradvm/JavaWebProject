@@ -1,0 +1,92 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" 
+              rel="stylesheet"
+              integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" 
+              crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+                crossorigin="anonymous"></script>
+        <script src="https://kit.fontawesome.com/b42e1089e2.js" 
+                crossorigin="anonymous"></script>
+        <link rel="stylesheet" th:href="@{/css/mycss.css}">
+        <title>Sign up</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <label for="role">
+            You are a<span style="color: red;">*</span>
+        </label>
+        <select id="role">
+            <option value="customer">Customer</option>
+            <option value="caterer">Caterer</option>
+        </select>
+        <form id="customer-form" th:object="${customer}" action="" method="post">
+            <!--Email-->
+            <label for="customer-email">
+                Email<span style="color: red;">*</span>
+            </label>
+            <input id="customer-email" type="email" th:field="*{customerEmail}"/>
+            <div th:errors="*{customerEmail}"></div>
+            <!--Password-->
+            <label for="customer-password">
+                Password<span style="color: red;">*</span>
+            </label>
+            <input id="customer-password" type="password" th:field="*{password}"/>
+            <div th:errors="*{password}"></div>
+            <!--Full name-->
+            <label for="customer-name">
+                Full name<span style="color: red;">*</span>
+            </label>
+            <input id="customer-name" type="text" th:field="*{fullName}"/>
+            <div th:errors="*{fullName}"></div>
+            <!--Phone-->
+            <label for="customer-phone">
+                Phone number<span style="color: red;">*</span>
+            </label>
+            <input id="customer-phone" type="tel" th:field="*{phone}"/>
+            <div th:errors="*{phone}"></div>
+            <!--Gender-->
+            <label for="customer-gender">
+                Gender<span style="color: red;">*</span>
+            </label>
+            <select id="customer-gender" th:field="*{gender}">
+                <option th:value="${0}">Male</option>
+                <option th:value="${1}">Male</option>
+            </select>
+            <div th:errors="*{gender}"></div>
+            <!--Birthday-->
+            <label for="customer-birthday">Gender</label>
+            <input id="customer-birthday" type="date" th:field="*{birthday}"/>
+            <div th:errors="*{birthday}"></div>
+            <!--Address-->
+            <label for="customer-address">
+                Address<span style="color: red;">*</span>
+            </label>
+            <input id="customer-address" type="text" th:field="*{address}"/>
+            <div th:errors="*{address}"></div>
+            <!--City-->
+            <select id="customer-city" onchange="getDistrictList('customer')">
+                <option th:each="city : ${cityList}" th:value="${city.cityID}">
+                    <span th:text="${city.cityName}"></span>
+                </option>
+            </select>
+            <span th:text="${cityError}"></span>
+            <!--District-->
+            <select id="customer-district" th:field="*{districtID.districtID}">
+                <option th:each="district : ${districtList}" 
+                        class="customer-district" 
+                        th:city="${district.cityID.cityID}"
+                        th:value="${district.districtID}">
+                    <span th:text="${district.districtName}"></span>
+                </option>
+            </select>
+            <span th:text="${cityError}"></span>
+            <!--Submit-->
+            <button type="submit">Submit</button>
+        </form>
+        <script th:src="@{/js/jquery.min.js}"></script>
+        <script th:src="@{/js/signup.js}"></script>
+    </body>
+</html>

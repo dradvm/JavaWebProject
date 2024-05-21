@@ -3,14 +3,19 @@ package com.JavaWebProject.JavaWebProject.controllers;
 import com.JavaWebProject.JavaWebProject.models.Admin;
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.Customer;
+import com.JavaWebProject.JavaWebProject.models.District;
 import com.JavaWebProject.JavaWebProject.services.AdminService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
+import com.JavaWebProject.JavaWebProject.services.CityService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
+import com.JavaWebProject.JavaWebProject.services.DistrictService;
+import com.JavaWebProject.JavaWebProject.services.MailService;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -27,6 +32,12 @@ public class AuthController {
     private CustomerService customerService;
     @Autowired
     private AdminService adminService;
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private CityService cityService;
+    @Autowired
+    private DistrictService districtService;
     private String role;
     private String username;
     
@@ -76,12 +87,33 @@ public class AuthController {
         return "Fail";
     }
     
+    @RequestMapping(value = "/toSignup", method = RequestMethod.GET)
+    public String toSignup(ModelMap model) {
+        Customer customer = new Customer();
+        customer.setDistrictID(new District());
+        Caterer caterer = new Caterer();
+        caterer.setDistrictID(new District());
+        model.addAttribute("customer", customer);
+        model.addAttribute("caterer", customer);
+        model.addAttribute("cityList", cityService.findAll());
+        model.addAttribute("districtList", districtService.findAll());
+        return "/AuthPage/signup";
+    }
+    
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logout() {
+        username = null;
+        role = null;
+        return "redirect:/";
+    }
+    
     private String hash(String str) {
         MessageDigest md;
         try {
             md = MessageDigest.getInstance("SHA-256");
         }
         catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
         BigInteger number = new BigInteger(1, md.digest(str.getBytes(StandardCharsets.UTF_8)));

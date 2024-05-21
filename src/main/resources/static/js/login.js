@@ -41,3 +41,7 @@ function login() {
         });
     });
 }
+
+function toSignup() {
+    location.href = '/auth/toSignup';
+}
