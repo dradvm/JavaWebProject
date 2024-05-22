@@ -14,6 +14,8 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface CustomerRepository extends CrudRepository<Customer, String> {
     
+    Customer findByCustomerEmail(String customerEmail);
+    
     int countByCreateDate(LocalDate createDate);
     
     int countByCreateDateBetween(LocalDate startDate, LocalDate endDate);

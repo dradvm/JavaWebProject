@@ -57,12 +57,12 @@ public class CustomerService {
     }
 
     public void updateRollChance(String username, Integer rollChance) {
-        Customer customer = findById(username);
+        Customer customer = customerRepository.findByCustomerEmail(username);
         customer.setRollChance(rollChance);
         customerRepository.save(customer);
     }
     public void updatePointValue(String username, Integer point) {
-        Customer customer = findById(username);
+        Customer customer = customerRepository.findByCustomerEmail(username);
         customer.setPoint(customer.getPoint() + point);
     }
     
