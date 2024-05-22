@@ -24,18 +24,17 @@ const radius = width / 2
 // let items = document.getElementsByTagName("textarea")[0].split("\n");
 let items = []
 
-// $(document).ready(function () {
-//     $.ajax({
-//         type: 'GET',
-//         url: '/minigame/getDataOfWheel',
-//         success: function (response) {
-//             items = response
-//             console.log(response)
-//             draw()
-//         }
-//     });
-// })
-items = [1, 2, 3, 4, 5, 6, 7, 8]
+$(document).ready(function () {
+    $.ajax({
+        type: 'GET',
+        url: '/minigame/getDataOfWheel',
+        success: function (response) {
+            items = response
+            getRollChance()
+            draw()
+        }
+    });
+})
 let currentDeg = 0
 let step = 360 / items.length
 let itemDegs = {}
@@ -43,12 +42,33 @@ let colors = [
     { r: 133, g: 255, b: 200 },
     { r: 0, g: 214, b: 117 }
 ]
-draw()
 
+function closeModal() {
+    document.querySelector(".modal-open").classList.remove("modal-open")
+}
+function showModal(modal, point) {
+    modal.classList.add("modal-open")
+    if (point >= 0) {
+        document.querySelector("#point").textContent = point
+    }
+
+}
 function createWheel() {
     // items = document.getElementsByTagName("textarea")[0].split("\n");
     step = 360 / items.length
     draw()
+}
+
+function getRollChance() {
+    $(document).ready(function () {
+        $.ajax({
+            type: 'GET',
+            url: '/minigame/getRollChance',
+            success: function (response) {
+                document.querySelector("#rollChance").innerHTML = response
+            }
+        });
+    })
 }
 
 function draw() {
@@ -128,6 +148,7 @@ function animate() {
                 url: '/minigame/update',
                 data: { value: winItem },
                 success: function (response) {
+                    showModal(document.querySelector("#modal-point"), response)
                     winItem = 0
                 }
             });
@@ -152,13 +173,19 @@ function spin() {
             type: 'GET',
             url: '/minigame/spin',
             success: function (response) {
-                console.log(response)
                 winItem = response
-                maxRotation = (360 * 10) - 90 - itemDegs[winItem].endDeg + randomRange(1, itemDegs[winItem].endDeg - itemDegs[winItem].startDeg - 1)
-                itemDegs = {}
-                // startTime = null
-                pause = false
-                window.requestAnimationFrame(animate);
+                if (winItem >= 0) {
+                    getRollChance()
+                    maxRotation = (360 * 10) - 90 - itemDegs[winItem].endDeg + randomRange(1, itemDegs[winItem].endDeg - itemDegs[winItem].startDeg - 1)
+                    itemDegs = {}
+                    // startTime = null
+                    pause = false
+                    window.requestAnimationFrame(animate);
+                }
+                else {
+                    showModal(document.querySelector("#modal-no-chance"), -1)
+                }
+
             }
         });
     })

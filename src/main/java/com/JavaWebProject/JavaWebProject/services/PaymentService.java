@@ -105,6 +105,9 @@ public class PaymentService {
         float currentValue = getTotalValueByDay(date);
         float oldValue = getTotalValueByDay(date.minusDays(1));
         if (oldValue == 0) {
+            if (currentValue == 0) {
+                return 0;
+            }
             return 1;
         }
         return ((currentValue/oldValue) - 1) * 100;
