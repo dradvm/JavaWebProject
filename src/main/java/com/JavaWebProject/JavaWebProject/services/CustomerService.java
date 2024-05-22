@@ -9,6 +9,7 @@ import com.JavaWebProject.JavaWebProject.repositories.CustomerRepository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,9 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Customer findByCustomerEmail(String customerEmail) {
-        return customerRepository.findByCustomerEmail(customerEmail);
+    public Customer findById(String customerEmail) {
+        Optional<Customer> result = customerRepository.findById(customerEmail);
+        return result.isPresent() ? result.get() : null;
     }
 
     public int getNewCustomerByDay(LocalDate date) {
@@ -53,6 +55,7 @@ public class CustomerService {
         LocalDate endDate = LocalDate.of(year, 12, 31);
         return customerRepository.countByCreateDateBetween(startDate, endDate);
     }
+<<<<<<< HEAD
     public void updateRollChance(String username, Integer rollChance) {
         Customer customer = findByCustomerEmail(username);
         customer.setRollChance(rollChance);
@@ -61,6 +64,10 @@ public class CustomerService {
     public void updatePointValue(String username, Integer point) {
         Customer customer = findByCustomerEmail(username);
         customer.setPoint(customer.getPoint() + point);
+=======
+    
+    public void save(Customer customer) {
+>>>>>>> bff4e3874fc590742ef4ce720b9188324f1e6b98
         customerRepository.save(customer);
     }
 }

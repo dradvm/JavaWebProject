@@ -13,8 +13,6 @@ import org.springframework.data.repository.CrudRepository;
  * @author DELL
  */
 public interface CustomerRepository extends CrudRepository<Customer, String> {
-
-    Customer findByCustomerEmail(String customerEmail);
     
     int countByCreateDate(LocalDate createDate);
     
