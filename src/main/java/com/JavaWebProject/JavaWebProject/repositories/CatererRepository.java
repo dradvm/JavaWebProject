@@ -14,8 +14,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface CatererRepository extends CrudRepository<Caterer, String> {
     
-    Caterer findByCatererEmail(String catererEmail);
-    
     int countByCreateDate(LocalDate createDate);
     
     int countByCreateDateBetween(LocalDate startDate, LocalDate endDate);

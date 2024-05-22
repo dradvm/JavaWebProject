@@ -13,10 +13,12 @@ import com.JavaWebProject.JavaWebProject.services.MailService;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -59,7 +61,7 @@ public class AuthController {
     @ResponseBody
     public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
         password = hash(password);
-        Customer customer = customerService.findByCustomerEmail(username);
+        Customer customer = customerService.findById(username);
         if (customer != null) {
             if (customer.getPassword().equals(password)) {
                 if (customer.getActive() == 0) {
@@ -73,7 +75,7 @@ public class AuthController {
                 return "Fail";
             }
         }
-        Caterer caterer = catererService.findByCatererEmail(username);
+        Caterer caterer = catererService.findById(username);
         if (caterer != null) {
             if (caterer.getPassword().equals(password)) {
                 if (caterer.getActive() == 0) {
@@ -87,7 +89,7 @@ public class AuthController {
                 return "Fail";
             }
         }
-        Admin admin = adminService.findByAdminUsername(username);
+        Admin admin = adminService.findById(username);
         if (admin != null && admin.getAdminPassword().equals(password)) {
             this.username = username;
             role = "Admin";
@@ -149,7 +151,7 @@ public class AuthController {
                 int year = Integer.parseInt(arr[0]);
                 int month = Integer.parseInt(arr[1]);
                 int day = Integer.parseInt(arr[2]);
-                date = new Date(year - 1990, month - 1, day);
+                date = new Date(year - 1900, month - 1, day);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -162,12 +164,12 @@ public class AuthController {
             valid = false;
             result.put("address", "fail");
         }
-        District districtID = districtService.findByDistrictID(district);
+        District districtID = districtService.findById(district);
         if (districtID == null) {
             valid = false;
             result.put("general", "fail");
         }
-        if (customerService.findByCustomerEmail(email) != null || catererService.findByCatererEmail(email) != null || adminService.findByAdminUsername(email) != null) {
+        if (customerService.findById(email) != null || catererService.findById(email) != null || adminService.findById(email) != null) {
             valid = false;
             result.put("general", "used");
         }
@@ -194,6 +196,43 @@ public class AuthController {
             result.put("status", "OK");
         }
         return result;
+    }
+    
+    @RequestMapping(value = "/toEmailverification", method = RequestMethod.GET)
+    public String toEmailverification(ModelMap model) {
+        String email = newCustomer != null ? newCustomer.getCustomerEmail() : newCaterer.getCatererEmail();
+        model.addAttribute("email", email);
+        expireTime = Instant.now().plus(Duration.ofMinutes(5));
+        Random random = new Random();
+        code = random.nextInt(100000, 1000000);
+        mailService.sendMail(email, "Plate Portal verification code", "Your email verification code is " + code + ", it is effective in 5 minutes");
+        return "/AuthPage/emailverification";
+    }
+    
+    @RequestMapping(value = "/verifyEmail", method = RequestMethod.POST)
+    @ResponseBody
+    public String verifyEmail(ModelMap model, @RequestParam("code") int code) {
+        if (Instant.now().isAfter(expireTime)) {
+            return "Expired";
+        }
+        else if (code != this.code) {
+            return "Incorrect";
+        }
+        else {
+            expireTime = null;
+            this.code = 0;
+            if (newCustomer != null) {
+                customerService.save(newCustomer);
+                username = newCustomer.getCustomerEmail();
+                role = "Customer";
+            }
+            else if (newCaterer != null) {
+                //Caterer
+            }
+            newCustomer = null;
+            newCaterer = null;
+            return "OK";
+        }
     }
     
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -226,5 +265,13 @@ public class AuthController {
     
     public String getRole() {
         return role;
+    }
+
+    public Customer getNewCustomer() {
+        return newCustomer;
+    }
+
+    public Caterer getNewCaterer() {
+        return newCaterer;
     }
 }

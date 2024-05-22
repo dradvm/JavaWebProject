@@ -9,6 +9,7 @@ import com.JavaWebProject.JavaWebProject.repositories.CustomerRepository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,9 @@ public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
 
-    public Customer findByCustomerEmail(String customerEmail) {
-        return customerRepository.findByCustomerEmail(customerEmail);
+    public Customer findById(String customerEmail) {
+        Optional<Customer> result = customerRepository.findById(customerEmail);
+        return result.isPresent() ? result.get() : null;
     }
 
     public int getNewCustomerByDay(LocalDate date) {
@@ -52,5 +54,9 @@ public class CustomerService {
         LocalDate startDate = LocalDate.of(year, 1, 1);
         LocalDate endDate = LocalDate.of(year, 12, 31);
         return customerRepository.countByCreateDateBetween(startDate, endDate);
+    }
+    
+    public void save(Customer customer) {
+        customerRepository.save(customer);
     }
 }

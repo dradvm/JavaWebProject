@@ -9,6 +9,7 @@ import com.JavaWebProject.JavaWebProject.repositories.CatererRepository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,8 +22,9 @@ public class CatererService {
     @Autowired
     private CatererRepository catererRepository;
     
-    public Caterer findByCatererEmail(String catererEmail) {
-        return catererRepository.findByCatererEmail(catererEmail);
+    public Caterer findById(String catererEmail) {
+        Optional<Caterer> result = catererRepository.findById(catererEmail);
+        return result.isPresent() ? result.get() : null;
     }
     
     public int getNewCatererByDay(LocalDate date) {

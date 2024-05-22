@@ -84,6 +84,10 @@ function signup(role) {
                 },
                 success: function (response) {
                     if (response.status === 'Fail') {
+                        if (response.general === 'fail') {
+                            $('#customer-error').text('Invalid page, please refresh');
+                            return;
+                        }
                         if (response.email === 'fail') {
                             $('#customer-email-error').text('Invalid email');
                         }
@@ -102,12 +106,9 @@ function signup(role) {
                         if (response.general === 'used') {
                             $('#customer-email-error').text('This email has been used');
                         }
-                        if (response.general === 'fail') {
-                            $('#customer-error').text('Invalid page, please refresh');
-                        }
                     }
                     else if (response.status === "OK") {
-                        console.log("OK");
+                        location.href = '/auth/toEmailverification';
                     }
                 }
             });

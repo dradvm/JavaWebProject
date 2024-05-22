@@ -2,7 +2,7 @@ package com.JavaWebProject.JavaWebProject.services;
 
 import com.JavaWebProject.JavaWebProject.models.District;
 import com.JavaWebProject.JavaWebProject.repositories.DistrictRepository;
-import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +11,17 @@ public class DistrictService {
     @Autowired
     private DistrictRepository districtRepository;
     
-    public List<District> findAll() {
+    public Iterable<District> findAll() {
         return districtRepository.findAll();
     }
     
-    public District findByDistrictID(int districtID) {
-        return districtRepository.findByDistrictID(districtID);
+    public District findById(int districtID) {
+        Optional<District> result = districtRepository.findById(districtID);
+        if (result.isPresent()) {
+            return result.get();
+        }
+        else {
+            return null;
+        }
     }
 }

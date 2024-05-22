@@ -1,6 +1,7 @@
 package com.JavaWebProject.JavaWebProject.config;
 
 import com.JavaWebProject.JavaWebProject.filters.AdminFilter;
+import com.JavaWebProject.JavaWebProject.filters.EmailVerificationFilter;
 import com.JavaWebProject.JavaWebProject.filters.LoginFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +25,15 @@ public class FilterConfig {
         registrationBean.setFilter(new AdminFilter());
         registrationBean.addUrlPatterns("/admin/*");
         registrationBean.setOrder(3);
+        return registrationBean;
+    }
+    
+    @Bean
+    public FilterRegistrationBean<EmailVerificationFilter> emailVerificationFilter() {
+        FilterRegistrationBean<EmailVerificationFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new EmailVerificationFilter());
+        registrationBean.addUrlPatterns("/auth/toEmailverification");
+        registrationBean.setOrder(4);
         return registrationBean;
     }
 }
