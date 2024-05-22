@@ -55,4 +55,8 @@ public class CatererService {
         LocalDate endDate = LocalDate.of(year, 12, 31);
         return catererRepository.countByCreateDateBetween(startDate, endDate);
     }
+    
+    public void save(Caterer caterer) {
+        catererRepository.save(caterer);
+    }
 }

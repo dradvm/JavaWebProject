@@ -108,7 +108,7 @@ function signup(role) {
                         }
                     }
                     else if (response.status === "OK") {
-                        location.href = '/auth/toEmailverification';
+                        location.href = '/auth/toEmailverificationSignup';
                     }
                 }
             });

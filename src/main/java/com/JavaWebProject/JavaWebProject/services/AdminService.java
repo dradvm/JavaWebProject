@@ -15,4 +15,8 @@ public class AdminService {
         Optional<Admin> result = adminRepository.findById(adminUsername);
         return result.isPresent() ? result.get() : null;
     }
+    
+    public void save(Admin admin) {
+        adminRepository.save(admin);
+    }
 }

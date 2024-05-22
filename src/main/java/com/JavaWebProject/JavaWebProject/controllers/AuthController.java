@@ -49,6 +49,7 @@ public class AuthController {
     private String username;
     private Customer newCustomer;
     private Caterer newCaterer;
+    private String retrieveEmail;
     private Instant expireTime;
     private int code;
     
@@ -98,8 +99,33 @@ public class AuthController {
         return "Fail";
     }
     
+    @RequestMapping(value = "/toRetrievepassword", method = RequestMethod.GET)
+    public String toRetrievepassword() {
+        retrieveEmail = null;
+        newCustomer = null;
+        newCaterer = null;
+        expireTime = null;
+        code = 0;
+        return "/AuthPage/retrievepassword";
+    }
+    
+    @RequestMapping(value = "/checkRetrieveEmail", method = RequestMethod.POST)
+    @ResponseBody
+    public String checkRetrieveEmail(@RequestParam("email") String email) {
+        Pattern pattern = Pattern.compile("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))");
+        if (email == null || !pattern.matcher(email).matches()) {
+            return "Email";
+        }
+        if (customerService.findById(email) == null && catererService.findById(email) == null && adminService.findById(email) == null) {
+            return "Unregistered";
+        }
+        retrieveEmail = email;
+        return "OK";
+    }
+    
     @RequestMapping(value = "/toSignup", method = RequestMethod.GET)
     public String toSignup(ModelMap model) {
+        retrieveEmail = null;
         newCustomer = null;
         newCaterer = null;
         expireTime = null;
@@ -198,20 +224,22 @@ public class AuthController {
         return result;
     }
     
-    @RequestMapping(value = "/toEmailverification", method = RequestMethod.GET)
-    public String toEmailverification(ModelMap model) {
+    @RequestMapping(value = "/toEmailverificationSignup", method = RequestMethod.GET)
+    public String toEmailverificationSignup(ModelMap model) {
+        model.addAttribute("command", "signup");
+        retrieveEmail = null;
         String email = newCustomer != null ? newCustomer.getCustomerEmail() : newCaterer.getCatererEmail();
         model.addAttribute("email", email);
         expireTime = Instant.now().plus(Duration.ofMinutes(5));
         Random random = new Random();
         code = random.nextInt(100000, 1000000);
-        mailService.sendMail(email, "Plate Portal verification code", "Your email verification code is " + code + ", it is effective in 5 minutes");
+        mailService.sendMail(email, "Plate Portal verification code", "Your email verification code is " + code + ", it is effective in 5 minutes.");
         return "/AuthPage/emailverification";
     }
     
-    @RequestMapping(value = "/verifyEmail", method = RequestMethod.POST)
+    @RequestMapping(value = "/verifyEmailSignup", method = RequestMethod.POST)
     @ResponseBody
-    public String verifyEmail(ModelMap model, @RequestParam("code") int code) {
+    public String verifyEmailSignup(@RequestParam("code") int code) {
         if (Instant.now().isAfter(expireTime)) {
             return "Expired";
         }
@@ -231,8 +259,78 @@ public class AuthController {
             }
             newCustomer = null;
             newCaterer = null;
+            retrieveEmail = null;
             return "OK";
         }
+    }
+    
+    @RequestMapping(value = "/toEmailverificationRetrieve", method = RequestMethod.GET)
+    public String toEmailverificationRetrieve(ModelMap model) {
+        model.addAttribute("command", "retrieve");
+        model.addAttribute("email", retrieveEmail);
+        expireTime = Instant.now().plus(Duration.ofMinutes(5));
+        Random random = new Random();
+        code = random.nextInt(100000, 1000000);
+        mailService.sendMail(retrieveEmail, "Plate Portal verification code", "Your email verification code is " + code + ", it is effective in 5 minutes");
+        return "/AuthPage/emailverification";
+    }
+    
+    @RequestMapping(value = "/verifyEmailRetrieve", method = RequestMethod.POST)
+    @ResponseBody
+    public String verifyEmailRetrieve(@RequestParam("code") int code) {
+        if (Instant.now().isAfter(expireTime)) {
+            return "Expired";
+        }
+        else if (code != this.code) {
+            return "Incorrect";
+        }
+        else {
+            expireTime = null;
+            this.code = 0;
+            newCustomer = null;
+            newCaterer = null;
+            return "OK";
+        }
+    }
+    
+    @RequestMapping(value = "/toResetpassword", method = RequestMethod.GET)
+    public String toResetpassword() {
+        if (retrieveEmail == null || expireTime != null || code != 0) {
+            return "redirect:/";
+        }
+        else {
+            return "/AuthPage/resetpassword";
+        }
+    }
+    
+    @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
+    @ResponseBody
+    public String resetPassword(@RequestParam("password") String password) {
+        if (password == null || password.trim().length() < 8) {
+            return "Invalid";
+        }
+        Customer customer = customerService.findById(retrieveEmail);
+        if (customer != null) {
+            customer.setPassword(hash(password));
+            customerService.save(customer);
+            retrieveEmail = null;
+            return "OK";
+        }
+        Caterer caterer = catererService.findById(retrieveEmail);
+        if (caterer != null) {
+            caterer.setPassword(hash(password));
+            catererService.save(caterer);
+            retrieveEmail = null;
+            return "OK";
+        }
+        Admin admin = adminService.findById(retrieveEmail);
+        if (admin != null) {
+            admin.setAdminPassword(hash(password));
+            adminService.save(admin);
+            retrieveEmail = null;
+            return "OK";
+        }
+        return "Fail";
     }
     
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
