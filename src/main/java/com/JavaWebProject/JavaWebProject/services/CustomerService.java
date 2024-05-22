@@ -53,4 +53,14 @@ public class CustomerService {
         LocalDate endDate = LocalDate.of(year, 12, 31);
         return customerRepository.countByCreateDateBetween(startDate, endDate);
     }
+    public void updateRollChance(String username, Integer rollChance) {
+        Customer customer = findByCustomerEmail(username);
+        customer.setRollChance(rollChance);
+        customerRepository.save(customer);
+    }
+    public void updatePointValue(String username, Integer point) {
+        Customer customer = findByCustomerEmail(username);
+        customer.setPoint(customer.getPoint() + point);
+        customerRepository.save(customer);
+    }
 }

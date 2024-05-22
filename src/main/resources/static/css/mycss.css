@@ -12,6 +12,40 @@
     --main-bg-active-color: #029251;
 }
 
+.modal {
+    display: none;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    offset: 0 0 0 0;
+    z-index: 999;
+    animation: slideIn .5s;
+}
+
+.modal-open {
+    display: flex;
+}
+
+.modal-container {
+    background-color: white;
+}
+
+.bg-danger:hover {
+    background-color: rgb(196, 4, 4) !important;
+}
+
+@keyframes slideIn {
+    from {
+        top: 100px;
+        opacity: 0;
+    }
+
+    to {
+        top: 0;
+        opacity: 1;
+    }
+}
+
 .wheel {
     display: flex;
     justify-content: center;
@@ -21,8 +55,9 @@
 .center-circle {
     width: 70px;
     height: 70px;
-    border-radius: 60px;
+    border-radius: 50%;
     background-color: #fff;
+    cursor: pointer;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);

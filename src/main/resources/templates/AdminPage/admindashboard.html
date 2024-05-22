@@ -38,7 +38,7 @@
                                         Today Revenue
                                     </div>
                                     <div th:class="'fs-7 ' + ${gapPercentRevenue >= 0 ? 'text-primary' : 'text-danger'} "
-                                        th:text="${gapPercentRevenue >= 0 ? '+' + gapPercentRevenue : '-' + gapPercentRevenue} + '%'">
+                                        th:text="${gapPercentRevenue >= 0 ? '+' + gapPercentRevenue : gapPercentRevenue} + '%'">
                                     </div>
                                 </div>
                             </div>
@@ -54,7 +54,7 @@
                                         Total Order
                                     </div>
                                     <div th:class="'fs-7 ' + ${gapPercentOrder >= 0 ? 'text-primary' : 'text-danger'} "
-                                        th:text="${gapPercentOrder >= 0 ? '+' + gapPercentOrder : '-' + gapPercentOrder} + '%'">
+                                        th:text="${gapPercentOrder >= 0 ? '+' + gapPercentOrder : gapPercentOrder} + '%'">
                                     </div>
                                 </div>
                             </div>
@@ -70,7 +70,7 @@
                                         New Caterer
                                     </div>
                                     <div th:class="'fs-7 ' + ${gapPercentCaterer >= 0 ? 'text-primary' : 'text-danger'} "
-                                        th:text="${gapPercentCaterer >= 0 ? '+' + gapPercentCaterer : '-' + gapPercentCaterer} + '%'">
+                                        th:text="${gapPercentCaterer >= 0 ? '+' + gapPercentCaterer : gapPercentCaterer} + '%'">
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +87,7 @@
                                         New Customer
                                     </div>
                                     <div th:class="'fs-7 ' + ${gapPercentCustomer >= 0 ? 'text-primary' : 'text-danger'} "
-                                        th:text="${gapPercentCustomer >= 0 ? '+' + gapPercentCustomer : '-' + gapPercentCustomer} + '%'">
+                                        th:text="${gapPercentCustomer >= 0 ? '+' + gapPercentCustomer : gapPercentCustomer} + '%'">
                                     </div>
                                 </div>
                             </div>

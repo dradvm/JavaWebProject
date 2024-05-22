@@ -12,7 +12,7 @@
     <title>TODO supply a title</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <div th:insert="Config/config :: link"></div>
 </head>
 
 <body>
@@ -41,8 +41,12 @@
     </heder>
     <div class="position-relative">
         <img src="../../static/images/bg-spinning-wheel.jpg" class="w-100" alt="">
+
+        <img th:src="@{/images/bg-spinning-wheel.jpg}" class="w-100" alt="">
         <div class="position-absolute top-0 start-50 translate-middle-x text-white mt-5">
-            <h3>You have: 5 chance</h3>
+            <h3>
+                You have: <span id="rollChance" class="fs-3"></span> chance
+            </h3>
         </div>
         <div class="wheel position-absolute top-50 start-50 translate-middle">
             <canvas class="" id="canvas" width="350" height="350"></canvas>
@@ -53,6 +57,51 @@
 
         </div>
     </div>
+    <div id="modal-point" class="modal">
+        <div class="modal-container px-5 pt-5 pb-4 rounded shadow">
+            <div class="v-stack">
+                <div class="text-center p-3">
+                    <i class="fa-solid fa-award text-warning" style="font-size: 150px;"></i>
+                </div>
+                <div class="text-center">
+                    <h3>Congratulations!</h3>
+                </div>
+                <div class="text-center mb-3">
+                    <h5>You get <span id="point" class="fs-5 text-danger">100</span> point</h5>
+                </div>
+                <div class="d-flex justify-content-around">
+
+                    <button class="my-btn text-white bg-main px-4 py-2 rounded-pill fw-semibold" onclick="closeModal()">
+                        Got it!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="modal-no-chance" class="modal">
+        <div class="modal-container px-5 pt-5 pb-4 rounded shadow">
+            <div class="v-stack">
+                <div class="text-center">
+                    <h3>You have no roll!!</h3>
+                </div>
+                <div class="text-center p-3">
+                    <i class="fa-solid fa-hand-point-down text-danger" style="font-size: 150px;"></i>
+                </div>
+                <div class="d-flex justify-content-around mb-3">
+
+                    <a class="text-decoration-none my-btn text-white bg-danger px-4 py-2 rounded-pill fw-semibold"
+                        onclick="closeModal()">
+                        Make order to get more
+                    </a>
+                </div>
+                <div class="d-flex justify-content-around">
+
+                    <button class="my-btn text-white bg-main px-4 py-2 rounded-pill fw-semibold" onclick="closeModal()">
+                        Got it!
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/minigame.js}"></script>

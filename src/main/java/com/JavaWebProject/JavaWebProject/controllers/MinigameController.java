@@ -5,7 +5,9 @@
 package com.JavaWebProject.JavaWebProject.controllers;
 
 import com.JavaWebProject.JavaWebProject.models.MinigameReward;
+import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.MinigameRewardService;
+import jakarta.servlet.http.HttpSession;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,10 +32,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MinigameController {
     @Autowired
     private MinigameRewardService minigameRewardService;
+    @Autowired 
+    private CustomerService customerService;
+    @Autowired
+    HttpSession session;
+    private AuthController user;
     private List<MinigameReward> data;
+    private Integer rollChance = 0;
     @GetMapping("")
-    public String minigamePage() {
+    public String minigamePage(Model model) {
         data = minigameRewardService.getAllMinigameReward();
+        user = (AuthController) session.getAttribute("scopedTarget.authController");
+        
         return "/MinigamePage/minigame";
     }
     
@@ -41,11 +52,21 @@ public class MinigameController {
     public Object getDataOfWheel() {
         return data.stream().mapToDouble((minigameReward) -> minigameReward.getPoint()).toArray();
     }
-    
+    @GetMapping("/getRollChance")
+    @ResponseBody
+    public int getRollChance() { 
+        rollChance = customerService.findByCustomerEmail(user.getUsername()).getRollChance();
+        return rollChance.intValue();
+    }
     @GetMapping("/spin")
     @ResponseBody
     public int getValueSpin() {
         int total = 0;
+        if (rollChance == 0) {
+            return -1;
+        }
+        rollChance--;
+        customerService.updateRollChance(user.getUsername(), rollChance);
         for (MinigameReward minigameReward : data) {
             total+=minigameReward.getWeight();
         }
@@ -62,11 +83,8 @@ public class MinigameController {
     
     @PostMapping("/update")
     @ResponseBody
-    public Map<String, Object> update(@RequestParam("value") int value) {
-        System.out.println(value);
-        // Trả về response
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", "success");
-        return response;
+    public int update(@RequestParam("value") int value) {
+        customerService.updatePointValue(user.getUsername(), value);
+        return value;
     }
 }

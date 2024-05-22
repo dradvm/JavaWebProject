@@ -19,7 +19,6 @@ com\JavaWebProject\JavaWebProject\filters\AdminFilter.class
 com\JavaWebProject\JavaWebProject\models\BannerType.class
 com\JavaWebProject\JavaWebProject\services\CustomerService.class
 com\JavaWebProject\JavaWebProject\repositories\CatererRepository.class
-com\JavaWebProject\JavaWebProject\services\FilterService.class
 com\JavaWebProject\JavaWebProject\controllers\MinigameController.class
 com\JavaWebProject\JavaWebProject\models\Banner.class
 com\JavaWebProject\JavaWebProject\controllers\MyController.class
