@@ -55,7 +55,7 @@ public class MinigameController {
     @GetMapping("/getRollChance")
     @ResponseBody
     public int getRollChance() { 
-        rollChance = customerService.findByCustomerEmail(user.getUsername()).getRollChance();
+        rollChance = customerService.findById(user.getUsername()).getRollChance();
         return rollChance.intValue();
     }
     @GetMapping("/spin")
