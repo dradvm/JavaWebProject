@@ -18,7 +18,7 @@
         <label for="role">
             You are a<span style="color: red;">*</span>
         </label>
-        <select id="role">
+        <select id="role" onchange="changeForm()">
             <option value="customer">Customer</option>
             <option value="caterer">Caterer</option>
         </select>
@@ -58,7 +58,6 @@
             <!--Birthday-->
             <label for="customer-birthday">Birthday</label>
             <input id="customer-birthday" type="date"/>
-            <div id="customer-birthday-error"></div>
             <!--Address-->
             <label for="customer-address">
                 Address<span style="color: red;">*</span>
@@ -80,9 +79,79 @@
                     <span th:text="${district.districtName}"></span>
                 </option>
             </select>
-            <div id="customer-error"></div>
             <!--Submit-->
+            <div id="customer-error"></div>
             <button type="button" onclick="signup('customer')">Submit</button>
+        </form>
+        <form id="caterer-form">
+            <!--Email-->
+            <label for="caterer-email">
+                Email<span style="color: red;">*</span>
+            </label>
+            <input id="caterer-email" type="email"/>
+            <div id="caterer-email-error"></div>
+            <!--Password-->
+            <label for="caterer-password">
+                Password<span style="color: red;">*</span>
+            </label>
+            <input id="caterer-password" type="password"/>
+            <div id="caterer-password-error"></div>
+            <!--Full name-->
+            <label for="caterer-name">
+                Full name<span style="color: red;">*</span>
+            </label>
+            <input id="caterer-name" type="text"/>
+            <div id="caterer-name-error"></div>
+            <!--Phone-->
+            <label for="cateterer-phone">
+                Phone number<span style="color: red;">*</span>
+            </label>
+            <input id="caterer-phone" type="tel"/>
+            <div id="caterer-phone-error"></div>
+            <!--Gender-->
+            <label for="caterer-gender">
+                Gender<span style="color: red;">*</span>
+            </label>
+            <select id="caterer-gender">
+                <option th:value="0">Male</option>
+                <option th:value="1">Female</option>
+            </select>
+            <!--Birthday-->
+            <label for="caterer-birthday">Birthday</label>
+            <input id="caterer-birthday" type="date"/>
+            <!--Address-->
+            <label for="caterer-address">
+                Address<span style="color: red;">*</span>
+            </label>
+            <input id="caterer-address" type="text"/>
+            <div id="caterer-address-error"></div>
+            <!--City-->
+            <select id="caterer-city" onchange="getDistrictList('caterer')">
+                <option th:each="city : ${cityList}" th:value="${city.cityID}">
+                    <span th:text="${city.cityName}"></span>
+                </option>
+            </select>
+            <!--District-->
+            <select id="caterer-district">
+                <option th:each="district : ${districtList}" 
+                        class="caterer-district" 
+                        th:city="${district.cityID.cityID}"
+                        th:value="${district.districtID}">
+                    <span th:text="${district.districtName}"></span>
+                </option>
+            </select>
+            <!--Service fee-->
+            <label for="caterer-servicefee">
+                Service fee<span style="color: red;">*</span>
+            </label>
+            <input id="caterer-servicefee" type="number" min="0" max="200" value="0"/>
+            <div id="caterer-servicefee-error"></div>
+            <!--Description-->
+            <label for="caterer-description">Description</label>
+            <input id="caterer-description" type="text"/>
+            <!--Submit-->
+            <div id="caterer-error"></div>
+            <button type="button" onclick="signup('caterer')">Submit</button>
         </form>
         <script th:src="@{/js/jquery.min.js}"></script>
         <script th:src="@{/js/signup.js}"></script>

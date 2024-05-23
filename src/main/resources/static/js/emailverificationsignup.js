@@ -15,8 +15,14 @@ function verify() {
                     else if (response === 'Incorrect') {
                         $('#error').text('Incorrect code');
                     }
-                    else if (response === 'OK') {
+                    else if (response === 'Customer') {
                         location.href = '/';
+                    }
+                    else if (response === 'Caterer') {
+                        location.href = '/rank/toBuyrankSignup';
+                    }
+                    else if (response === 'Fail') {
+                        $('#error').text('We cannot handle your request at the moment, please try again later');
                     }
                 }
             });
