@@ -46,8 +46,13 @@ public class AdminController {
     private ArrayList<String> labelsMonth;
     private ArrayList<String> labelsYear;
     private LocalDate today;
+    public void setTabAdminPage(ModelMap model, String page, String title) {
+        model.addAttribute("selectedPage", page);
+        model.addAttribute("title", title);
+    }
+    
     @GetMapping(value = "/dashboard")
-    public String adminPage(ModelMap model) {
+    public String adminDashboardPage(ModelMap model) {
         days = new ArrayList<>();
         months = new ArrayList<>();
         years = new ArrayList<>();
@@ -76,8 +81,30 @@ public class AdminController {
         model.addAttribute("gapPercentOrder", paymentService.getGapPercentOrderByDay(today));
         model.addAttribute("gapPercentCustomer", customerService.getGapPercentCustomerByDay(today));
         model.addAttribute("gapPercentCaterer", catererService.getGapPercentCatererByDay(today));
+        setTabAdminPage(model, "admindashboard", "Dashboard");
         return "AdminPage/admindashboard";
     }
+    @GetMapping("/manageCaterer")
+    public String adminCatererPage(ModelMap model) {
+        setTabAdminPage(model, "admincaterer", "Manage Caterer");
+        return "AdminPage/admincaterer";
+    }
+    @GetMapping("/manageCustomer")
+    public String adminCustomerPage(ModelMap model) {
+        setTabAdminPage(model, "admincustomer", "Manage Customer");
+        return "AdminPage/admincustomer";
+    }
+    @GetMapping("/manageCatererRank")
+    public String adminCatererRankPage(ModelMap model) {
+        setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
+        return "AdminPage/admincatererrank";
+    }
+    @GetMapping("/manageFeedback")
+    public String adminFeedbackPage(ModelMap model) {
+        setTabAdminPage(model, "adminfeedback", "Manage Feedback");
+        return "AdminPage/adminfeedback";
+    }
+    
     @GetMapping("/lineChart")
     @ResponseBody
     public Map<String, Object> getDataLineChart(@RequestParam("selectedValue") String selectedValue) {
@@ -144,4 +171,7 @@ public class AdminController {
         data.put("datasets", datasets);
         return data;
     }
+    
+    
+    
 }
