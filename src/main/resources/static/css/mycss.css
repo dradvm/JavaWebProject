@@ -129,6 +129,8 @@ button {
     display: flex;
     padding: 0.6rem;
     cursor: pointer;
+    text-decoration: none;
+    color: black;
 }
 
 .item-nav>div:first-of-type {
