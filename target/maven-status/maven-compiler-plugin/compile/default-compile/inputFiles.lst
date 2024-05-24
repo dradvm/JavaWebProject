@@ -17,6 +17,7 @@ D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\JavaWebPr
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\filters\AdminFilter.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\CatererRankRepository.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\OrderDetails.java
+D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\filters\LoginedFilter.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\PaymentType.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\MinigameController.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\MailService.java
@@ -33,7 +34,6 @@ D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Voucher.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Report.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Dish.java
-D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\filters\LoginFilter.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\AdminController.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\MinigameRewardRepository.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\AuthController.java

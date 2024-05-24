@@ -31,11 +31,8 @@ function login() {
                 else if (response === 'Suspended') {
                     $('#error').text("This account has been suspended");
                 }
-                else if (response === 'Caterer' || response === 'Customer') {
-                    location.href = '/';
-                }
-                else if (response === 'Admin') {
-                    location.href = '/admin/dashboard';
+                else {
+                    location.href = response;
                 }
             }
         });

@@ -6,7 +6,6 @@ package com.JavaWebProject.JavaWebProject.repositories;
 
 import com.JavaWebProject.JavaWebProject.models.PaymentHistory;
 import com.JavaWebProject.JavaWebProject.models.PaymentType;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
@@ -15,7 +14,7 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author DELL
  */
-public interface PaymentHistoryRepository extends CrudRepository<PaymentHistory, Long> {
+public interface PaymentHistoryRepository extends CrudRepository<PaymentHistory, Integer> {
     List<PaymentHistory> findByTypeIDAndPaymentTimeBetween(PaymentType paymentType, LocalDateTime startDate, LocalDateTime endDate);
     int countByTypeIDAndPaymentTimeBetween(PaymentType paymentType, LocalDateTime startDate, LocalDateTime endDate);
 }

@@ -4,17 +4,20 @@ import com.JavaWebProject.JavaWebProject.models.Admin;
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.models.District;
+import com.JavaWebProject.JavaWebProject.models.PaymentHistory;
 import com.JavaWebProject.JavaWebProject.services.AdminService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CityService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.MailService;
+import com.JavaWebProject.JavaWebProject.services.PaymentService;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,6 +48,8 @@ public class AuthController {
     private CityService cityService;
     @Autowired
     private DistrictService districtService;
+    @Autowired
+    private PaymentService paymentService;
     private String role;
     private String username;
     private Customer newCustomer;
@@ -77,7 +82,7 @@ public class AuthController {
                 }
                 this.username = username;
                 role = "Customer";
-                return "Customer";
+                return "/";
             }
             else {
                 return "Fail";
@@ -91,7 +96,7 @@ public class AuthController {
                 }
                 this.username = username;
                 role = "Caterer";
-                return "Caterer";
+                return "/";
             }
             else {
                 return "Fail";
@@ -101,7 +106,7 @@ public class AuthController {
         if (admin != null && admin.getAdminPassword().equals(password)) {
             this.username = username;
             role = "Admin";
-            return "Admin";
+            return "/admin/dashboard";
         }
         return "Fail";
     }
@@ -134,7 +139,7 @@ public class AuthController {
             return "Unregistered";
         }
         retrieveEmail = email;
-        return "OK";
+        return "/auth/toEmailverificationRetrieve";
     }
     
     @RequestMapping(value = "/toEmailverificationRetrieve", method = RequestMethod.GET)
@@ -160,7 +165,7 @@ public class AuthController {
         else {
             expireTime = null;
             this.code = -1;
-            return "OK";
+            return "/auth/toResetpassword";
         }
     }
     
@@ -306,6 +311,7 @@ public class AuthController {
             newCustomer.setCreateDate(new Date());
             newCustomer.setDistrictID(districtID);
             result.put("status", "OK");
+            result.put("target", "/auth/toEmailverificationSignup");
         }
         return result;
     }
@@ -321,7 +327,7 @@ public class AuthController {
             @RequestParam("birthday") String birthday,
             @RequestParam("address") String address,
             @RequestParam("district") int district,
-            @RequestParam("servicefee") float serviceFee,
+            @RequestParam("servicefee") double serviceFee,
             @RequestParam("description") String description) {
         Map<String, String> result = new HashMap<>();
         boolean valid = true;
@@ -403,6 +409,7 @@ public class AuthController {
             newCaterer.setCreateDate(new Date());
             newCaterer.setDistrictID(districtID);
             result.put("status", "OK");
+            result.put("target", "/auth/toEmailverificationSignup");
         }
         return result;
     }
@@ -437,14 +444,37 @@ public class AuthController {
                 role = "Customer";
                 newCustomer = null;
                 newCaterer = null;
-                return "Customer";
+                return "/";
             }
             else if (newCaterer != null) {
                 this.code = -1;
-                return "Caterer";
+                return "/rank/toBuyrankSignup";
             }
         }
         return "Fail";
+    }
+    
+    @RequestMapping(value = "/completeSignupCaterer", method = RequestMethod.GET)
+    public String completeSignupCaterer() {
+        code = 0;
+        Date current = new Date();
+        newCaterer.setRankStartDate(new Date());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(current);
+        calendar.add(Calendar.DAY_OF_MONTH, 30);
+        newCaterer.setRankEndDate(calendar.getTime());
+        username = newCaterer.getCatererEmail();
+        role = "Caterer";
+        catererService.save(newCaterer);
+        PaymentHistory payment = new PaymentHistory();
+        payment.setCatererEmail(newCaterer);
+        payment.setDescription("Rank buy " + newCaterer.getRankID().getRankID());
+        payment.setPaymentTime(current);
+        payment.setTypeID(paymentService.findPaymentTypeById(1));
+        payment.setValue(newCaterer.getRankID().getRankFee());
+        paymentService.savePaymentHistory(payment);
+        newCaterer = null;
+        return "redirect:/";
     }
     
     private String hash(String str) {

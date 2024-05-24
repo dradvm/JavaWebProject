@@ -15,8 +15,8 @@ function verify() {
                     else if (response === 'Incorrect') {
                         $('#error').text('Incorrect code');
                     }
-                    else if (response === 'OK') {
-                        location.href = '/auth/toResetpassword';
+                    else {
+                        location.href = response;
                     }
                 }
             });

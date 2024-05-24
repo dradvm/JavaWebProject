@@ -155,7 +155,7 @@ function signup(role) {
                         }
                     }
                     else if (response.status === "OK") {
-                        location.href = '/auth/toEmailverificationSignup';
+                        location.href = response.target;
                     }
                 }
             });
@@ -252,7 +252,7 @@ function signup(role) {
                         }
                     }
                     else if (response.status === "OK") {
-                        location.href = '/auth/toEmailverificationSignup';
+                        location.href = response.target;
                     }
                 }
             });

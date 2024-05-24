@@ -30,11 +30,11 @@ function buy() {
                 id: option
             },
             success: function (response) {
-                if (response === 'OK') {
-                    console.log('OK');
-                }
                 if (response === 'Fail') {
-                    $('#error').text('Invalid page, please refresh');
+                    $('#error').text('We cannot handle your request at the moment, please try again later');
+                }
+                else {
+                    location.href = response;
                 }
             }
         });

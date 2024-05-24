@@ -20,8 +20,8 @@ function retrieve() {
                     else if (response === 'Unregistered') {
                         $('#error').text('This email has not been registered');
                     }
-                    else if (response === 'OK') {
-                        location.href = '/auth/toEmailverificationRetrieve';
+                    else {
+                        location.href = response;
                     }
                 }
             });
