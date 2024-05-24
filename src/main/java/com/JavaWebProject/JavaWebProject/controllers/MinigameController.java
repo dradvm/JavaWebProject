@@ -35,14 +35,12 @@ public class MinigameController {
     @Autowired 
     private CustomerService customerService;
     @Autowired
-    HttpSession session;
     private AuthController user;
     private List<MinigameReward> data;
     private Integer rollChance = 0;
     @GetMapping("")
     public String minigamePage(Model model) {
         data = minigameRewardService.getAllMinigameReward();
-        user = (AuthController) session.getAttribute("scopedTarget.authController");
         
         return "/MinigamePage/minigame";
     }

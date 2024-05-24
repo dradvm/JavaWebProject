@@ -18,6 +18,7 @@ com\JavaWebProject\JavaWebProject\models\VoucherType.class
 com\JavaWebProject\JavaWebProject\models\District.class
 com\JavaWebProject\JavaWebProject\models\OrderDetails.class
 com\JavaWebProject\JavaWebProject\filters\AdminFilter.class
+GlobalControllerAdvice.class
 com\JavaWebProject\JavaWebProject\models\BannerType.class
 com\JavaWebProject\JavaWebProject\repositories\CityRepository.class
 com\JavaWebProject\JavaWebProject\services\CustomerService.class
