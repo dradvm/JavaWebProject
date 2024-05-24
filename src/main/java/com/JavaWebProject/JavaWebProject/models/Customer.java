@@ -48,6 +48,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Customer.findByCreateDate", query = "SELECT c FROM Customer c WHERE c.createDate = :createDate")})
 public class Customer implements Serializable {
 
+    @Column(name = "Point")
+    private Integer point;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -60,9 +63,6 @@ public class Customer implements Serializable {
     @Size(min = 1, max = 64)
     @Column(name = "Password")
     private String password;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "Point")
-    private Double point;
     @Column(name = "RollChance")
     private Integer rollChance;
     @Basic(optional = false)
@@ -142,13 +142,6 @@ public class Customer implements Serializable {
         this.password = password;
     }
 
-    public Double getPoint() {
-        return point;
-    }
-
-    public void setPoint(Double point) {
-        this.point = point;
-    }
 
     public Integer getRollChance() {
         return rollChance;
@@ -271,6 +264,14 @@ public class Customer implements Serializable {
     @Override
     public String toString() {
         return "com.JavaWebProject.JavaWebProject.models.Customer[ customerEmail=" + customerEmail + " ]";
+    }
+
+    public Integer getPoint() {
+        return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
     }
     
 }

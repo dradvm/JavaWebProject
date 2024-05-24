@@ -44,6 +44,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CateringOrder.findByNote", query = "SELECT c FROM CateringOrder c WHERE c.note = :note")})
 public class CateringOrder implements Serializable {
 
+    @Column(name = "PointDiscount")
+    private Integer pointDiscount;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cateringOrder")
     private Collection<OrderDetails> orderDetailsCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderID")
@@ -79,9 +82,6 @@ public class CateringOrder implements Serializable {
     @NotNull
     @Column(name = "NumOfTables")
     private int numOfTables;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "PointDiscount")
-    private Double pointDiscount;
     @Column(name = "VoucherDiscount")
     private Double voucherDiscount;
     @Basic(optional = false)
@@ -169,13 +169,6 @@ public class CateringOrder implements Serializable {
         this.numOfTables = numOfTables;
     }
 
-    public Double getPointDiscount() {
-        return pointDiscount;
-    }
-
-    public void setPointDiscount(Double pointDiscount) {
-        this.pointDiscount = pointDiscount;
-    }
 
     public Double getVoucherDiscount() {
         return voucherDiscount;
@@ -274,6 +267,14 @@ public class CateringOrder implements Serializable {
 
     public void setCatererRatingCollection(Collection<CatererRating> catererRatingCollection) {
         this.catererRatingCollection = catererRatingCollection;
+    }
+
+    public Integer getPointDiscount() {
+        return pointDiscount;
+    }
+
+    public void setPointDiscount(Integer pointDiscount) {
+        this.pointDiscount = pointDiscount;
     }
     
 }

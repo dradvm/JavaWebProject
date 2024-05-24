@@ -17,4 +17,5 @@ public interface CatererRepository extends CrudRepository<Caterer, String> {
     int countByCreateDate(LocalDate createDate);
     
     int countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
+    
 }

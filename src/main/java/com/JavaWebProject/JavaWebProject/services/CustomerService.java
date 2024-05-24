@@ -69,4 +69,14 @@ public class CustomerService {
     public void save(Customer customer) {
         customerRepository.save(customer);
     }
+    
+    public int getCustomerPointByEmail(String email) {
+        Customer customer = findById(email);
+        if (customer == null) {
+            return -1;
+        }
+        else {
+            return customer.getPoint();
+        }
+    }
 }
