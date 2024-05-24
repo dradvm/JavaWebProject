@@ -33,13 +33,25 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         href="./CustomerPage/customer.html">Caterer</a>
                 </div>
             </div>
-            <div class="d-flex align-items-center justify-content-end" style="width: 20%;">
+            <div th:if="${role == null}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
                 <a href="/auth/toLogin" class="text-decoration-none mx-3 menu-item-nav px-3 py-2 fs-7">
                     Log in
                 </a>
-                <button href="" class="fw-bold mx-1 my-btn bg-main px-3 py-2 text-white rounded fs-7">
-                    Sign up
+                <button class="fw-bold mx-1 my-btn bg-main px-3 py-2 text-white rounded fs-7">
+                    <a href="/auth/toSignup">Sign up</a>
                 </button>
+            </div>
+            <div th:if="${role == 'Customer'}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
+                Hello customer <span th:text="${name}"></span> <span th:text="${username}"></span>
+                <a href="/auth/logout">Log out</a>
+            </div>
+            <div th:if="${role == 'Caterer'}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
+                Hello caterer <span th:text="${name}"></span> <span th:text="${username}"></span>
+                <a href="/auth/logout">Log out</a>
+            </div>
+            <div th:if="${role == 'Admin'}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
+                Hello admin <span th:text="${username}"></span>
+                <a href="/auth/logout">Log out</a>
             </div>
         </div>
     </header>

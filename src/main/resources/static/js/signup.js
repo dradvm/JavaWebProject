@@ -167,7 +167,6 @@ function signup(role) {
             $('#caterer-name-error').text('');
             $('#caterer-phone-error').text('');
             $('#caterer-address-error').text('');
-            $('#caterer-servicefee-error').text('');
             inputEmail = $('#caterer-email').val();
             inputPassword = $('#caterer-password').val();
             inputName = $('#caterer-name').val();
@@ -176,7 +175,6 @@ function signup(role) {
             inputBirthday = $('#caterer-birthday').val();
             inputAddress = $('#caterer-address').val();
             inputDistrict = $('#caterer-district').val();
-            inputServicefee = $('#caterer-servicefee').val();
             inputDescription = $('#caterer-description').val();
             valid = true;
             regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -201,10 +199,6 @@ function signup(role) {
                 valid = false;
                 $('#caterer-address-error').text('Please enter your address');
             }
-            if (inputServicefee < 0 || inputServicefee > 200) {
-                valid = false;
-                $('#caterer-servicefee-error').text('Service fee must be between 0 and 200');
-            }
             if (!valid) {
                 return;
             }
@@ -220,7 +214,6 @@ function signup(role) {
                     birthday: inputBirthday,
                     address: inputAddress,
                     district: inputDistrict,
-                    servicefee: inputServicefee,
                     description: inputDescription
                 },
                 success: function (response) {
@@ -243,9 +236,6 @@ function signup(role) {
                         }
                         if (response.address === 'fail') {
                             $('#caterer-address-error').text('Please enter your address');
-                        }
-                        if (response.servicefee === 'fail') {
-                            $('#caterer-servicefee-error').text('Service fee must be between 0 and 200');
                         }
                         if (response.general === 'used') {
                             $('#caterer-email-error').text('This email has been used');
