@@ -1,6 +1,7 @@
 package com.JavaWebProject.JavaWebProject.models;
 
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,14 +11,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -39,6 +43,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CateringOrder.findByValue", query = "SELECT c FROM CateringOrder c WHERE c.value = :value"),
     @NamedQuery(name = "CateringOrder.findByNote", query = "SELECT c FROM CateringOrder c WHERE c.note = :note")})
 public class CateringOrder implements Serializable {
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "cateringOrder")
+    private Collection<OrderDetails> orderDetailsCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "orderID")
+    private Collection<CatererRating> catererRatingCollection;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -247,6 +256,24 @@ public class CateringOrder implements Serializable {
     @Override
     public String toString() {
         return "com.JavaWebProject.JavaWebProject.models.CateringOrder[ orderID=" + orderID + " ]";
+    }
+
+    @XmlTransient
+    public Collection<OrderDetails> getOrderDetailsCollection() {
+        return orderDetailsCollection;
+    }
+
+    public void setOrderDetailsCollection(Collection<OrderDetails> orderDetailsCollection) {
+        this.orderDetailsCollection = orderDetailsCollection;
+    }
+
+    @XmlTransient
+    public Collection<CatererRating> getCatererRatingCollection() {
+        return catererRatingCollection;
+    }
+
+    public void setCatererRatingCollection(Collection<CatererRating> catererRatingCollection) {
+        this.catererRatingCollection = catererRatingCollection;
     }
     
 }
