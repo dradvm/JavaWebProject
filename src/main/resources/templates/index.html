@@ -33,7 +33,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         href="./CustomerPage/customer.html">Caterer</a>
                 </div>
             </div>
-            <div th:if="${role == null}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
+            <div th:if="${session.get('scopedTarget.authController') == null || session.get('scopedTarget.authController').role == null}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
                 <a href="/auth/toLogin" class="text-decoration-none mx-3 menu-item-nav px-3 py-2 fs-7">
                     Log in
                 </a>
@@ -41,16 +41,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <a href="/auth/toSignup">Sign up</a>
                 </button>
             </div>
-            <div th:if="${role == 'Customer'}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
-                Hello customer <span th:text="${name}"></span> <span th:text="${username}"></span>
+            <div th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role == 'Customer'}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
+                Hello customer
                 <a href="/auth/logout">Log out</a>
             </div>
-            <div th:if="${role == 'Caterer'}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
-                Hello caterer <span th:text="${name}"></span> <span th:text="${username}"></span>
+            <div th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role == 'Caterer'}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
+                Hello caterer
                 <a href="/auth/logout">Log out</a>
             </div>
-            <div th:if="${role == 'Admin'}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
-                Hello admin <span th:text="${username}"></span>
+            <div th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role == 'Admin'}" class="d-flex align-items-center justify-content-end" style="width: 20%;">
+                Hello admin
                 <a href="/auth/logout">Log out</a>
             </div>
         </div>
