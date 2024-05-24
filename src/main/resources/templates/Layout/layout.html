@@ -3,27 +3,16 @@
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
 -->
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="headerfiles">
-    <title th:fragment="title">My Website</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.1/css/bootstrap.min.css">
-    <!-- Các tệp CSS tùy chỉnh của bạn (nếu có) -->
-    <!--<link rel="stylesheet" href="/css/styles.css">-->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <div th:insert="Config/config :: link"></div>
 </head>
 <body>
-    <div th:fragment="header">
-        <h1 class="text-danger">Thymeleaf Fragments sample</h1>
+    <div th:insert="Layout/header :: header"></div>
+    <div layout:fragment="contentMainPage">
     </div>
-    <p>Go to the next page to see fragments in action</p>
-    <aside>
-        <div>This is a sidebar</div>
-    </aside>
-    <div class="another">This is another sidebar</div>
-    <footer th:fragment="footer">
-        <a th:href="@{/fragments}">Fragments Index</a> | 
-        <a th:href="@{/markup}">Markup inclussion</a> | 
-        <a th:href="@{/params}">Fragment params</a> | 
-        <a th:href="@{/other}">Other</a>
-    </footer>
+    <div layout:fragment="script"></div>
 </body>
 </html>

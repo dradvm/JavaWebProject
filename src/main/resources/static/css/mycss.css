@@ -102,6 +102,11 @@ button {
     outline: none;
 }
 
+a {
+    text-decoration: none;
+    color: black;
+}
+
 .my-btn {
     cursor: pointer;
 }
