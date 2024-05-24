@@ -31,16 +31,17 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "MinigameReward.findByWeight", query = "SELECT m FROM MinigameReward m WHERE m.weight = :weight")})
 public class MinigameReward implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Point")
+    private int point;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "RewardID")
     private Integer rewardID;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Point")
-    private double point;
     @Basic(optional = false)
     @NotNull
     @Column(name = "Weight")
@@ -53,7 +54,7 @@ public class MinigameReward implements Serializable {
         this.rewardID = rewardID;
     }
 
-    public MinigameReward(Integer rewardID, double point, int weight) {
+    public MinigameReward(Integer rewardID, int point, int weight) {
         this.rewardID = rewardID;
         this.point = point;
         this.weight = weight;
@@ -67,13 +68,6 @@ public class MinigameReward implements Serializable {
         this.rewardID = rewardID;
     }
 
-    public double getPoint() {
-        return point;
-    }
-
-    public void setPoint(double point) {
-        this.point = point;
-    }
 
     public int getWeight() {
         return weight;
@@ -106,6 +100,14 @@ public class MinigameReward implements Serializable {
     @Override
     public String toString() {
         return "com.JavaWebProject.JavaWebProject.models.MinigameReward[ rewardID=" + rewardID + " ]";
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
     }
     
 }
