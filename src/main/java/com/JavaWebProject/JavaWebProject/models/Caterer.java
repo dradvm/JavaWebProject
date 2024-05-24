@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.JavaWebProject.JavaWebProject.models;
 
 import jakarta.persistence.Basic;
@@ -27,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author DELL
+ * @author Voke
  */
 @Entity
 @Table(name = "Caterer")
@@ -36,7 +32,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Caterer.findAll", query = "SELECT c FROM Caterer c"),
     @NamedQuery(name = "Caterer.findByCatererEmail", query = "SELECT c FROM Caterer c WHERE c.catererEmail = :catererEmail"),
     @NamedQuery(name = "Caterer.findByPassword", query = "SELECT c FROM Caterer c WHERE c.password = :password"),
-    @NamedQuery(name = "Caterer.findByServiceFee", query = "SELECT c FROM Caterer c WHERE c.serviceFee = :serviceFee"),
     @NamedQuery(name = "Caterer.findByCatererRating", query = "SELECT c FROM Caterer c WHERE c.catererRating = :catererRating"),
     @NamedQuery(name = "Caterer.findByRankStartDate", query = "SELECT c FROM Caterer c WHERE c.rankStartDate = :rankStartDate"),
     @NamedQuery(name = "Caterer.findByRankEndDate", query = "SELECT c FROM Caterer c WHERE c.rankEndDate = :rankEndDate"),
@@ -63,10 +58,6 @@ public class Caterer implements Serializable {
     @Size(min = 1, max = 64)
     @Column(name = "Password")
     private String password;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "ServiceFee")
-    private double serviceFee;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "CatererRating")
     private Double catererRating;
@@ -119,10 +110,6 @@ public class Caterer implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date createDate;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
-    private Collection<PaymentHistory> paymentHistoryCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
-    private Collection<Banner> bannerCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
     private Collection<CateringOrder> cateringOrderCollection;
     @JoinColumn(name = "RankID", referencedColumnName = "RankID")
     @ManyToOne(optional = false)
@@ -131,11 +118,7 @@ public class Caterer implements Serializable {
     @ManyToOne(optional = false)
     private District districtID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
-    private Collection<CatererRating> catererRatingCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
     private Collection<Voucher> voucherCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
-    private Collection<Dish> dishCollection;
 
     public Caterer() {
     }
@@ -144,10 +127,9 @@ public class Caterer implements Serializable {
         this.catererEmail = catererEmail;
     }
 
-    public Caterer(String catererEmail, String password, double serviceFee, Date rankStartDate, Date rankEndDate, int active, String fullName, String phone, int gender, String address, Date createDate) {
+    public Caterer(String catererEmail, String password, Date rankStartDate, Date rankEndDate, int active, String fullName, String phone, int gender, String address, Date createDate) {
         this.catererEmail = catererEmail;
         this.password = password;
-        this.serviceFee = serviceFee;
         this.rankStartDate = rankStartDate;
         this.rankEndDate = rankEndDate;
         this.active = active;
@@ -172,14 +154,6 @@ public class Caterer implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public double getServiceFee() {
-        return serviceFee;
-    }
-
-    public void setServiceFee(double serviceFee) {
-        this.serviceFee = serviceFee;
     }
 
     public Double getCatererRating() {
@@ -279,24 +253,6 @@ public class Caterer implements Serializable {
     }
 
     @XmlTransient
-    public Collection<PaymentHistory> getPaymentHistoryCollection() {
-        return paymentHistoryCollection;
-    }
-
-    public void setPaymentHistoryCollection(Collection<PaymentHistory> paymentHistoryCollection) {
-        this.paymentHistoryCollection = paymentHistoryCollection;
-    }
-
-    @XmlTransient
-    public Collection<Banner> getBannerCollection() {
-        return bannerCollection;
-    }
-
-    public void setBannerCollection(Collection<Banner> bannerCollection) {
-        this.bannerCollection = bannerCollection;
-    }
-
-    @XmlTransient
     public Collection<CateringOrder> getCateringOrderCollection() {
         return cateringOrderCollection;
     }
@@ -322,30 +278,12 @@ public class Caterer implements Serializable {
     }
 
     @XmlTransient
-    public Collection<CatererRating> getCatererRatingCollection() {
-        return catererRatingCollection;
-    }
-
-    public void setCatererRatingCollection(Collection<CatererRating> catererRatingCollection) {
-        this.catererRatingCollection = catererRatingCollection;
-    }
-
-    @XmlTransient
     public Collection<Voucher> getVoucherCollection() {
         return voucherCollection;
     }
 
     public void setVoucherCollection(Collection<Voucher> voucherCollection) {
         this.voucherCollection = voucherCollection;
-    }
-
-    @XmlTransient
-    public Collection<Dish> getDishCollection() {
-        return dishCollection;
-    }
-
-    public void setDishCollection(Collection<Dish> dishCollection) {
-        this.dishCollection = dishCollection;
     }
 
     @Override

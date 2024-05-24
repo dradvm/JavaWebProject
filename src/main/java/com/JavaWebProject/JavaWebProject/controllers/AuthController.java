@@ -327,7 +327,6 @@ public class AuthController {
             @RequestParam("birthday") String birthday,
             @RequestParam("address") String address,
             @RequestParam("district") int district,
-            @RequestParam("servicefee") double serviceFee,
             @RequestParam("description") String description) {
         Map<String, String> result = new HashMap<>();
         boolean valid = true;
@@ -378,10 +377,6 @@ public class AuthController {
             valid = false;
             result.put("general", "fail");
         }
-        if (serviceFee < 0 || serviceFee > 200) {
-            valid = false;
-            result.put("servicefee", "fail");
-        }
         if (customerService.findById(email) != null || catererService.findById(email) != null || adminService.findById(email) != null) {
             valid = false;
             result.put("general", "used");
@@ -394,7 +389,6 @@ public class AuthController {
             newCaterer.setCatererEmail(email);
             newCaterer.setPassword(hash(password));
             newCaterer.setFullName(name);
-            newCaterer.setServiceFee(serviceFee);
             newCaterer.setActive(1);
             newCaterer.setFullName(name);
             newCaterer.setPhone(phone);
