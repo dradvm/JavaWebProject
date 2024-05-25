@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="https://www.thymeleaf.org/" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="/AdminPage/admin">
     <head>
     </head>
@@ -9,7 +10,7 @@
             <a href="/admin/toManageinformationCaterer">Manage information</a>
             <a href="/admin/toCaterer">Handle reports</a>
             <a href="/admin/toCatererlist">Statistical reports</a>
-            <table id="caterer-list">
+            <table id="caterer-list" class="table table-striped">
                 <thead>
                     <tr>
                         <th>Email</th>
@@ -27,7 +28,7 @@
                 <tbody>
                     <tr th:each="caterer : ${catererList}">
                         <td th:text="${caterer.catererEmail}"></td>
-                        <td th:text="${caterer.rankID.rankFee}"></td>
+                        <td th:text="${'$' + caterer.rankID.rankFee}"></td>
                         <td th:text="${#dates.format(caterer.rankEndDate, 'dd-MM-yyyy')}"></td>
                         <td th:text="${caterer.catererRating}"></td>
                         <td th:text="${caterer.fullName}"></td>
@@ -36,9 +37,12 @@
                         <td th:text="${#dates.format(caterer.createDate, 'dd-MM-yyyy')}"></td>
                         <td th:text="${caterer.active == 1 ? 'Active' : 'Suspended'}"></td>
                         <td>
-                            <a>Edit</a>
-                            <a th:if="${caterer.active == 1}">Suspend</a>
-                            <a th:if="${caterer.active == 0}">Unsuspend</a>
+                            <a th:href="@{/admin/toEditinformationCaterer(email=${caterer.catererEmail})}">
+                                <button>Edit</button>
+                            </a>
+                            <a th:href="@{/admin/changeCatererActive(email=${caterer.catererEmail})}">
+                                <button th:text="${caterer.active == 1 ? 'Suspend' : 'Unsuspend'}"></button>
+                            </a>
                         </td>
                     </tr>
                 </tbody>

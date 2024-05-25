@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/AdminPage/admin">
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="contentAdminPage">
+            <a href="/admin/toManageinformationCaterer">
+                <button>Back</button>
+            </a>
+            <img th:src="${'/images/' + caterer.profileImage == null ? 'default-avatar.png' : ('caterer/' + caterer.profileImage)}">
+            <!--Email-->
+            <div>
+                Email: <span th:text="${caterer.catererEmail}"></span>
+            </div>
+            <div>
+                Rating: <span th:text="${caterer.catererRating}"></span>
+            </div>
+            <form>
+                <!--Password-->
+                <label for="password">Password: </label>
+                <input id="password" type="password"/>
+                <div id="password-error"></div>
+                <!--Rank-->
+                <label for="rank-id">Rank ID: </label>
+                <select id="rank-id" th:value="${caterer.rankID.rankID}" onchange="selectRank()">
+                    <option th:each="rank : ${rankList}" th:value="${rank.rankID}" th:text="${rank.rankID}"></option>
+                </select>
+                <div th:each="rank : ${rankList}" th:rank="${rank.rankID}" th:text="${'Rank fee: $' + rank.rankFee}" class="rank-fee"></div>
+                <div th:each="rank : ${rankList}" th:rank="${rank.rankID}" th:text="${'Rank CPO: $' + rank.rankCPO}" class="rank-cpo"></div>
+                <div th:each="rank : ${rankList}" th:rank="${rank.rankID}" th:text="${'Rank max dish: ' + rank.rankMaxDish}" class="rank-max-dish"></div>
+                <!--Rank starting date-->
+                <label for="rank-start-date">Rank starting date: </label>
+                <input id="rank-start-date" type="date" th:value="${#dates.format(caterer.rankStartDate, 'yyyy-MM-dd')}"/>
+                <div id="rank-start-date-error"></div>
+                <!--Rank ending date-->
+                <label for="rank-end-date">Rank ending date: </label>
+                <input id="rank-end-date" type="date" th:value="${#dates.format(caterer.rankEndDate, 'yyyy-MM-dd')}"/>
+                <div id="rank-end-date-error"></div>
+                <!--Name-->
+                <label for="name">Full name: </label>
+                <input id="name" th:value="${caterer.fullName}"/>
+                <div id="name-error"></div>
+                <!--Phone-->
+                <label for="phone">Full name: </label>
+                <input id="phone" th:value="${caterer.phone}"/>
+                <div id="phone-error"></div>
+                <!--Gender-->
+                <label for="gender">Gender: </label>
+                <select id="gender" th:value="${caterer.gender}">
+                    <option value="0">Male</option>
+                    <option value="1">Male</option>
+                </select>
+                <!--Address-->
+                <label for="address">Address: </label>
+                <input id="adress" th:value="${caterer.address}"/>
+                <div id="address-error"></div>
+                <!--District-->
+                <label for="district">District: </label>
+                <select id="district" th:value="${caterer.districtID.districtID}">
+                    <option th:each="district : ${districtList}"
+                            th:value="${district.districtID}"
+                            th:text="${district.districtName + ', ' + district.cityID.cityName}">
+                    </option>
+                </select>
+                <!--Birthday-->
+                <label for="birthday">Birthday: </label>
+                <input id="birthday" type="date" th:value="${#dates.format(caterer.birthday, 'yyyy-MM-dd')}"/>
+                <!--Active-->
+                <label for="active">Active: </label>
+                <select id="active" th:value="${caterer.active}">
+                    <option value="0">Suspended</option>
+                    <option value="1">Active</option>
+                </select>
+                <!--Submit-->
+                <button type="button" onclick="submit()">Submit</button>
+            </form>
+            <script th:src="@{/js/jquery.min.js}"></script>
+            <script th:src="@{/js/editinformationcaterer.js}"></script>
+        </div>
+    </body>
+</html>
