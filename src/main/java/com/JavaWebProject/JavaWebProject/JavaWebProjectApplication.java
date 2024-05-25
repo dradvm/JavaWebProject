@@ -8,8 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan("com.JavaWebProject.JavaWebProject")
 public class JavaWebProjectApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(JavaWebProjectApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(JavaWebProjectApplication.class, args);
+    }
 
 }
