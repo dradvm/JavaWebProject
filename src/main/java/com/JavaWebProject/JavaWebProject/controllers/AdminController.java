@@ -84,10 +84,11 @@ public class AdminController {
         setTabAdminPage(model, "admindashboard", "Dashboard");
         return "AdminPage/admindashboard";
     }
-    @GetMapping("/manageCaterer")
-    public String adminCatererPage(ModelMap model) {
+    @GetMapping("/toManageinformationCaterer")
+    public String toCatererlist(ModelMap model) {
         setTabAdminPage(model, "admincaterer", "Manage Caterer");
-        return "AdminPage/admincaterer";
+        model.addAttribute("catererList", catererService.findAll());
+        return "AdminPage/Caterer/manageinformation";
     }
     @GetMapping("/manageCustomer")
     public String adminCustomerPage(ModelMap model) {

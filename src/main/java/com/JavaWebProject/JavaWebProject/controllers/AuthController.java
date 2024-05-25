@@ -298,7 +298,7 @@ public class AuthController {
             newCustomer.setCustomerEmail(email);
             newCustomer.setPassword(hash(password));
             newCustomer.setFullName(name);
-            newCustomer.setPoint(0.0);
+            newCustomer.setPoint(0);
             newCustomer.setRollChance(0);
             newCustomer.setActive(1);
             newCustomer.setFullName(name);

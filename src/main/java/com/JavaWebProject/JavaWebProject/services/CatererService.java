@@ -27,6 +27,10 @@ public class CatererService {
         return result.isPresent() ? result.get() : null;
     }
     
+    public Iterable<Caterer> findAll() {
+        return catererRepository.findAll();
+    }
+    
     public int getNewCatererByDay(LocalDate date) {
         return catererRepository.countByCreateDate(date);
     }
