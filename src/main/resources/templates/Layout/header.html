@@ -27,9 +27,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </div>
             </div>
             <div class="d-flex justify-content-around" style="width: 60%;">
-                <div class="d-flex">
-                    <a class="mx-3 menu-item-nav fs-7 text-decoration-none" href="">Home</a>
-                    <a class="mx-3 menu-item-nav fs-7 text-decoration-none"
+                <div class="d-flex align-items-center">
+                    <a class="mx-3 menu-item-nav menu-item-nav-selected fs-7 text-decoration-none" href="">Home</a>
+                    <a class="mx-3 menu-item-nav menu-item-nav-hover fs-7 text-decoration-none"
                         href="./CustomerPage/customer.html">Caterer</a>
                 </div>
             </div>
@@ -43,6 +43,29 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         Sign up
                     </button>
                 </a>
+            </div>
+            <div th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role != null}"
+                class="d-flex align-items-center justify-content-end" style="width: 20%;">
+                <div class="dropdown no-focus-visible">
+                    <button class="btn p-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-circle-user fs-4"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item dropdown-item-custom d-flex align-items-center" href="#">
+                                <i style="width: 20px;" class="me-3 fa-solid fa-house-user"></i>
+                                <span>My Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item dropdown-item-custom d-flex align-items-center" href="#">
+                                <i style="width: 20px;" class="me-3 fa-solid fa-arrow-right-from-bracket"></i>
+                                <span>Logout</span>
+
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </header>

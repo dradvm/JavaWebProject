@@ -137,7 +137,7 @@ public class PaymentService {
     }
     
     public int getNewOrderByDay(LocalDate date) {
-        return paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween( paymentTypeRepository.findById(3) ,LocalDateTime.of(date, LocalTime.MIN), LocalDateTime.of(date, LocalTime.MAX));
+        return paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween( paymentTypeRepository.findById(2) ,LocalDateTime.of(date, LocalTime.MIN), LocalDateTime.of(date, LocalTime.MAX));
 
     }
     public float getGapPercentOrderByDay(LocalDate date) {
