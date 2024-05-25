@@ -6,6 +6,7 @@ package com.JavaWebProject.JavaWebProject.repositories;
 
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import java.time.LocalDate;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -13,6 +14,8 @@ import org.springframework.data.repository.CrudRepository;
  * @author DELL
  */
 public interface CatererRepository extends CrudRepository<Caterer, String> {
+    
+    List<Caterer> findAll();
     
     int countByCreateDate(LocalDate createDate);
     

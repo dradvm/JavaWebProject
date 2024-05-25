@@ -9,6 +9,7 @@ import com.JavaWebProject.JavaWebProject.repositories.CatererRepository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class CatererService {
         return result.isPresent() ? result.get() : null;
     }
     
-    public Iterable<Caterer> findAll() {
+    public List<Caterer> findAll() {
         return catererRepository.findAll();
     }
     

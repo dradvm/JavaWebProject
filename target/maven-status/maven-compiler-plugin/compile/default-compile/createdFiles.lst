@@ -27,7 +27,6 @@ com\JavaWebProject\JavaWebProject\controllers\MinigameController.class
 com\JavaWebProject\JavaWebProject\services\MailService.class
 com\JavaWebProject\JavaWebProject\repositories\CatererRankRepository.class
 com\JavaWebProject\JavaWebProject\models\Banner.class
-com\JavaWebProject\JavaWebProject\controllers\MyController.class
 com\JavaWebProject\JavaWebProject\repositories\CustomerRepository.class
 com\JavaWebProject\JavaWebProject\models\CatererRank.class
 com\JavaWebProject\JavaWebProject\filters\EmailVerificationFilter.class

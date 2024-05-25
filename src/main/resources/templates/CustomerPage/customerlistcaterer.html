@@ -1,0 +1,86 @@
+</html>
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{Layout/layout}">
+
+<head>
+    <script type="text/javascript">
+        // Notice how this gets configured before we load Font Awesome
+        window.FontAwesomeConfig = { autoReplaceSvg: false }
+    </script>
+</head>
+
+<body>
+    <div layout:fragment="contentMainPage">
+
+        <div class="container-fuild px-5 mt-5">
+            <div class="row gy-3" id="listCaterer">
+
+            </div>
+        </div>
+        <script>
+            $(document).ready(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: '/getListCaterer',
+                    success: function (response) {
+                        console.log(response)
+                        loadCatererList(response)
+                    }
+                });
+            })
+            function loadCatererList(data) {
+                var listCaterer = document.querySelector("#listCaterer")
+                console.log(data)
+                data.forEach((item) => {
+                    listCaterer.innerHTML += getCaterer(item)
+                })
+                // renderFloatingIcon()
+            }
+            function getCaterer(item) {
+                return `<div class="col-3">
+                    <div class="rounded border position-relative">
+                        <div class="v-stack">
+                            <div class="w-100" style="height: 200px;">
+                                <img src="/images/${item.catererEmail + "/" + item.image}" class="w-100 h-100" />
+                            </div>
+                            <div class=" px-3 py-2">
+
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div class="fs-6 fw-medium" style="width: 70%;">${item.fullName}</div>
+                                    <div class="d-flex align-items-center">
+                                        <span class="fw-medium me-1">${item.catererRating}</span>
+                                        <i class="fa-solid fa-star" style="color: #FFD43B;"></i>
+                                    </div>
+                                </div>
+                                <div class="fs-7 text-secondary my-2 text-justify" style="height: 40px;">
+                                    ${item.description}
+                                </div>
+                                <button class="my-btn w-100 bg-main rounded-pill px-3 py-2 fw-medium text-white">View
+                                    Caterer</button>
+                            </div>
+                        </div>
+                        <button class="position-absolute favorite-floating-btn favorite-floating-btn-mark">
+                            <i class="fa-solid fa-heart heart"></i>
+                        </button>
+                    </div>
+                </div>`
+            }
+            // function renderFloatingIcon() {
+            //     var iconElement = document.createElement("i")
+            //     iconElement.classList.add("fa-solid")
+            //     iconElement.classList.add("fa-heart")
+            //     iconElement.classList.add("heart")
+            //     document.querySelectorAll(".favorite-floating-btn").forEach((item) => {
+            //         item.appendChild(iconElement)
+            //     })
+            // }
+        </script>
+    </div>
+</body>
+
+</html>

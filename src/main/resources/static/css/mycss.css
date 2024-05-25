@@ -165,6 +165,31 @@ a {
     left: 0;
 }
 
+.favorite-floating-btn {
+    top: 3%;
+    right: 3%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.favorite-floating-btn>.heart {
+    padding: 8px;
+    background-color: white;
+    border-radius: 50%;
+    transition: .2s;
+}
+
+.favorite-floating-btn:hover>.heart {
+    color: white;
+    background-color: #FF8787;
+}
+
+.favorite-floating-btn-mark>.heart {
+    background-color: #f05757;
+    color: white;
+}
+
 .menu-item-nav-selected {
     color: white;
     font-weight: bold;
