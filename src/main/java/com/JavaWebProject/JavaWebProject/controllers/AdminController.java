@@ -4,11 +4,13 @@
  */
 package com.JavaWebProject.JavaWebProject.controllers;
 
+import com.JavaWebProject.JavaWebProject.models.Caterer;
+import com.JavaWebProject.JavaWebProject.services.CatererRankService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
+import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.PaymentService;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,11 +19,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -38,7 +38,10 @@ public class AdminController {
     private CustomerService customerService;
     @Autowired
     private PaymentService paymentService;
-    
+    @Autowired
+    private CatererRankService catererRankService;
+    @Autowired
+    private DistrictService districtService;
     private ArrayList<LocalDate> days;
     private ArrayList<Month> months;
     private ArrayList<Integer> years;
@@ -90,16 +93,41 @@ public class AdminController {
         model.addAttribute("catererList", catererService.findAll());
         return "AdminPage/Caterer/manageinformation";
     }
+    
+    @GetMapping("/changeCatererActive")
+    public String changeCatererActive(@RequestParam("email") String email) {
+        Caterer caterer = catererService.findById(email);
+        if (caterer.getActive() == 0) {
+            caterer.setActive(1);
+        }
+        else {
+            caterer.setActive(0);
+        }
+        catererService.save(caterer);
+        return "redirect:/admin/toManageinformationCaterer";
+    }
+    
+    @GetMapping("/toEditinformationCaterer")
+    public String toEditinformationCaterer(@RequestParam("email") String email, ModelMap model) {
+        setTabAdminPage(model, "admincaterer", "Manage Caterer");
+        model.addAttribute("caterer", catererService.findById(email));
+        model.addAttribute("rankList", catererRankService.findAll());
+        model.addAttribute("districtList", districtService.findAll());
+        return "AdminPage/Caterer/editinformation";
+    }
+    
     @GetMapping("/manageCustomer")
     public String adminCustomerPage(ModelMap model) {
         setTabAdminPage(model, "admincustomer", "Manage Customer");
         return "AdminPage/admincustomer";
     }
+    
     @GetMapping("/manageCatererRank")
     public String adminCatererRankPage(ModelMap model) {
         setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
         return "AdminPage/admincatererrank";
     }
+    
     @GetMapping("/manageFeedback")
     public String adminFeedbackPage(ModelMap model) {
         setTabAdminPage(model, "adminfeedback", "Manage Feedback");
