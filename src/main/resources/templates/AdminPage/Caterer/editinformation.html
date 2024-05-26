@@ -9,7 +9,7 @@
             <a href="/admin/toManageinformationCaterer">
                 <button>Back</button>
             </a>
-            <img th:src="${'/images/' + caterer.profileImage == null ? 'default-avatar.png' : ('caterer/' + caterer.profileImage)}">
+            <img th:src="@{${img == null ? 'images/default-avatar.png' : img}}">
             <!--Email-->
             <div>
                 Email: <span th:text="${caterer.catererEmail}"></span>
@@ -18,12 +18,17 @@
                 Rating: <span th:text="${caterer.catererRating}"></span>
             </div>
             <form>
+                <!--Profile image-->
+                <label for="profile-img">New profile image: </label>
+                <input id="profile-img" type="file" accept="image/*"/>
                 <!--Password-->
-                <label for="password">Password: </label>
+                <label for="password">New password: </label>
                 <input id="password" type="password"/>
                 <div id="password-error"></div>
                 <!--Rank-->
-                <label for="rank-id">Rank ID: </label>
+                <label for="rank-id">
+                    Rank ID <span style="color: red;">*</span>
+                </label>
                 <select id="rank-id" th:value="${caterer.rankID.rankID}" onchange="selectRank()">
                     <option th:each="rank : ${rankList}" th:value="${rank.rankID}" th:text="${rank.rankID}"></option>
                 </select>
@@ -31,34 +36,44 @@
                 <div th:each="rank : ${rankList}" th:rank="${rank.rankID}" th:text="${'Rank CPO: $' + rank.rankCPO}" class="rank-cpo"></div>
                 <div th:each="rank : ${rankList}" th:rank="${rank.rankID}" th:text="${'Rank max dish: ' + rank.rankMaxDish}" class="rank-max-dish"></div>
                 <!--Rank starting date-->
-                <label for="rank-start-date">Rank starting date: </label>
+                <label for="rank-start-date">
+                    Rank starting date <span style="color: red;">*</span>
+                </label>
                 <input id="rank-start-date" type="date" th:value="${#dates.format(caterer.rankStartDate, 'yyyy-MM-dd')}"/>
-                <div id="rank-start-date-error"></div>
                 <!--Rank ending date-->
-                <label for="rank-end-date">Rank ending date: </label>
+                <label for="rank-end-date">
+                    Rank ending date <span style="color: red;">*</span>
+                </label>
                 <input id="rank-end-date" type="date" th:value="${#dates.format(caterer.rankEndDate, 'yyyy-MM-dd')}"/>
                 <div id="rank-end-date-error"></div>
                 <!--Name-->
-                <label for="name">Full name: </label>
+                <label for="name">
+                    Full name <span style="color: red;">*</span>
+                </label>
                 <input id="name" th:value="${caterer.fullName}"/>
                 <div id="name-error"></div>
                 <!--Phone-->
-                <label for="phone">Full name: </label>
+                <label for="phone">
+                    Phone <span style="color: red;">*</span>
+                </label>
                 <input id="phone" th:value="${caterer.phone}"/>
                 <div id="phone-error"></div>
                 <!--Gender-->
-                <label for="gender">Gender: </label>
+                <label for="gender">
+                    Gender <span style="color: red;">*</span>
+                </label>
                 <select id="gender" th:value="${caterer.gender}">
                     <option value="0">Male</option>
                     <option value="1">Male</option>
                 </select>
                 <!--Address-->
-                <label for="address">Address: </label>
+                <label for="address">
+                    Address <span style="color: red;">*</span>
+                </label>
                 <input id="adress" th:value="${caterer.address}"/>
                 <div id="address-error"></div>
                 <!--District-->
-                <label for="district">District: </label>
-                <select id="district" th:value="${caterer.districtID.districtID}">
+                <select id="district-id" th:value="${caterer.districtID.districtID}">
                     <option th:each="district : ${districtList}"
                             th:value="${district.districtID}"
                             th:text="${district.districtName + ', ' + district.cityID.cityName}">
@@ -68,13 +83,16 @@
                 <label for="birthday">Birthday: </label>
                 <input id="birthday" type="date" th:value="${#dates.format(caterer.birthday, 'yyyy-MM-dd')}"/>
                 <!--Active-->
-                <label for="active">Active: </label>
+                <label for="active">
+                    Active <span style="color: red;">*</span>
+                </label>
                 <select id="active" th:value="${caterer.active}">
                     <option value="0">Suspended</option>
                     <option value="1">Active</option>
                 </select>
                 <!--Submit-->
-                <button type="button" onclick="submit()">Submit</button>
+                <div id="error"></div>
+                <button type="button" th:onclick="|submit('${caterer.catererEmail}')|">Submit</button>
             </form>
             <script th:src="@{/js/jquery.min.js}"></script>
             <script th:src="@{/js/editinformationcaterer.js}"></script>

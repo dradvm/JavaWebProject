@@ -19,7 +19,7 @@ public class Config {
     public FirebaseApp firebaseApp() {
         try {
             Resource resource = new ClassPathResource("firebase.json");
-            FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(resource.getInputStream())).build();
+            FirebaseOptions options = new FirebaseOptions.Builder().setCredentials(GoogleCredentials.fromStream(resource.getInputStream())).setStorageBucket("java-web-project-2d8bc.appspot.com").build();
             return FirebaseApp.initializeApp(options);
         }
         catch (Exception e) {
