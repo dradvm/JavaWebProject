@@ -1,9 +1,11 @@
+</html>
 <!DOCTYPE html>
 <!--
 Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
 -->
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{Layout/layout}">
 
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -12,37 +14,70 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/b42e1089e2.js" crossorigin="anonymous"></script>
+    <script src="../../static/js/jquery.min.js"></script>
+    <script src="../../static/js/angular.min.js"></script>
     <link rel="stylesheet" href="../../static/css/mycss.css">
-    <title>TODO supply a title</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript">
+        // Notice how this gets configured before we load Font Awesome
+        window.FontAwesomeConfig = { autoReplaceSvg: false }
+    </script>
 </head>
 
 <body>
-    <header>
-        <div class="container-fuild px-5 py-2 d-flex justify-content-between align-items-center fw-medium">
+    <header th:fragment="header">
+        <div class="shadow-sm container-fuild px-5 py-2 d-flex justify-content-between align-items-center fw-medium">
             <div class="d-flex align-items-center" style="width: 20%;">
                 <div class="d-flex justify-content-between align-items-center" style="cursor: pointer;">
-                    <img src="../static/images/big_logo.png" width="200" />
+                    <img th:src="@{/images/big_logo.png}" width="200" />
                 </div>
             </div>
             <div class="d-flex justify-content-around" style="width: 60%;">
-                <div class="d-flex">
-                    <a class="mx-3 menu-item-nav fs-7 text-decoration-none" href="">Home</a>
-                    <a class="mx-3 menu-item-nav fs-7 text-decoration-none" href="/caterer.html">Caterer</a>
+                <div class="d-flex align-items-center">
+                    <a th:class="'mx-3 menu-item-nav fs-7 ' + ${selectedNav == 'home' ? 'menu-item-nav-selected' : 'menu-item-nav-hover'}"
+                        href="/">Home</a>
+                    <a th:class="'mx-3 menu-item-nav fs-7 ' + ${selectedNav == 'listCaterer' ? 'menu-item-nav-selected' : 'menu-item-nav-hover'}"
+                        href="/listCaterer">Caterers</a>
                 </div>
             </div>
-            <div class="d-flex align-items-center justify-content-end" style="width: 20%;">
-                <a href="./AuthPage/login.html" class="text-decoration-none mx-3 menu-item-nav px-3 py-2 fs-7">
+            <div th:if="${session.get('scopedTarget.authController') == null || session.get('scopedTarget.authController').role == null}"
+                class="d-flex align-items-center justify-content-end" style="width: 20%;">
+                <a href="/auth/toLogin" class="text-decoration-none mx-3 menu-item-nav px-3 py-2 fs-7">
                     Log in
                 </a>
-                <button href="" class="fw-bold mx-1 my-btn bg-main px-3 py-2 text-white rounded fs-7">
-                    Sign up
-                </button>
+                <a href="/auth/toSignup">
+                    <button class="fw-bold mx-1 my-btn bg-main px-3 py-2 text-white rounded fs-7">
+                        Sign up
+                    </button>
+                </a>
+            </div>
+            <div th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role != null}"
+                class="d-flex align-items-center justify-content-end" style="width: 20%;">
+                <div class="dropdown no-focus-visible">
+                    <button class="btn p-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-circle-user fs-4"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item dropdown-item-custom d-flex align-items-center" href="#">
+                                <i style="width: 20px;" class="me-3 fa-solid fa-house-user"></i>
+                                <span>My Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item dropdown-item-custom d-flex align-items-center" href="/auth/logout">
+                                <i style="width: 20px;" class="me-3 fa-solid fa-arrow-right-from-bracket"></i>
+                                <span>Logout</span>
+
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </header>
-    <a href="/admin/dashboard">Admin Page</a>
+    <div layout:fragment="contentMainPage">
+
+    </div>
 </body>
 
 </html>
