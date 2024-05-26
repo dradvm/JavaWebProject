@@ -53,8 +53,11 @@ public class MainController {
         }
         return data;
     }
-    @GetMapping("/listCaterer/{fullName}")
-    public String detailsCatererPage(@PathVariable("fullName") String fullName) {
-           return "CustomerPage/customerdetailscaterer";
+    @GetMapping("/listCaterer/{fullName_Email}")
+    public String detailsCatererPage(@PathVariable("fullName_Email") String fullName_Email, ModelMap model) {
+        String[] data = fullName_Email.split("_");
+        data[0] = data[0].replace("-", " ");
+        model.addAttribute("caterer", catererService.findByCatererEmailAndFullNam(data[0], data[1]));
+        return "CustomerPage/customerdetailscaterer";
     }
 }
