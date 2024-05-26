@@ -10,6 +10,7 @@ import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.PaymentService;
+import com.JavaWebProject.JavaWebProject.services.RankManageService;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
@@ -40,6 +41,8 @@ public class AdminController {
     private PaymentService paymentService;
     @Autowired
     private CatererRankService catererRankService;
+    @Autowired
+    private RankManageService rankManageService;
     @Autowired
     private DistrictService districtService;
     private ArrayList<LocalDate> days;
@@ -122,11 +125,11 @@ public class AdminController {
         return "AdminPage/admincustomer";
     }
     
-    @GetMapping("/manageCatererRank")
-    public String adminCatererRankPage(ModelMap model) {
-        setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
-        return "AdminPage/admincatererrank";
-    }
+//    @GetMapping("/manageCatererRank")
+//    public String adminCatererRankPage(ModelMap model) {
+//        setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
+//        return "AdminPage/admincatererrank";
+//    }
     
     @GetMapping("/manageFeedback")
     public String adminFeedbackPage(ModelMap model) {
@@ -199,6 +202,12 @@ public class AdminController {
         }
         data.put("datasets", datasets);
         return data;
+    }
+    @GetMapping("/toManageCatererRanks")
+    public String toCatererRanklist(ModelMap model) {
+        setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
+        model.addAttribute("catererRankList", rankManageService.findAll());
+        return "AdminPage/CatererRank/catererRanks";
     }
     
     

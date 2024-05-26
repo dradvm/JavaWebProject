@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/AdminPage/admin">
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="contentAdminPage">
+            <link rel="stylesheet" th:href="@{/lib/datatable/datatables.min.css}"/>
+            <a href="/admin/toManageCatererRanks">Manage information</a>
+            <a href="/admin/toCaterer">Handle reports</a>
+            <a href="/admin/toCatererlist">Statistical reports</a>
+            <table id="rank-list" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Rank ID</th>
+                        <th>Rank Fee</th>
+                        <th>Rank CPO</th>
+                        <th>Rank Max Dish</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="catererRank : ${catererRankList}">
+                        <td th:text="${catererRank.rankID}"></td>
+                        <td th:text="${'$' + catererRank.rankFee}"></td>
+                        <td th:text="${catererRank.rankCPO}"></td>
+                        <td th:text="${catererRank.rankMaxDish}"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <script th:src="@{/js/jquery.min.js}"></script>
+            <script th:src="@{/lib/datatable/datatables.min.js}"></script>
+            <script th:src="@{/js/managecatererrank.js}"></script>
+
+        </div>
+    </body>
+</html>
