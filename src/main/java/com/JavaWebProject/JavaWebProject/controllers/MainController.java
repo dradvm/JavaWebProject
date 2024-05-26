@@ -9,6 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -38,7 +44,7 @@ public class MainController {
         Map<String, Object> temp = new HashMap<>();
         for (Caterer c : catererService.findAll()) {
             temp = new HashMap<>();
-            temp.put("fullName", c.getFullName());
+            temp.put("fullName", c.getFullName().replace(" ", "-"));
             temp.put("catererEmail", c.getCatererEmail());
             temp.put("catererRating", c.getCatererRating());
             temp.put("description", c.getDescription());
@@ -46,5 +52,9 @@ public class MainController {
             data.add(temp);
         }
         return data;
+    }
+    @GetMapping("/listCaterer/{fullName}")
+    public String detailsCatererPage(@PathVariable("fullName") String fullName) {
+           return "CustomerPage/customerdetailscaterer";
     }
 }
