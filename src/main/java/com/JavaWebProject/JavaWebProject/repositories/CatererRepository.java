@@ -17,6 +17,7 @@ public interface CatererRepository extends CrudRepository<Caterer, String> {
     
     List<Caterer> findAll();
     
+    List<Caterer> findByFullName(String fullName);
     
     int countByCreateDate(LocalDate createDate);
     

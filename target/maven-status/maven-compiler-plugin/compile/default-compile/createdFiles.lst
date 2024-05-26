@@ -8,6 +8,7 @@ com\JavaWebProject\JavaWebProject\controllers\CustomerController.class
 com\JavaWebProject\JavaWebProject\models\Feedback.class
 com\JavaWebProject\JavaWebProject\services\MinigameRewardService.class
 com\JavaWebProject\JavaWebProject\models\Dish.class
+com\JavaWebProject\JavaWebProject\repositories\RankManageRepository.class
 com\JavaWebProject\JavaWebProject\services\CatererService.class
 com\JavaWebProject\JavaWebProject\models\OrderDetailsPK.class
 com\JavaWebProject\JavaWebProject\services\PaymentService.class
@@ -21,6 +22,7 @@ GlobalControllerAdvice.class
 com\JavaWebProject\JavaWebProject\models\BannerType.class
 com\JavaWebProject\JavaWebProject\repositories\CityRepository.class
 com\JavaWebProject\JavaWebProject\services\CustomerService.class
+com\JavaWebProject\JavaWebProject\services\RankManageService.class
 com\JavaWebProject\JavaWebProject\repositories\CatererRepository.class
 com\JavaWebProject\JavaWebProject\config\Config.class
 com\JavaWebProject\JavaWebProject\controllers\MinigameController.class
@@ -32,6 +34,7 @@ com\JavaWebProject\JavaWebProject\models\CatererRank.class
 com\JavaWebProject\JavaWebProject\filters\EmailVerificationFilter.class
 com\JavaWebProject\JavaWebProject\services\CloudStorageService.class
 com\JavaWebProject\JavaWebProject\models\PaymentHistory.class
+com\JavaWebProject\JavaWebProject\controllers\RankManageController.class
 com\JavaWebProject\JavaWebProject\models\DeliveryAddress.class
 com\JavaWebProject\JavaWebProject\services\CityService.class
 com\JavaWebProject\JavaWebProject\repositories\PaymentTypeRepository.class

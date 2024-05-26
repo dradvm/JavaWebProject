@@ -32,6 +32,18 @@ public class CatererService {
         return catererRepository.findAll();
     }
     
+    public Caterer findByCatererEmailAndFullNam(String fullName, String catererEmail) {
+        List<Caterer> caterers = catererRepository.findByFullName(fullName);
+        Caterer caterer = caterers.get(0);
+        for (Caterer c : caterers) {
+            if (c.getCatererEmail().equals(catererEmail)) {
+                caterer = c;
+                break;
+            }
+        }
+        return caterer;
+    }
+    
     public int getNewCatererByDay(LocalDate date) {
         return catererRepository.countByCreateDate(date);
     }

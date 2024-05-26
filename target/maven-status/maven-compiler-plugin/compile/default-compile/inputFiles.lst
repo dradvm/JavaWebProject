@@ -1,6 +1,7 @@
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\MinigameReward.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\CustomerController.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\CatererRank.java
+D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\RankManageRepository.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\OrderDetailsPK.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\MainController.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\PaymentHistory.java
@@ -32,9 +33,11 @@ D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Vo
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\CustomerService.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Banner.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\CatererRankService.java
+D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\RankManageController.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Voucher.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\CloudStorageService.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Report.java
+D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\RankManageService.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Dish.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\AdminController.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\MinigameRewardRepository.java
