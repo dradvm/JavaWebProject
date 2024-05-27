@@ -4,6 +4,7 @@
  */
 package com.JavaWebProject.JavaWebProject.services;
 
+import com.JavaWebProject.JavaWebProject.controllers.AuthController;
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.repositories.CatererRepository;
 import java.time.LocalDate;
@@ -22,6 +23,8 @@ import org.springframework.stereotype.Service;
 public class CatererService {
     @Autowired
     private CatererRepository catererRepository;
+    @Autowired
+    private AuthController authController;
     
     public Caterer findById(String catererEmail) {
         Optional<Caterer> result = catererRepository.findById(catererEmail);
@@ -36,7 +39,7 @@ public class CatererService {
         List<Caterer> caterers = catererRepository.findByFullName(fullName);
         Caterer caterer = caterers.get(0);
         for (Caterer c : caterers) {
-            if (c.getCatererEmail().equals(catererEmail)) {
+            if (authController.hash_public(c.getCatererEmail()).equals(catererEmail)) {
                 caterer = c;
                 break;
             }
