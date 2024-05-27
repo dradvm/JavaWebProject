@@ -301,6 +301,12 @@ public class AdminController {
         return "redirect:/admin/toHandlereportsCaterer";
     }
     
+    @GetMapping("/toStatisticalreportCaterer")
+    public String toStatisticalreportCaterer(ModelMap model) {
+        setTabAdminPage(model, "admincaterer", "Manage Caterer");
+        return "/AdminPage/Caterer/statisticalreport";
+    }
+    
     @GetMapping("/manageCustomer")
     public String adminCustomerPage(ModelMap model) {
         setTabAdminPage(model, "admincustomer", "Manage Customer");
