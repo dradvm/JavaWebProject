@@ -1,4 +1,6 @@
-selectRank();
+$(document).ready(function () {
+    selectRank();
+});
 
 function selectRank() {
     $(document).ready(function () {
@@ -42,38 +44,30 @@ function selectRank() {
     });
 }
 
-function submit(editEmail) {
+function editCatererInformation() {
     $(document).ready(function () {
         $('#error').text('');
+        $('#profile-img-error').text('');
         $('#password-error').text('');
-        $('#rank-end-date-error').text('');
         $('#name-error').text('');
         $('#phone-error').text('');
         $('#address-error').text('');
-        inputProfileImg = $('#profile-img').files.length > 0 ? $('#profile-img').files[0] : null;
+        inputProfileImg = $('#profile-img').prop('files')[0] ? $('#profile-img').prop('files')[0] : null;
         inputPassword = $('#password').val();
         inputRankID = $('#rank-id').val();
-        inputRankStartDate = $('#rank-start-date').val();
-        inputRankEndDate = $('#rank-end-date').val();
         inputName = $('#name').val();
         inputPhone = $('#phone').val();
-        inputGender = $('#gender').val();
-        inpputAddress = $('#address').val();
-        inputDistrictID = $('#district-id').val();
-        inputBirthday = $('#birthday').val();
-        inputActive = $('#active').val();
+        inputAddress = $('#address').val();
         valid = true;
+        if (inputProfileImg !== null && inputProfileImg.size > 10000000) {
+            valid = false;
+            $('#profile-img-error').text('We only support images smaller than 10MB');
+        }
         if (inputPassword.trim().length > 0 && inputPassword.trim().length < 8) {
             valid = false;
             $('#password-error').text("Password must have at least 8 characters, leave this field empty if you don't want to change it");
         }
-        startDate = new Date(inputRankStartDate);
-        endDate = new Date(inputRankEndDate);
-        if (endDate < startDate) {
-            valid = false;
-            $('#rank-end-date-error').text('Rank ending date must be after rank starting date');
-        }
-        if (name.trim().length === 0) {
+        if (inputName.trim().length === 0) {
             valid = false;
             $('#name-error').text('Please enter name');
         }
@@ -82,37 +76,29 @@ function submit(editEmail) {
             valid = false;
             $('#phone-error').text('Please enter phone number');
         }
-        if (inpputAddress.trim().length === 0) {
+        if (inputAddress.trim().length === 0) {
             valid = false;
             $('#address-error').text('Please enter address');
         }
         if (!valid) {
             return;
         }
+        formData = new FormData($('#caterer-info')[0]);
         $.ajax({
-            url: 'admin/editinformationCaterer',
+            url: '/admin/editinformationCaterer',
             type: 'POST',
-            data: {
-                email: editEmail,
-                profileImage: inputProfileImg,
-                password: inputPassword,
-                rankID: inputRankID,
-                rankStartDate: inputRankStartDate,
-                rankEndDate: inputRankEndDate,
-                name: inputName,
-                phone: inputPhone,
-                gender: inputGender,
-                address: inpputAddress,
-                districtID: inputDistrictID,
-                birthday: inputBirthday,
-                active: inputActive
-            },
+            data: formData,
+            processData: false,
+            contentType: false,
             success: function (response) {
                 if (response.status === 'OK') {
                     location.href = response.target;
                 }
                 else if (response.status === 'Invalid') {
                     $('#error').text('Invalid page, please refresh');
+                }
+                else if (response.status === 'Fail') {
+                    $('#error').text('This request cannot be completed, please try again later');
                 }
             }
         });

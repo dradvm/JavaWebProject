@@ -5,6 +5,8 @@
 package com.JavaWebProject.JavaWebProject.controllers;
 
 import com.JavaWebProject.JavaWebProject.models.Caterer;
+import com.JavaWebProject.JavaWebProject.models.CatererRank;
+import com.JavaWebProject.JavaWebProject.models.District;
 import com.JavaWebProject.JavaWebProject.services.CatererRankService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
@@ -12,12 +14,17 @@ import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.PaymentService;
 import com.JavaWebProject.JavaWebProject.services.RankManageService;
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -127,12 +134,12 @@ public class AdminController {
     }
     
     @PostMapping("/editinformationCaterer")
+    @ResponseBody
     public Map<String, Object> editinformationCaterer(
             @RequestParam("email") String email,
             @RequestParam("profileImg") MultipartFile profileImg,
             @RequestParam("password") String password,
             @RequestParam("rankID") int rankID,
-            @RequestParam("rankStartDate") String rankStartDate,
             @RequestParam("rankEndDate") String rankEndDate,
             @RequestParam("name") String name,
             @RequestParam("phone") String phone,
@@ -147,18 +154,120 @@ public class AdminController {
             result.put("status", "Invalid");
             return result;
         }
-        if (profileImg != null) {
+        if (!profileImg.isEmpty()) {
             String type = profileImg.getContentType();
             if (type == null || type.equals("application/octet-stream")) {
-                result.put("image", "type");
+                result.put("status", "Invalid");
+                return result;
             }
             else if (!type.equals("image/jpeg") && !type.equals("image/png")) {
-                result.put("image", "type");
+                result.put("status", "Invalid");
+                return result;
             }
             if (profileImg.getSize() > 10000000) {
-                result.put(("image"), "size");
+                result.put("status", "Invalid");
+                return result;
             }
         }
+        if (password != null && password.trim().length() > 0 && password.trim().length() < 8) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        CatererRank rank = catererRankService.findById(rankID);
+        if (rank == null) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        Date endDate = new Date();
+        try {
+            String[] endArr = rankEndDate.split("-");
+            int year = Integer.parseInt(endArr[0]);
+            int month = Integer.parseInt(endArr[1]);
+            int day = Integer.parseInt(endArr[2]);
+            endDate = new Date(year - 1900, month - 1, day);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            result.put("status", "Invalid");
+            return result;
+        }
+        if (name == null || name.trim().length() == 0) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        Pattern pattern = Pattern.compile("^(?:[0-9] ?){7,11}$");
+        if (phone == null || !pattern.matcher(phone).matches()) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        if (gender != 0 && gender != 1) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        if (address == null || address.trim().length() == 0) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        District district = districtService.findById(districtID);
+        if (district == null) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        Date parsedBirthday = new Date();
+        if (birthday != null && birthday.trim().length() > 0) {
+            String[] arr = birthday.split("-");
+            try {
+                int year = Integer.parseInt(arr[0]);
+                int month = Integer.parseInt(arr[1]);
+                int day = Integer.parseInt(arr[2]);
+                parsedBirthday = new Date(year - 1900, month - 1, day);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                result.put("status", "Invalid");
+                return result;
+            }
+        }
+        else {
+            parsedBirthday = null;
+        }
+        if (active != 0 && active != 1) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        if (!profileImg.isEmpty()) {
+            if (caterer.getProfileImage() != null) {
+                if (!cloudStorageService.deleteFile("caterer/" + caterer.getProfileImage())) {
+                    result.put("status", "Fail");
+                    return result;
+                }
+            }
+            String fileName = cloudStorageService.generateFileName(profileImg);
+            if (cloudStorageService.uploadFile("caterer/" + fileName, profileImg)) {
+                caterer.setProfileImage(fileName);
+            }
+            else {
+                result.put("status", "Fail");
+                return result;
+            }
+        }
+        if (password != null && password.trim().length() >= 8) {
+            caterer.setPassword(hash(password));
+        }
+        caterer.setRankID(rank);
+        caterer.setRankEndDate(endDate);
+        caterer.setFullName(name);
+        caterer.setPhone(phone);
+        caterer.setGender(gender);
+        caterer.setAddress(address);
+        caterer.setDistrictID(district);
+        if (parsedBirthday != null) {
+            caterer.setBirthday(parsedBirthday);
+        }
+        caterer.setActive(active);
+        catererService.save(caterer);
+        result.put("status", "OK");
+        result.put("target", "/admin/toManageinformationCaterer");
         return result;
     }
     
@@ -253,6 +362,20 @@ public class AdminController {
         return "AdminPage/CatererRank/catererRanks";
     }
     
-    
-    
+    private String hash(String str) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        BigInteger number = new BigInteger(1, md.digest(str.getBytes(StandardCharsets.UTF_8)));
+        StringBuilder hex = new StringBuilder(number.toString(16));
+        while (hex.length() < 64) {
+            hex.insert(0, '0');
+        }
+        return hex.toString();
+    }
 }
