@@ -7,6 +7,7 @@ package com.JavaWebProject.JavaWebProject.controllers;
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.CatererRank;
 import com.JavaWebProject.JavaWebProject.models.District;
+import com.JavaWebProject.JavaWebProject.models.Report;
 import com.JavaWebProject.JavaWebProject.services.CatererRankService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
@@ -14,6 +15,7 @@ import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.PaymentService;
 import com.JavaWebProject.JavaWebProject.services.RankManageService;
+import com.JavaWebProject.JavaWebProject.services.ReportService;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -57,6 +59,8 @@ public class AdminController {
     private DistrictService districtService;
     @Autowired
     private CloudStorageService cloudStorageService;
+    @Autowired
+    private ReportService reportService;
     private ArrayList<LocalDate> days;
     private ArrayList<Month> months;
     private ArrayList<Integer> years;
@@ -269,6 +273,32 @@ public class AdminController {
         result.put("status", "OK");
         result.put("target", "/admin/toManageinformationCaterer");
         return result;
+    }
+    
+    @GetMapping("/toHandlereportsCaterer")
+    public String toHandlereportsCaterer(ModelMap model) {
+        setTabAdminPage(model, "admincaterer", "Manage Caterer");
+        model.addAttribute("reportList", reportService.findReportSentByCustomer());
+        return "AdminPage/Caterer/handlereports";
+    }
+    
+    @GetMapping("/reportSuspendCaterer")
+    public String reportSuspend(@RequestParam("id") int id) {
+        Report report = reportService.findById(id);
+        Caterer caterer = catererService.findById(report.getReportee());
+        caterer.setActive(0);
+        catererService.save(caterer);
+        report.setReportStatus(1);
+        reportService.save(report);
+        return "redirect:/admin/toHandlereportsCaterer";
+    }
+    
+    @GetMapping("/reportSkip")
+    public String reportSkip(@RequestParam("id") int id, ModelMap model) {
+        Report report = reportService.findById(id);
+        report.setReportStatus(1);
+        reportService.save(report);
+        return "redirect:/admin/toHandlereportsCaterer";
     }
     
     @GetMapping("/manageCustomer")
