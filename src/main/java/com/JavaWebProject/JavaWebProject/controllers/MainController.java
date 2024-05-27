@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MainController {
     @Autowired
     CatererService catererService;
+    @Autowired
+    AuthController authController;
     
     public void setTabNavBar(ModelMap model, String page) {
         model.addAttribute("selectedNav", page);
@@ -45,7 +47,7 @@ public class MainController {
         for (Caterer c : catererService.findAll()) {
             temp = new HashMap<>();
             temp.put("fullName", c.getFullName().replace(" ", "-"));
-            temp.put("catererEmail", c.getCatererEmail());
+            temp.put("catererEmail", authController.hash_public(c.getCatererEmail()));
             temp.put("catererRating", c.getCatererRating());
             temp.put("description", c.getDescription());
             temp.put("image", c.getProfileImage());

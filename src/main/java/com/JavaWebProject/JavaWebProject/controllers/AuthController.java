@@ -488,6 +488,10 @@ public class AuthController {
         return hex.toString();
     }
 
+    public String hash_public(String str) {
+        return hash(str);
+    }
+    
     public String getUsername() {
         return username;
     }
