@@ -7,6 +7,7 @@ package com.JavaWebProject.JavaWebProject.controllers;
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.services.CatererRankService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
+import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.PaymentService;
@@ -22,9 +23,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -45,6 +48,8 @@ public class AdminController {
     private RankManageService rankManageService;
     @Autowired
     private DistrictService districtService;
+    @Autowired
+    private CloudStorageService cloudStorageService;
     private ArrayList<LocalDate> days;
     private ArrayList<Month> months;
     private ArrayList<Integer> years;
@@ -113,10 +118,48 @@ public class AdminController {
     @GetMapping("/toEditinformationCaterer")
     public String toEditinformationCaterer(@RequestParam("email") String email, ModelMap model) {
         setTabAdminPage(model, "admincaterer", "Manage Caterer");
-        model.addAttribute("caterer", catererService.findById(email));
+        Caterer caterer = catererService.findById(email);
+        model.addAttribute("caterer", caterer);
+        model.addAttribute("img", cloudStorageService.getProfileImg("Caterer", caterer.getProfileImage()));
         model.addAttribute("rankList", catererRankService.findAll());
         model.addAttribute("districtList", districtService.findAll());
         return "AdminPage/Caterer/editinformation";
+    }
+    
+    @PostMapping("/editinformationCaterer")
+    public Map<String, Object> editinformationCaterer(
+            @RequestParam("email") String email,
+            @RequestParam("profileImg") MultipartFile profileImg,
+            @RequestParam("password") String password,
+            @RequestParam("rankID") int rankID,
+            @RequestParam("rankStartDate") String rankStartDate,
+            @RequestParam("rankEndDate") String rankEndDate,
+            @RequestParam("name") String name,
+            @RequestParam("phone") String phone,
+            @RequestParam("gender") int gender,
+            @RequestParam("address") String address,
+            @RequestParam("districtID") int districtID,
+            @RequestParam("birthday") String birthday,
+            @RequestParam("active") int active) {
+        Map<String, Object> result = new HashMap();
+        Caterer caterer = catererService.findById(email);
+        if (caterer == null) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        if (profileImg != null) {
+            String type = profileImg.getContentType();
+            if (type == null || type.equals("application/octet-stream")) {
+                result.put("image", "type");
+            }
+            else if (!type.equals("image/jpeg") && !type.equals("image/png")) {
+                result.put("image", "type");
+            }
+            if (profileImg.getSize() > 10000000) {
+                result.put(("image"), "size");
+            }
+        }
+        return result;
     }
     
     @GetMapping("/manageCustomer")

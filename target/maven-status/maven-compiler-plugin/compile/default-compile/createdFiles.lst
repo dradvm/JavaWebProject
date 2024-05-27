@@ -32,6 +32,7 @@ com\JavaWebProject\JavaWebProject\models\Banner.class
 com\JavaWebProject\JavaWebProject\repositories\CustomerRepository.class
 com\JavaWebProject\JavaWebProject\models\CatererRank.class
 com\JavaWebProject\JavaWebProject\filters\EmailVerificationFilter.class
+com\JavaWebProject\JavaWebProject\services\CloudStorageService.class
 com\JavaWebProject\JavaWebProject\models\PaymentHistory.class
 com\JavaWebProject\JavaWebProject\controllers\RankManageController.class
 com\JavaWebProject\JavaWebProject\models\DeliveryAddress.class
