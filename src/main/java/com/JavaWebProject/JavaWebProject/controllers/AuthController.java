@@ -252,7 +252,7 @@ public class AuthController {
             valid = false;
             result.put("name", "fail");
         }
-        pattern = Pattern.compile("^(?:[0-9] ?){7,10}$");
+        pattern = Pattern.compile("^(?:[0-9] ?){7,11}$");
         if (phone == null || !pattern.matcher(phone).matches()) {
             valid = false;
             result.put("phone", "fail");
@@ -343,7 +343,7 @@ public class AuthController {
             valid = false;
             result.put("name", "fail");
         }
-        pattern = Pattern.compile("^(?:[0-9] ?){7,10}$");
+        pattern = Pattern.compile("^(?:[0-9] ?){7,11}$");
         if (phone == null || !pattern.matcher(phone).matches()) {
             valid = false;
             result.put("phone", "fail");

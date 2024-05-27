@@ -68,6 +68,9 @@ public class CloudStorageService {
     
     public String generateFileName(MultipartFile file) {
         String original = file.getOriginalFilename();
+        if (original == null) {
+            return null;
+        }
         String[] temp = original.split("\\.");
         String extension = temp[temp.length - 1];
         MessageDigest md;
@@ -79,6 +82,30 @@ public class CloudStorageService {
             return null;
         }
         BigInteger number = new BigInteger(1, md.digest(original.getBytes(StandardCharsets.UTF_8)));
+        String result = number.toString(16);
+        Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        result += formatter.format(cld.getTime()) + "." + extension;
+        return result;
+    }
+    
+    public String generateFileName(MultipartFile file, String email) {
+        String original = file.getOriginalFilename();
+        if (original == null) {
+            return null;
+        }
+        String[] temp = original.split("\\.");
+        String extension = temp[temp.length - 1];
+        String newName = original + email;
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        BigInteger number = new BigInteger(1, md.digest(newName.getBytes(StandardCharsets.UTF_8)));
         String result = number.toString(16);
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
