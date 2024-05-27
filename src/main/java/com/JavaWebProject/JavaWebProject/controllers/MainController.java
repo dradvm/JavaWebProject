@@ -2,6 +2,7 @@ package com.JavaWebProject.JavaWebProject.controllers;
 
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
+import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,6 +19,8 @@ public class MainController {
     CatererService catererService;
     @Autowired
     AuthController authController;
+    @Autowired
+    CloudStorageService cloudStorageService;
     
     public void setTabNavBar(ModelMap model, String page) {
         model.addAttribute("selectedNav", page);
@@ -45,7 +48,7 @@ public class MainController {
             temp.put("catererEmail", authController.hash_public(c.getCatererEmail()));
             temp.put("catererRating", c.getCatererRating());
             temp.put("description", c.getDescription());
-            temp.put("image", c.getProfileImage());
+            temp.put("image", cloudStorageService.getProfileImg("Caterer", c.getProfileImage()));
             data.add(temp);
         }
         return data;
