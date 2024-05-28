@@ -5,7 +5,7 @@
 package com.JavaWebProject.JavaWebProject.repositories;
 
 import com.JavaWebProject.JavaWebProject.models.Caterer;
-import java.time.LocalDate;
+import com.JavaWebProject.JavaWebProject.models.Dish;
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
@@ -13,16 +13,6 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author DELL
  */
-public interface CatererRepository extends CrudRepository<Caterer, String> {
-    
-    List<Caterer> findAll();
-    
-    List<Caterer> findByFullName(String fullName);
-    
-    List<Caterer> findByActive(int active);
-    
-    int countByCreateDate(LocalDate createDate);
-    
-    int countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
-    
+public interface DishRepository extends CrudRepository<Dish, Integer> {
+    List<Dish> findByCatererEmailAndDishStatus(Caterer caterer, int dishStatus);
 }

@@ -171,22 +171,30 @@ a {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-
-.favorite-floating-btn>.heart {
     padding: 8px;
     background-color: white;
     border-radius: 50%;
     transition: .2s;
 }
 
-.favorite-floating-btn:hover>.heart {
-    color: white;
+.favorite-floating-btn>.heart {
+    /* padding: 8px; */
+    transition: .2s;
+}
+
+.favorite-floating-btn:hover {
     background-color: #FF8787;
 }
 
-.favorite-floating-btn-mark>.heart {
+.favorite-floating-btn:hover>.heart {
+    color: white;
+}
+
+.favorite-floating-btn-mark {
     background-color: #f05757;
+}
+
+.favorite-floating-btn-mark>.heart {
     color: white;
 }
 

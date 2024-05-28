@@ -34,6 +34,9 @@ public class CatererService {
     public List<Caterer> findAll() {
         return catererRepository.findAll();
     }
+    public List<Caterer> findAllCatererActive() {
+        return catererRepository.findByActive(1);
+    }
     
     public Caterer findByCatererEmailAndFullNam(String fullName, String catererEmail) {
         List<Caterer> caterers = catererRepository.findByFullName(fullName);

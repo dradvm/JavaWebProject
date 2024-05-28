@@ -1,8 +1,10 @@
 package com.JavaWebProject.JavaWebProject.controllers;
 
 import com.JavaWebProject.JavaWebProject.models.Caterer;
+import com.JavaWebProject.JavaWebProject.models.Dish;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
+import com.JavaWebProject.JavaWebProject.services.DishService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MainController {
     @Autowired
     CatererService catererService;
+    @Autowired
+    DishService dishService;
     @Autowired
     AuthController authController;
     @Autowired
@@ -42,7 +46,7 @@ public class MainController {
     public ArrayList getListCaterer() {
         ArrayList data = new ArrayList();
         Map<String, Object> temp = new HashMap<>();
-        for (Caterer c : catererService.findAll()) {
+        for (Caterer c : catererService.findAllCatererActive()) {
             temp = new HashMap<>();
             temp.put("fullName", c.getFullName().replace(" ", "-"));
             temp.put("catererEmail", authController.hash_public(c.getCatererEmail()));
@@ -53,11 +57,32 @@ public class MainController {
         }
         return data;
     }
-    @GetMapping("/listCaterer/{fullName_Email}")
-    public String detailsCatererPage(@PathVariable("fullName_Email") String fullName_Email, ModelMap model) {
+    private Caterer findCaterer(String fullName_Email) {
         String[] data = fullName_Email.split("_");
         data[0] = data[0].replace("-", " ");
-        model.addAttribute("caterer", catererService.findByCatererEmailAndFullNam(data[0], data[1]));
+        return catererService.findByCatererEmailAndFullNam(data[0], data[1]);
+    }
+    @GetMapping("/listCaterer/{fullName_Email}")
+    public String detailsCatererPage(@PathVariable("fullName_Email") String fullName_Email, ModelMap model) {
+        Caterer c = findCaterer(fullName_Email);
+        c.setProfileImage(cloudStorageService.getProfileImg("Caterer", c.getProfileImage()));
+        model.addAttribute("caterer", c);
         return "CustomerPage/customerdetailscaterer";
+    }
+    @GetMapping("/listCaterer/{fullName_Email}/getCatererDish")
+    @ResponseBody
+    public ArrayList getDetailsCaterer(@PathVariable("fullName_Email") String fullName_Email) {
+        ArrayList data = new ArrayList<>();
+        Map<String, Object> temp = new HashMap<>();
+        System.out.println("Call");
+        for (Dish d : dishService.findAllDishOfCaterer(findCaterer(fullName_Email), 1)) {
+            temp = new HashMap<>();
+            temp.put("name", d.getDishName());
+            temp.put("price", d.getDishPrice());
+            temp.put("des", d.getDishDescription());
+            System.out.print(d.getDishName());
+            data.add(temp);
+        }
+        return data;
     }
 }
