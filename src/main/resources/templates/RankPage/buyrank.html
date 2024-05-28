@@ -20,8 +20,9 @@
              th:onclick="|choose(${catererRank.rankID})|"
              class="rank">
             <div>
-                $<span th:text="${catererRank.rankFee}"></span>/30 days
+                $<span th:text="${catererRank.rankFee}"></span>
             </div>
+            <div>30 days</div>
             <div th:if="${catererRank.rankCPO > 0}">
                 Pay $<span th:text="${catererRank.rankCPO}"></span> to accept 1 order
             </div>
@@ -30,6 +31,7 @@
                 Can showcase maximum <span th:text="${catererRank.rankMaxDish}"></span> dishes
             </div>
         </div>
+        <div>You cannot refund after purchasing, changing rank during duration will result in replacing current expire date with the new one's</div>
         <div id="error"></div>
         <button onclick="buy()">Confirm</button>
         <script th:src="@{/js/jquery.min.js}"></script>

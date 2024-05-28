@@ -1,16 +1,18 @@
-option = 1;
+option = 0;
 
-choose(1);
+$(document).ready(function () {
+    choose(parseInt($('.rank').first().attr('rank')));
+});
 
 function choose(id) {
     option = id;
     $(document).ready(function () {
-        $('.rank').each(function (index) {
-            if (index === option - 1) {
+        $('.rank').each(function () {
+            if (parseInt($(this).attr('rank')) === id) {
                 $(this).css({
                     border: 'thin solid red'
                 });
-            } 
+            }
             else {
                 $(this).css({
                     border: 'thin solid black'

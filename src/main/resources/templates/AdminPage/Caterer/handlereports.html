@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/AdminPage/admin">
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="contentAdminPage">
+            <link rel="stylesheet" th:href="@{/lib/datatable/datatables.min.css}"/>
+            <a href="/admin/toManageinformationCaterer">Manage information</a>
+            <a href="/admin/toHandlereportsCaterer">Handle reports</a>
+            <a href="/admin/toStatisticalreportCaterer">Statistical reports</a>
+            <table id="report-list" class="table table-striped">
+                <thead>
+                    <th>ID</th>
+                    <th>Reporter</th>
+                    <th>Reportee</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </thead>
+                <tbody>
+                    <tr th:each="report : ${reportList}">
+                        <td th:text="${report.reportID}"></td>
+                        <td th:text="${report.reporter}"></td>
+                        <td th:text="${report.reportee}"></td>
+                        <td th:text="${report.reportDescription}"></td>
+                        <td th:text="${#dates.format(report.reportDate, 'dd-MM-yyyy')}"></td>
+                        <td th:text="${report.reportStatus == 0 ? 'Unhandled' : 'Handled'}"></td>
+                        <td>
+                            <a th:href="@{/admin/reportSuspendCaterer(id=${report.reportID})}" th:if="${report.reportStatus == 0}">
+                                <button>Suspend</button>
+                            </a>
+                            <a th:href="@{/admin/reportSkip(id=${report.reportID})}" th:if="${report.reportStatus == 0}">
+                                <button>Skip</button>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <script th:src="@{/lib/datatable/datatables.min.js}"></script>
+            <script th:src="@{/js/handlereportscaterer.js}"></script>
+        </div>
+    </body>
+</html>
