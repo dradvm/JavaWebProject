@@ -5,6 +5,7 @@ com\JavaWebProject\JavaWebProject\controllers\MainController.class
 com\JavaWebProject\JavaWebProject\controllers\AdminController.class
 com\JavaWebProject\JavaWebProject\models\Notification.class
 com\JavaWebProject\JavaWebProject\services\DistrictService.class
+com\JavaWebProject\JavaWebProject\services\DishService.class
 com\JavaWebProject\JavaWebProject\controllers\CustomerController.class
 com\JavaWebProject\JavaWebProject\models\Feedback.class
 com\JavaWebProject\JavaWebProject\services\MinigameRewardService.class
@@ -32,6 +33,7 @@ com\JavaWebProject\JavaWebProject\controllers\MinigameController.class
 com\JavaWebProject\JavaWebProject\services\MailService.class
 com\JavaWebProject\JavaWebProject\repositories\CatererRankRepository.class
 com\JavaWebProject\JavaWebProject\models\Banner.class
+com\JavaWebProject\JavaWebProject\repositories\DishRepository.class
 com\JavaWebProject\JavaWebProject\services\VoucherService.class
 com\JavaWebProject\JavaWebProject\repositories\CustomerRepository.class
 com\JavaWebProject\JavaWebProject\repositories\CateringOrderRepository.class
