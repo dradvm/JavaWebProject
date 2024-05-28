@@ -40,6 +40,15 @@ public class CloudStorageService {
         return null;
     }
     
+    public String getDishImg(String img) {
+        Bucket bucket = StorageClient.getInstance().bucket();
+        Blob blob = bucket.get("dish/" + img);
+        if (blob != null) {
+            return blob.signUrl(5, TimeUnit.MINUTES).toString();
+        }
+        return null;
+    }
+    
     public boolean uploadFile(String fileName, MultipartFile file) {
 //        fileName bao gom ca duong dan vi du /caterer/caterer1.jpg
         Bucket bucket = StorageClient.getInstance().bucket();

@@ -10,6 +10,7 @@ import com.JavaWebProject.JavaWebProject.models.District;
 import com.JavaWebProject.JavaWebProject.models.Report;
 import com.JavaWebProject.JavaWebProject.services.CatererRankService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
+import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
@@ -61,6 +62,8 @@ public class AdminController {
     private CloudStorageService cloudStorageService;
     @Autowired
     private ReportService reportService;
+    @Autowired
+    private CateringOrderService cateringOrderService;
     private ArrayList<LocalDate> days;
     private ArrayList<Month> months;
     private ArrayList<Integer> years;
@@ -304,6 +307,34 @@ public class AdminController {
     @GetMapping("/toStatisticalreportCaterer")
     public String toStatisticalreportCaterer(ModelMap model) {
         setTabAdminPage(model, "admincaterer", "Manage Caterer");
+        days = new ArrayList<>();
+        months = new ArrayList<>();
+        years = new ArrayList<>();
+        today = LocalDate.now();
+        for (int i = 6; i >=0; i--) {
+            days.add(today.minusDays(i));
+            months.add(today.getMonth().minus(i));
+            years.add(today.getYear() - i);
+        }
+        labelsDay = days.stream().map(day -> 
+            String.valueOf(day.getDayOfMonth())+
+            "/"+
+            String.valueOf(day.getMonthValue())
+        ).collect(Collectors.toCollection(ArrayList::new));
+        labelsMonth = months.stream().map(month ->
+            String.valueOf(month.getValue())
+        ).collect(Collectors.toCollection(ArrayList::new));
+        labelsYear = years.stream().map(year ->
+            String.valueOf(year)
+        ).collect(Collectors.toCollection(ArrayList::new));
+        model.addAttribute("newCatererToday",  catererService.getNewCatererByDay(today));
+        model.addAttribute("numCatererGotOrdered", cateringOrderService.countDistinctCatererEmailByCreateDate(today));
+        model.addAttribute("newOrderToday", paymentService.getNewOrderByDay(today));
+        model.addAttribute("revenueToday", paymentService.getTotalValueByDay(today));
+        model.addAttribute("gapPercentRevenue", paymentService.getGapPercentRevenueByDay(today));
+        model.addAttribute("gapPercentOrder", paymentService.getGapPercentOrderByDay(today));
+        model.addAttribute("gapPercentCustomer", customerService.getGapPercentCustomerByDay(today));
+        model.addAttribute("gapPercentCaterer", catererService.getGapPercentCatererByDay(today));
         return "/AdminPage/Caterer/statisticalreport";
     }
     
