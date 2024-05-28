@@ -21,6 +21,10 @@ public class ReportService {
         return reportRepository.findReportSentByCustomer();
     }
     
+    public List<Report> findReportSentByCaterer() {
+        return reportRepository.findReportSentByCaterer();
+    }
+    
     public void save(Report report) {
         reportRepository.save(report);
     }

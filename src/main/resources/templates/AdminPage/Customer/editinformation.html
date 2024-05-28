@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/AdminPage/admin">
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="contentAdminPage">
+            <a href="/admin/toManageinformationCustomer">
+                <button>Back</button>
+            </a>
+            <img th:src="@{${img == null ? '/images/default-avatar.png' : img}}" style="height: 180px; width: 320px">
+            <div>
+                Email: <span th:text="${customer.customerEmail}"></span>
+            </div>
+            <form id="customer-info" method="POST">
+                <!--Email-->
+                <input name="email" type="hidden" th:value="${customer.customerEmail}"/>
+                <!--Profile image-->
+                <label for="profile-img">New profile image: </label>
+                <input id="profile-img" name="profileImg" type="file" accept=".jpg, .jpeg, .png"/>
+                <div id="profile-img-error"></div>
+                <!--Password-->
+                <label for="password">New password: </label>
+                <input id="password" name="password" type="password"/>
+                <div id="password-error"></div>
+                <!--Name-->
+                <label for="name">
+                    Full name <span style="color: red;">*</span>
+                </label>
+                <input id="name" name="name" th:value="${customer.fullName}"/>
+                <div id="name-error"></div>
+                <!--Point-->
+                <label for="point">Point</label>
+                <input id="point" name="point" type="number" th:value="${customer.point}"/>
+                <div id="point-error"></div>
+                <!--Roll chance-->
+                <label for="point">Roll chance</label>
+                <input id="roll-chance" name="rollChance" type="number" th:value="${customer.rollChance}"/>
+                <div id="roll-chance-error"></div>
+                <!--Phone-->
+                <label for="phone">
+                    Phone <span style="color: red;">*</span>
+                </label>
+                <input id="phone" name="phone" th:value="${customer.phone}"/>
+                <div id="phone-error"></div>
+                <!--Gender-->
+                <label for="gender">
+                    Gender <span style="color: red;">*</span>
+                </label>
+                <select id="gender" name="gender">
+                    <option value="0" th:selected="${customer.gender == 0}">Male</option>
+                    <option value="1" th:selected="${customer.gender == 1}">Female</option>
+                </select>
+                <!--Address-->
+                <label for="address">
+                    Address <span style="color: red;">*</span>
+                </label>
+                <input id="address" name="address" th:value="${customer.address}"/>
+                <div id="address-error"></div>
+                <!--District-->
+                <select id="district-id" name="districtID">
+                    <option th:each="district : ${districtList}"
+                            th:value="${district.districtID}"
+                            th:text="${district.districtName + ', ' + district.cityID.cityName}"
+                            th:selected="${customer.districtID.districtID == district.districtID}">
+                    </option>
+                </select>
+                <!--Birthday-->
+                <label for="birthday">Birthday: </label>
+                <input id="birthday" name="birthday" type="date" th:value="${#dates.format(customer.birthday, 'yyyy-MM-dd')}"/>
+                <!--Active-->
+                <label for="active">
+                    Active <span style="color: red;">*</span>
+                </label>
+                <select id="active" name="active">
+                    <option value="0" th:selected="${customer.active == 0}">Suspended</option>
+                    <option value="1" th:selected="${customer.active == 1}">Active</option>
+                </select>
+                <!--Submit-->
+                <div id="error"></div>
+                <button type="button" onclick="editCustomerInformation()">Submit</button>
+            </form>
+            <script th:src="@{/js/editinformationcustomer.js}"></script>
+        </div>
+    </body>
+</html>

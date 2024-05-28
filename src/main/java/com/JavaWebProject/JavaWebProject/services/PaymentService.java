@@ -6,6 +6,7 @@ package com.JavaWebProject.JavaWebProject.services;
 
 import com.JavaWebProject.JavaWebProject.models.PaymentHistory;
 import com.JavaWebProject.JavaWebProject.models.PaymentType;
+import com.JavaWebProject.JavaWebProject.repositories.CateringOrderRepository;
 import com.JavaWebProject.JavaWebProject.repositories.PaymentHistoryRepository;
 import com.JavaWebProject.JavaWebProject.repositories.PaymentTypeRepository;
 import jakarta.servlet.ServletException;
@@ -45,6 +46,8 @@ public class PaymentService {
     private PaymentTypeRepository paymentTypeRepository;
     @Autowired
     private PaymentHistoryRepository paymentHistoryRepository;
+    @Autowired
+    private CateringOrderRepository cateringOrderRepository;
     
     public void savePaymentHistory(PaymentHistory paymentHistory) {
         paymentHistoryRepository.save(paymentHistory);
@@ -116,6 +119,62 @@ public class PaymentService {
         return datasets;
     }
     
+    public List<Map<String, Object>> getValueBarChartCaterer(ArrayList dates) {
+        List<Map<String, Object>> datasets = new ArrayList();
+        ArrayList<String> labels = new ArrayList();
+        PaymentType acceptType = paymentTypeRepository.findById(2);
+        labels.add("Created orders");
+        labels.add("Accepted orders");
+        for (String label : labels) {
+            Map<String, Object> set = new HashMap();
+            ArrayList<Integer> data = new ArrayList();
+            for (Object valueDate : dates) {
+                if (valueDate instanceof LocalDate) {
+                    if (label.equals("Created orders")) {
+                        data.add(cateringOrderRepository.countByCreateDate((LocalDate) valueDate));
+                    }
+                    else {
+                        LocalDateTime startDate = LocalDateTime.of((LocalDate) valueDate, LocalTime.MIN);
+                        LocalDateTime endDate = LocalDateTime.of((LocalDate) valueDate, LocalTime.MAX);
+                        data.add(paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween(acceptType, startDate, endDate));
+                    }
+                }
+                else if (valueDate instanceof Month) {
+                    int year = LocalDate.now().getYear();
+                    int value = ((Month) valueDate).getValue();
+                    if (value > LocalDate.now().getMonthValue()) {
+                        year--;
+                    }
+                    if (label.equals("Created orders")) {
+                        LocalDate startDate = LocalDate.of(year, (Month) valueDate, 1);
+                        LocalDate endDate = LocalDate.of(year, (Month) valueDate, ((Month) valueDate).maxLength());
+                        data.add(cateringOrderRepository.countByCreateDateBetween(startDate, endDate));
+                    }
+                    else {
+                        LocalDateTime startDate = LocalDateTime.of(LocalDate.of(year, value, 1), LocalTime.MIN);
+                        LocalDateTime endDate = LocalDateTime.of(YearMonth.of(year, value).atEndOfMonth(), LocalTime.MAX);
+                        data.add(paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween(acceptType, startDate, endDate));
+                    }
+                }
+                else {
+                    int value = (int) valueDate;
+                    if (label.equals("Created orders")) {
+                        data.add(cateringOrderRepository.countByCreateDateYear(value));
+                    }
+                    else {
+                        LocalDateTime startDate = LocalDateTime.of(LocalDate.of(value, 1, 1), LocalTime.MIN);
+                        LocalDateTime endDate = LocalDateTime.of(LocalDate.of(value, 12, 31), LocalTime.MAX);
+                        data.add(paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween(acceptType, startDate, endDate));
+                    }
+                }
+            }
+            set.put("label", label);
+            set.put("data", data);
+            datasets.add(set);
+        }
+        return datasets;
+    }
+    
     
     public float getTotalValueByDay(LocalDate date) {
         float sum = 0;
@@ -150,6 +209,10 @@ public class PaymentService {
             return 100;
         }
        return ((currentValue/oldValue) - 1) * 100;
+    }
+    
+    public int getNumAcceptedOrderGapByDay(LocalDate date) {
+        return getNewOrderByDay(date) - getNewOrderByDay(date.minusDays(1));
     }
     
     public String getPaymentUrl(long amount, String returnURL, HttpServletRequest request) throws ServletException, IOException {

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/AdminPage/admin">
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="contentAdminPage">
+            <link rel="stylesheet" th:href="@{/lib/datatable/datatables.min.css}"/>
+            <a href="/admin/toManageinformationCustomer">Manage information</a>
+            <a href="/admin/toHandlereportsCustomer">Handle reports</a>
+            <a href="/admin/toStatisticalreportCustomer">Statistical reports</a>
+            <table id="customer-list" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Full name</th>
+                        <th>Gender</th>
+                        <th>Point</th>
+                        <th>Roll chance</th>
+                        <th>Phone</th>
+                        <th>Address</th>
+                        <th>Create date</th>
+                        <th>Active</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="customer : ${customerList}">
+                        <td th:text="${customer.customerEmail}"></td>
+                        <td th:text="${customer.fullName}"></td>
+                        <td th:text="${customer.gender == 0 ? 'Male' : 'Female'}"></td>
+                        <td th:text="${customer.point}"></td>
+                        <td th:text="${customer.rollChance}"></td>
+                        <td th:text="${customer.phone}"></td>
+                        <td th:text="${customer.address + ', ' + customer.districtID.districtName + ', ' + customer.districtID.cityID.cityName}"></td>
+                        <td th:text="${#dates.format(customer.createDate, 'dd-MM-yyyy')}"></td>
+                        <td th:text="${customer.active == 1 ? 'Active' : 'Suspended'}"></td>
+                        <td>
+                            <a th:href="@{/admin/toEditinformationCustomer(email=${customer.customerEmail})}">
+                                <button>Edit</button>
+                            </a>
+                            <a th:href="@{/admin/changeCustomerActive(email=${customer.customerEmail})}">
+                                <button th:text="${customer.active == 1 ? 'Suspend' : 'Unsuspend'}"></button>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <script th:src="@{/lib/datatable/datatables.min.js}"></script>
+            <script th:src="@{/js/manageinformationcustomer.js}"></script>
+        </div>
+    </body>
+</html>

@@ -21,6 +21,10 @@ import org.springframework.stereotype.Service;
 public class CustomerService {
     @Autowired
     private CustomerRepository customerRepository;
+    
+    public Iterable<Customer> findAll() {
+        return customerRepository.findAll();
+    }
 
     public Customer findById(String customerEmail) {
         Optional<Customer> result = customerRepository.findById(customerEmail);

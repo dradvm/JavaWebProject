@@ -7,9 +7,9 @@
     <body>
         <div layout:fragment="contentAdminPage">
             <link rel="stylesheet" th:href="@{/lib/datatable/datatables.min.css}"/>
-            <a href="/admin/toManageinformationCaterer">Manage information</a>
-            <a href="/admin/toHandlereportsCaterer">Handle reports</a>
-            <a href="/admin/toStatisticalreportCaterer">Statistical reports</a>
+            <a href="/admin/toManageinformationCustomer">Manage information</a>
+            <a href="/admin/toHandlereportsCustomer">Handle reports</a>
+            <a href="/admin/toStatisticalreportCustomer">Statistical reports</a>
             <table id="report-list" class="table table-striped">
                 <thead>
                     <th>ID</th>
@@ -29,10 +29,10 @@
                         <td th:text="${#dates.format(report.reportDate, 'dd-MM-yyyy')}"></td>
                         <td th:text="${report.reportStatus == 0 ? 'Unhandled' : 'Handled'}"></td>
                         <td>
-                            <a th:href="@{/admin/reportSuspendCaterer(id=${report.reportID})}" th:if="${report.reportStatus == 0}">
+                            <a th:href="@{/admin/reportSuspendCustomer(id=${report.reportID})}" th:if="${report.reportStatus == 0}">
                                 <button>Suspend</button>
                             </a>
-                            <a th:href="@{/admin/reportSkipCaterer(id=${report.reportID})}" th:if="${report.reportStatus == 0}">
+                            <a th:href="@{/admin/reportSkipCustomer(id=${report.reportID})}" th:if="${report.reportStatus == 0}">
                                 <button>Skip</button>
                             </a>
                         </td>
@@ -40,7 +40,7 @@
                 </tbody>
             </table>
             <script th:src="@{/lib/datatable/datatables.min.js}"></script>
-            <script th:src="@{/js/handlereportscaterer.js}"></script>
+            <script th:src="@{/js/handlereportscustomer.js}"></script>
         </div>
     </body>
 </html>

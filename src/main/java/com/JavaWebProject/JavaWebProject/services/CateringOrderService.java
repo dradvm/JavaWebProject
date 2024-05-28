@@ -13,4 +13,8 @@ public class CateringOrderService {
     public int countDistinctCatererEmailByCreateDate(LocalDate date) {
         return cateringOrderRepository.countDistinctCatererEmailByCreateDate(date);
     }
+    
+    public int getNumCatererGotOrderedGapByDay(LocalDate date) {
+        return countDistinctCatererEmailByCreateDate(date) - countDistinctCatererEmailByCreateDate(date.minusDays(1));
+    }
 }
