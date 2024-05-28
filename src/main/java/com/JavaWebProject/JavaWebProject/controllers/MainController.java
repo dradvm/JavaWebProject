@@ -51,36 +51,53 @@ public class MainController {
             temp.put("fullName", c.getFullName().replace(" ", "-"));
             temp.put("catererEmail", authController.hash_public(c.getCatererEmail()));
             temp.put("catererRating", c.getCatererRating());
-            temp.put("description", c.getDescription());
+            if (c.getDescription().length() > 50) {
+                temp.put("description", c.getDescription().substring(0, 50)+"...");
+            }
+            else {
+                temp.put("description", c.getDescription());
+            }
+            
             temp.put("image", cloudStorageService.getProfileImg("Caterer", c.getProfileImage()));
             data.add(temp);
         }
         return data;
     }
     private Caterer findCaterer(String fullName_Email) {
+        System.out.println(fullName_Email);
         String[] data = fullName_Email.split("_");
         data[0] = data[0].replace("-", " ");
-        return catererService.findByCatererEmailAndFullNam(data[0], data[1]);
+        return catererService.findByCatererEmailAndFullName(data[0], data[1]);
     }
     @GetMapping("/listCaterer/{fullName_Email}")
     public String detailsCatererPage(@PathVariable("fullName_Email") String fullName_Email, ModelMap model) {
+        
+        System.out.println(fullName_Email + "A");
         Caterer c = findCaterer(fullName_Email);
+        System.out.println(c.getCatererEmail());
         c.setProfileImage(cloudStorageService.getProfileImg("Caterer", c.getProfileImage()));
         model.addAttribute("caterer", c);
+        model.addAttribute("listDish", getDetailsCaterer(fullName_Email));
         return "CustomerPage/customerdetailscaterer";
     }
-    @GetMapping("/listCaterer/{fullName_Email}/getCatererDish")
-    @ResponseBody
+//    @GetMapping("/getCatererDish/{fullName_Email}")
+//    @ResponseBody
     public ArrayList getDetailsCaterer(@PathVariable("fullName_Email") String fullName_Email) {
         ArrayList data = new ArrayList<>();
         Map<String, Object> temp = new HashMap<>();
-        System.out.println("Call");
+        System.out.println(fullName_Email + "B");
         for (Dish d : dishService.findAllDishOfCaterer(findCaterer(fullName_Email), 1)) {
             temp = new HashMap<>();
             temp.put("name", d.getDishName());
             temp.put("price", d.getDishPrice());
-            temp.put("des", d.getDishDescription());
-            System.out.print(d.getDishName());
+            if (d.getDishDescription().length() > 50) {
+                temp.put("des", d.getDishDescription().substring(0, 50) + "...");
+            }
+            else {
+                temp.put("des", d.getDishDescription());
+            }
+            temp.put("tooltip", d.getDishDescription());
+            temp.put("image", cloudStorageService.getDishImg(d.getDishImage()));
             data.add(temp);
         }
         return data;

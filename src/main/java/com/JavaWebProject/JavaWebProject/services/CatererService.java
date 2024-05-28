@@ -38,7 +38,7 @@ public class CatererService {
         return catererRepository.findByActive(1);
     }
     
-    public Caterer findByCatererEmailAndFullNam(String fullName, String catererEmail) {
+    public Caterer findByCatererEmailAndFullName(String fullName, String catererEmail) {
         List<Caterer> caterers = catererRepository.findByFullName(fullName);
         Caterer caterer = caterers.get(0);
         for (Caterer c : caterers) {
