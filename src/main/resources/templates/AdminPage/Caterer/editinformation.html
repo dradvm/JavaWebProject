@@ -9,8 +9,7 @@
             <a href="/admin/toManageinformationCaterer">
                 <button>Back</button>
             </a>
-            <img th:src="@{${img == null ? '/images/default-avatar.png' : img}}">
-            <!--Email-->
+            <img th:src="@{${img == null ? '/images/default-avatar.png' : img}}" style="height: 180px; width: 320px">
             <div>
                 Email: <span th:text="${caterer.catererEmail}"></span>
             </div>
@@ -73,10 +72,11 @@
                 <input id="address" name="address" th:value="${caterer.address}"/>
                 <div id="address-error"></div>
                 <!--District-->
-                <select id="district-id" name="districtID" th:value="${caterer.districtID.districtID}">
+                <select id="district-id" name="districtID">
                     <option th:each="district : ${districtList}"
                             th:value="${district.districtID}"
-                            th:text="${district.districtName + ', ' + district.cityID.cityName}">
+                            th:text="${district.districtName + ', ' + district.cityID.cityName}"
+                            th:selected="${caterer.districtID.districtID == district.districtID}">
                     </option>
                 </select>
                 <!--Birthday-->
@@ -86,7 +86,7 @@
                 <label for="active">
                     Active <span style="color: red;">*</span>
                 </label>
-                <select id="active" name="active" th:value="${caterer.active}">
+                <select id="active" name="active">
                     <option value="0" th:selected="${caterer.active == 0}">Suspended</option>
                     <option value="1" th:selected="${caterer.active == 1}">Active</option>
                 </select>

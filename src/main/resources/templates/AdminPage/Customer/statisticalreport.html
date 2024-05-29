@@ -6,16 +6,16 @@
     </head>
     <body>
         <div layout:fragment="contentAdminPage">
-            <a href="/admin/toManageinformationCaterer">Manage information</a>
-            <a href="/admin/toHandlereportsCaterer">Handle reports</a>
-            <a href="/admin/toStatisticalreportCaterer">Statistical reports</a>
+            <a href="/admin/toManageinformationCustomer">Manage information</a>
+            <a href="/admin/toHandlereportsCustomer">Handle reports</a>
+            <a href="/admin/toStatisticalreportCustomer">Statistical reports</a>
             <div class="m-3">
                 <div class="vstack gap-3">
                     <div class="d-flex justify-content-between">
                         <div class="bg-white rounded px-3 py-2" style="width: 65%;">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="vstack">
-                                    <div class="fw-bold">Today's caterer activity summary</div>
+                                    <div class="fw-bold">Today's customer activity summary</div>
                                 </div>
                                 <div>
                                     Export
@@ -29,13 +29,13 @@
                                             <i class="fs-7 fa-solid fa-hand-holding-dollar text-white"></i>
                                         </div>
                                         <div class="fs-5 fw-bold"
-                                             th:text="${numCatererGotOrdered}">
+                                             th:text="${numNewCustomer}">
                                         </div>
                                         <div class="">
-                                            Caterers got Ordered
+                                            New Customers
                                         </div>
-                                        <div th:class="'fs-7 ' + ${numCatererGotOrderedGap >= 0 ? 'text-primary' : 'text-danger'} "
-                                             th:text="${numCatererGotOrderedGap >= 0 ? '+' + numCatererGotOrderedGap : numCatererGotOrderedGap}">
+                                        <div th:class="'fs-7 ' + ${numNewCustomerGap >= 0 ? 'text-primary' : 'text-danger'} "
+                                             th:text="${numNewCustomerGap >= 0 ? '+' + numNewCustomerGap : numNewCustomerGap}">
                                         </div>
                                     </div>
                                 </div>
@@ -45,13 +45,13 @@
                                              style="width: 34px; height: 34px; background-color: #FF947A;">
                                             <i class="fs-7 fa-solid fa-file-contract text-white"></i>
                                         </div>
-                                        <div class="fs-5 fw-bold" th:text="${numAcceptedOrder}">
+                                        <div class="fs-5 fw-bold" th:text="${numOrder}">
                                         </div>
                                         <div class="">
-                                            Accepted Orders
+                                            New Orders
                                         </div>
-                                        <div th:class="'fs-7 ' + ${numAcceptedOrderGap >= 0 ? 'text-primary' : 'text-danger'} "
-                                             th:text="${numAcceptedOrderGap >= 0 ? '+' + numAcceptedOrderGap : numAcceptedOrderGap}">
+                                        <div th:class="'fs-7 ' + ${numOrderGap >= 0 ? 'text-primary' : 'text-danger'} "
+                                             th:text="${numOrderGap >= 0 ? '+' + numOrderGap : numOrderGap}">
                                         </div>
                                     </div>
                                 </div>
@@ -61,13 +61,13 @@
                                              style="width: 34px; height: 34px; background-color: #3CD755;">
                                             <i class="fs-7 fa-regular fa-bell text-white"></i>
                                         </div>
-                                        <div class="fs-5 fw-bold" th:text="${numAciveBanner}">
+                                        <div class="fs-5 fw-bold" th:text="${numCustomerOrdered}">
                                         </div>
                                         <div class="">
-                                            Active Banners
+                                            Customers Ordered
                                         </div>
-                                        <div th:class="'fs-7 ' + ${numActiveBannerGap >= 0 ? 'text-primary' : 'text-danger'} "
-                                             th:text="${numActiveBannerGap >= 0 ? '+' + numActiveBannerGap : numActiveBannerGap}">
+                                        <div th:class="'fs-7 ' + ${numCustomerOrderedGap >= 0 ? 'text-primary' : 'text-danger'} "
+                                             th:text="${numCustomerOrderedGap >= 0 ? '+' + numCustomerOrderedGap : numCustomerOrderedGap}">
                                         </div>
                                     </div>
                                 </div>
@@ -77,13 +77,14 @@
                                              style="width: 34px; height: 34px; background-color: #BF83FF;">
                                             <i class="fs-7 fa-solid fa-user-plus text-white"></i>
                                         </div>
-                                        <div class="fs-5 fw-bold" th:text="${numActiveVoucher}">
+                                        <div class="fs-5 fw-bold" th:text="${pointUsed}">
+                                            10
                                         </div>
                                         <div class="">
-                                            Active Vouchers
+                                            Points used
                                         </div>
-                                        <div th:class="'fs-7 ' + ${numActiveVoucherGap >= 0 ? 'text-primary' : 'text-danger'} "
-                                             th:text="${numActiveVoucherGap >= 0 ? '+' + numActiveVoucherGap : numActiveVoucherGap}">
+                                        <div th:class="'fs-7 ' + ${pointUsedGap >= 0 ? 'text-primary' : 'text-danger'} "
+                                             th:text="${pointUsedGap >= 0 ? '+' + pointUsedGap : pointUsedGap}">
                                         </div>
                                     </div>
                                 </div>
@@ -92,9 +93,9 @@
                         <div class="bg-white rounded px-3 py-2" style="width: 33%;">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="fw-bold">
-                                    Accepted Orders
+                                    New Customers
                                 </div>
-                                <select id="lineChartCaterer" class="form-select fs-7" style="width: 40%;">
+                                <select id="lineChartCustomer" class="form-select fs-7" style="width: 40%;">
                                     <option class="fs-7" value="Day">By Day</option>
                                     <option class="fs-7" value="Month">By Month</option>
                                     <option class="fs-7" value="Year">By Year</option>
@@ -106,31 +107,26 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <div class="bg-white rounded" style="width: 31%;">
-                            <div>
-                                <canvas id="myChart2"></canvas>
-                            </div>
-                        </div>
-                        <div class="bg-white rounded px-3 py-2" style="width: 67%;">
+                        <div class="bg-white rounded px-3 py-2" style="width: 98%;">
                             <div class="d-flex justify-content-between align-items-center">
                                 <div class="fw-bold">
                                     Order Report
                                 </div>
-                                <select id="barChartCaterer" class="form-select fs-7" style="width: 20%;">
+                                <select id="barChartCustomer" class="form-select fs-7" style="width: 20%;">
                                     <option class="fs-7" value="Day">By Day</option>
                                     <option class="fs-7" value="Month">By Month</option>
                                     <option class="fs-7" value="Year">By Year</option>
                                 </select>
                             </div>
                             <div class="pt-4">
-                                <canvas id="myChart3"></canvas>
+                                <canvas id="myChart2"></canvas>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <script th:src="@{/js/chart.js}"></script>
-            <script th:src="@{/js/statisticalreportcaterer.js}"></script>
+            <script th:src="@{/js/statisticalreportcustomer.js}"></script>
         </div>
     </body>
 </html>

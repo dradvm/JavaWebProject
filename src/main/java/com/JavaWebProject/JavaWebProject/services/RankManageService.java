@@ -19,4 +19,16 @@ public class RankManageService {
     public List<CatererRank> findAll() {
         return rankManageRepository.findAll();
     }
+
+    public CatererRank findById(Integer id) { // Changed to Integer
+        return rankManageRepository.findById(id).orElse(null);
+    }
+
+    public void save(CatererRank catererRank) {
+        rankManageRepository.save(catererRank);
+    }
+
+    public void deleteById(Integer id) { // Changed to Integer
+        rankManageRepository.deleteById(id);
+    }
 }

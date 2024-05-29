@@ -9,4 +9,7 @@ public interface ReportRepository extends CrudRepository<Report, Integer> {
     
     @Query(value = "select * from Report where Reporter in (select CustomerEmail from Customer)", nativeQuery = true)
     List<Report> findReportSentByCustomer();
+    
+    @Query(value = "select * from Report where Reporter in (select CatererEmail from Caterer)", nativeQuery = true)
+    List<Report> findReportSentByCaterer();
 }

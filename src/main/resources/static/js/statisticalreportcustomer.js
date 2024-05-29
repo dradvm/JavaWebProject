@@ -1,9 +1,9 @@
 $(document).ready(function () {
-    $('#lineChartCaterer').change(function () {
+    $('#lineChartCustomer').change(function () {
         var selectedValue = $(this).val();
         $.ajax({
             type: 'GET',
-            url: '/admin/lineChartCaterer',
+            url: '/admin/lineChartCustomer',
             data: { selectedValue: selectedValue },
             success: function (response) {
                 if (!lineChart) {
@@ -15,19 +15,12 @@ $(document).ready(function () {
             }
         });
     });
-    $("#lineChartCaterer").trigger("change");
-    $.ajax({
-        type: 'GET',
-        url: '/admin/pieChartCaterer',
-        success: function (response) {
-            initPieChart(response.labels, response.data);
-        }
-    });
-    $('#barChartCaterer').change(function () {
+    $("#lineChartCustomer").trigger("change");
+    $('#barChartCustomer').change(function () {
         var selectedValue = $(this).val();
         $.ajax({
             type: 'GET',
-            url: '/admin/barChartCaterer',
+            url: '/admin/barChartCustomer',
             data: { selectedValue: selectedValue },
             success: function (response) {
                 if (!barChart) {
@@ -39,7 +32,7 @@ $(document).ready(function () {
             }
         });
     });
-    $("#barChartCaterer").trigger("change");
+    $("#barChartCustomer").trigger("change");
 });
 const ctx = document.getElementById('myChart');
 var lineChart;
@@ -76,38 +69,9 @@ function updateLineChart(labels, data) {
     lineChart.update();
 }
 const ctx2 = document.getElementById('myChart2');
-var pieChart;
-function initPieChart(labels, data) {
-    pieChart = new Chart(ctx2, {
-        type: 'pie',
-        data: {
-            labels: labels,
-            datasets: [{
-                data: data,
-                label: '',
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: {
-                    position: 'top'
-                },
-                title: {
-                    display: true,
-                    text: "Active banner details"
-                }
-            },
-            scales: {
-            }
-        }
-    });
-}
-const ctx3 = document.getElementById('myChart3');
 var barChart;
 function initBarChart(labels, datasets) {
-    barChart = new Chart(ctx3, {
+    barChart = new Chart(ctx2, {
         type: 'bar',
         data: {
             labels: labels,
