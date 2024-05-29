@@ -23,6 +23,7 @@ C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\J
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\DeliveryAddress.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Dish.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\CatererRankRepository.java
+C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\CatererController.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\CustomerService.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\CustomerController.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\RankManageRepository.java
@@ -42,6 +43,7 @@ C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\J
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\RankController.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\filters\AdminFilter.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\RankManageController.java
+C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\filters\CatererFilter.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Admin.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\JavaWebProjectApplication.java
 C:\Users\DELL\NetBeansProjects\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\MinigameRewardRepository.java

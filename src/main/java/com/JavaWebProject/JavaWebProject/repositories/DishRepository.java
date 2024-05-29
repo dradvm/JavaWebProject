@@ -7,7 +7,11 @@ package com.JavaWebProject.JavaWebProject.repositories;
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.Dish;
 import java.util.List;
+import org.springframework.data.domain.Limit;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 
 /**
  *
@@ -15,4 +19,6 @@ import org.springframework.data.repository.CrudRepository;
  */
 public interface DishRepository extends CrudRepository<Dish, Integer> {
     List<Dish> findByCatererEmailAndDishStatus(Caterer caterer, int dishStatus);
+    
+    Dish findByDishID(Integer dishID);
 }

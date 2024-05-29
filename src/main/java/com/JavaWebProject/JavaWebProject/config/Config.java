@@ -1,6 +1,7 @@
 package com.JavaWebProject.JavaWebProject.config;
 
 import com.JavaWebProject.JavaWebProject.filters.AdminFilter;
+import com.JavaWebProject.JavaWebProject.filters.CatererFilter;
 import com.JavaWebProject.JavaWebProject.filters.EmailVerificationFilter;
 import com.JavaWebProject.JavaWebProject.filters.LoginedFilter;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -52,6 +53,15 @@ public class Config {
         registrationBean.setFilter(new EmailVerificationFilter());
         registrationBean.addUrlPatterns("/auth/toEmailverification");
         registrationBean.setOrder(4);
+        return registrationBean;
+    }
+    
+    @Bean
+    public FilterRegistrationBean<CatererFilter> catererVerificationFilter() {
+        FilterRegistrationBean<CatererFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new CatererFilter());
+        registrationBean.addUrlPatterns("/caterer/*");
+        registrationBean.setOrder(5);
         return registrationBean;
     }
 }

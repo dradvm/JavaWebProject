@@ -208,6 +208,7 @@ a {
 
 .item-nav {
     display: flex;
+    align-items: center;
     padding: 0.6rem;
     cursor: pointer;
     text-decoration: none;

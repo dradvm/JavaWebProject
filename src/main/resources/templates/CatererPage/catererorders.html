@@ -1,0 +1,59 @@
+</html>
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{CatererPage/caterer}">
+
+<head>
+
+
+</head>
+
+<body>
+    <div layout:fragment="contentCatererPage">
+        <table id="" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Rank</th>
+                    <th>Rank ending date</th>
+                    <th>Rating</th>
+                    <th>Full name</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Create date</th>
+                    <th>Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="caterer : ${catererList}">
+                    <td th:text="${caterer.catererEmail}"></td>
+                    <td th:text="${'$' + caterer.rankID.rankFee}"></td>
+                    <td th:text="${#dates.format(caterer.rankEndDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${caterer.catererRating}"></td>
+                    <td th:text="${caterer.fullName}"></td>
+                    <td th:text="${caterer.phone}"></td>
+                    <td
+                        th:text="${caterer.address + ', ' + caterer.districtID.districtName + ', ' + caterer.districtID.cityID.cityName}">
+                    </td>
+                    <td th:text="${#dates.format(caterer.createDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${caterer.active == 1 ? 'Active' : 'Suspended'}"></td>
+                    <td>
+                        <a th:href="@{/admin/toEditinformationCaterer(email=${caterer.catererEmail})}">
+                            <button>Edit</button>
+                        </a>
+                        <a th:href="@{/admin/changeCatererActive(email=${caterer.catererEmail})}">
+                            <button th:text="${caterer.active == 1 ? 'Suspend' : 'Unsuspend'}"></button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+</html>

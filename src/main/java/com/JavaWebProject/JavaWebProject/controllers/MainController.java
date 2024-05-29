@@ -80,8 +80,8 @@ public class MainController {
         model.addAttribute("listDish", getDetailsCaterer(fullName_Email));
         return "CustomerPage/customerdetailscaterer";
     }
-//    @GetMapping("/getCatererDish/{fullName_Email}")
-//    @ResponseBody
+    @GetMapping("/getCatererDish/{fullName_Email}")
+    @ResponseBody
     public ArrayList getDetailsCaterer(@PathVariable("fullName_Email") String fullName_Email) {
         ArrayList data = new ArrayList<>();
         Map<String, Object> temp = new HashMap<>();
