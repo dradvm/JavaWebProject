@@ -83,4 +83,8 @@ public class CustomerService {
             return customer.getPoint();
         }
     }
+    
+    public int getNewCustomerGapByDay(LocalDate date) {
+        return getNewCustomerByDay(date) - getNewCustomerByDay(date.minusDays(1));
+    }
 }

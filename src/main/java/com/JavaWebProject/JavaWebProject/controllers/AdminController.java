@@ -529,6 +529,40 @@ public class AdminController {
         return "redirect:/admin/toHandlereportsCustomer";
     }
     
+    @GetMapping("/toStatisticalreportCustomer")
+    public String toStatisticalreportCustomer(ModelMap model) {
+        setTabAdminPage(model, "admincustomer", "Manage Customer");
+        days = new ArrayList<>();
+        months = new ArrayList<>();
+        years = new ArrayList<>();
+        today = LocalDate.now();
+        for (int i = 6; i >=0; i--) {
+            days.add(today.minusDays(i));
+            months.add(today.getMonth().minus(i));
+            years.add(today.getYear() - i);
+        }
+        labelsDay = days.stream().map(day -> 
+            String.valueOf(day.getDayOfMonth())+
+            "/"+
+            String.valueOf(day.getMonthValue())
+        ).collect(Collectors.toCollection(ArrayList::new));
+        labelsMonth = months.stream().map(month ->
+            String.valueOf(month.getValue())
+        ).collect(Collectors.toCollection(ArrayList::new));
+        labelsYear = years.stream().map(year ->
+            String.valueOf(year)
+        ).collect(Collectors.toCollection(ArrayList::new));
+        model.addAttribute("numNewCustomer", customerService.getNewCustomerByDay(today));
+        model.addAttribute("numOrder", cateringOrderService.countByCreateDate(today));
+        model.addAttribute("numCustomerOrdered", cateringOrderService.countDistinctCustomerEmailByCreateDate(today));
+        model.addAttribute("pointUsed", cateringOrderService.sumPointDiscountByCreateDate(today));
+        model.addAttribute("numNewCustomerGap", customerService.getNewCustomerGapByDay(today));
+        model.addAttribute("numOrderGap", cateringOrderService.getNewOrderGapByDay(today));
+        model.addAttribute("numCustomerOrderedGap", cateringOrderService.getNumCustomerOrderedGapByDay(today));
+        model.addAttribute("pointUsedGap", cateringOrderService.getPointUsedGapByDay(today));
+        return "/AdminPage/Customer/statisticalreport";
+    }
+    
 //    @GetMapping("/manageCatererRank")
 //    public String adminCatererRankPage(ModelMap model) {
 //        setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
@@ -574,6 +608,7 @@ public class AdminController {
         data.put("data", dataChart);
         return data; // Chỉ trả về fragment cần cập nhật
     }
+    
     @GetMapping("/lineChartCaterer")
     @ResponseBody
     public Map<String, Object> getDataLineChartCaterer(@RequestParam("selectedValue") String selectedValue) {
@@ -589,13 +624,13 @@ public class AdminController {
             case "Month":
                 data.put("labels", labelsMonth);
                 for (Month month : months) {
-                    dataChart.add(catererService.getNewCatererByMonth(month) + customerService.getNewCustomerByMonth(month));
+                    dataChart.add(paymentService.getNewOrderByMonth(month));
                 }
                 break;
             case "Year":
                 data.put("labels", labelsYear);
                 for (int year : years) {
-                    dataChart.add(catererService.getNewCatererByYear(year) + customerService.getNewCustomerByYear(year));
+                    dataChart.add(paymentService.getNewOrderByYear(year));
                 }
                 break;
             default:
@@ -604,7 +639,40 @@ public class AdminController {
                 break;
         }
         data.put("data", dataChart);
-        return data; // Chỉ trả về fragment cần cập nhật
+        return data;
+    }
+    
+    @GetMapping("/lineChartCustomer")
+    @ResponseBody
+    public Map<String, Object> getDataLineChartCustomer(@RequestParam("selectedValue") String selectedValue) {
+        Map<String, Object> data = new HashMap<>();
+        ArrayList<Integer> dataChart = new ArrayList<>();
+        switch (selectedValue) {
+            case "Day":
+                data.put("labels", labelsDay);
+                for (LocalDate day : days) {
+                    dataChart.add(customerService.getNewCustomerByDay(day));
+                }
+                break;
+            case "Month":
+                data.put("labels", labelsMonth);
+                for (Month month : months) {
+                    dataChart.add(customerService.getNewCustomerByMonth(month));
+                }
+                break;
+            case "Year":
+                data.put("labels", labelsYear);
+                for (int year : years) {
+                    dataChart.add(customerService.getNewCustomerByYear(year));
+                }
+                break;
+            default:
+                data.put("labels", new String[]{});
+                data.put("data", new int[]{});
+                break;
+        }
+        data.put("data", dataChart);
+        return data;
     }
     
     @GetMapping("/polarAreaChart")
@@ -654,6 +722,27 @@ public class AdminController {
     @GetMapping("/barChartCaterer")
     @ResponseBody
     public Map<String, Object> getBarChartCaterer(@RequestParam("selectedValue") String selectedValue) {
+        Map<String, Object> data = new HashMap();
+        List<Map<String, Object>> datasets = new ArrayList();
+        if (selectedValue.equals("Day")) {
+            data.put("labels", labelsDay);
+            datasets = paymentService.getValueBarChartCaterer(days);
+        }
+        else if (selectedValue.equals("Month")) {
+            data.put("labels", labelsMonth);
+            datasets = paymentService.getValueBarChartCaterer(months);
+        }
+        else {
+            data.put("labels", labelsYear);
+            datasets = paymentService.getValueBarChartCaterer(years);
+        }
+        data.put("datasets", datasets);
+        return data;
+    }
+    
+    @GetMapping("/barChartCustomer")
+    @ResponseBody
+    public Map<String, Object> getBarChartCustomer(@RequestParam("selectedValue") String selectedValue) {
         Map<String, Object> data = new HashMap();
         List<Map<String, Object>> datasets = new ArrayList();
         if (selectedValue.equals("Day")) {

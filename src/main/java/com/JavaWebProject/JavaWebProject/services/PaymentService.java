@@ -196,9 +196,25 @@ public class PaymentService {
     }
     
     public int getNewOrderByDay(LocalDate date) {
-        return paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween( paymentTypeRepository.findById(2) ,LocalDateTime.of(date, LocalTime.MIN), LocalDateTime.of(date, LocalTime.MAX));
-
+        return paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween( paymentTypeRepository.findById(2),LocalDateTime.of(date, LocalTime.MIN), LocalDateTime.of(date, LocalTime.MAX));
     }
+    
+    public int getNewOrderByMonth(Month month) {
+        int year = LocalDate.now().getYear();
+        if (month.getValue() > LocalDate.now().getMonthValue()) {
+            year--;
+        }
+        LocalDateTime start = LocalDateTime.of(LocalDate.of(year, month, month.minLength()), LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(LocalDate.of(year, month, month.maxLength()), LocalTime.MAX);
+        return paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween(paymentTypeRepository.findById(2), start, end);
+    }
+    
+    public int getNewOrderByYear(int year) {
+        LocalDateTime start = LocalDateTime.of(LocalDate.of(year, 1, 1), LocalTime.MIN);
+        LocalDateTime end = LocalDateTime.of(LocalDate.of(year, 12, 31), LocalTime.MAX);
+        return paymentHistoryRepository.countByTypeIDAndPaymentTimeBetween(paymentTypeRepository.findById(2), start, end);
+    }
+    
     public float getGapPercentOrderByDay(LocalDate date) {
        float currentValue = getNewOrderByDay(date);
        float oldValue = getNewOrderByDay(date.minusDays(1));
