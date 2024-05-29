@@ -6,10 +6,13 @@ package com.JavaWebProject.JavaWebProject.controllers;
 
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.CatererRank;
+<<<<<<< Updated upstream
 import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.models.District;
 import com.JavaWebProject.JavaWebProject.models.Report;
 import com.JavaWebProject.JavaWebProject.services.BannerService;
+=======
+>>>>>>> Stashed changes
 import com.JavaWebProject.JavaWebProject.services.CatererRankService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
@@ -41,6 +44,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -48,7 +52,8 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Controller
 @RequestMapping(value = "/admin")
-public class AdminController {  
+public class AdminController {
+
     @Autowired
     private CatererService catererService;
     @Autowired
@@ -78,34 +83,35 @@ public class AdminController {
     private ArrayList<String> labelsMonth;
     private ArrayList<String> labelsYear;
     private LocalDate today;
+
     public void setTabAdminPage(ModelMap model, String page, String title) {
         model.addAttribute("selectedPage", page);
         model.addAttribute("title", title);
     }
-    
+
     @GetMapping(value = "/dashboard")
     public String adminDashboardPage(ModelMap model) {
         days = new ArrayList<>();
         months = new ArrayList<>();
         years = new ArrayList<>();
         today = LocalDate.now();
-        for (int i = 6; i >=0; i--) {
+        for (int i = 6; i >= 0; i--) {
             days.add(today.minusDays(i));
             months.add(today.getMonth().minus(i));
             years.add(today.getYear() - i);
         }
-        labelsDay = days.stream().map(day -> 
-            String.valueOf(day.getDayOfMonth())+
-            "/"+
-            String.valueOf(day.getMonthValue())
+        labelsDay = days.stream().map(day
+                -> String.valueOf(day.getDayOfMonth())
+                + "/"
+                + String.valueOf(day.getMonthValue())
         ).collect(Collectors.toCollection(ArrayList::new));
-        labelsMonth = months.stream().map(month ->
-            String.valueOf(month.getValue())
+        labelsMonth = months.stream().map(month
+                -> String.valueOf(month.getValue())
         ).collect(Collectors.toCollection(ArrayList::new));
-        labelsYear = years.stream().map(year ->
-            String.valueOf(year)
+        labelsYear = years.stream().map(year
+                -> String.valueOf(year)
         ).collect(Collectors.toCollection(ArrayList::new));
-        model.addAttribute("newCatererToday",  catererService.getNewCatererByDay(today));
+        model.addAttribute("newCatererToday", catererService.getNewCatererByDay(today));
         model.addAttribute("newCustomerToday", customerService.getNewCustomerByDay(today));
         model.addAttribute("newOrderToday", paymentService.getNewOrderByDay(today));
         model.addAttribute("revenueToday", paymentService.getTotalValueByDay(today));
@@ -116,26 +122,26 @@ public class AdminController {
         setTabAdminPage(model, "admindashboard", "Dashboard");
         return "AdminPage/admindashboard";
     }
+
     @GetMapping("/toManageinformationCaterer")
     public String toCatererlist(ModelMap model) {
         setTabAdminPage(model, "admincaterer", "Manage Caterer");
         model.addAttribute("catererList", catererService.findAll());
         return "AdminPage/Caterer/manageinformation";
     }
-    
+
     @GetMapping("/changeCatererActive")
     public String changeCatererActive(@RequestParam("email") String email) {
         Caterer caterer = catererService.findById(email);
         if (caterer.getActive() == 0) {
             caterer.setActive(1);
-        }
-        else {
+        } else {
             caterer.setActive(0);
         }
         catererService.save(caterer);
         return "redirect:/admin/toManageinformationCaterer";
     }
-    
+
     @GetMapping("/toEditinformationCaterer")
     public String toEditinformationCaterer(@RequestParam("email") String email, ModelMap model) {
         setTabAdminPage(model, "admincaterer", "Manage Caterer");
@@ -146,7 +152,7 @@ public class AdminController {
         model.addAttribute("districtList", districtService.findAll());
         return "AdminPage/Caterer/editinformation";
     }
-    
+
     @PostMapping("/editinformationCaterer")
     @ResponseBody
     public Map<String, Object> editinformationCaterer(
@@ -171,12 +177,18 @@ public class AdminController {
         if (!profileImg.isEmpty()) {
             String type = profileImg.getContentType();
             if (type == null || type.equals("application/octet-stream")) {
+<<<<<<< Updated upstream
                 result.put("status", "Invalid");
                 return result;
             }
             else if (!type.equals("image/jpeg") && !type.equals("image/png")) {
                 result.put("status", "Invalid");
                 return result;
+=======
+                result.put("image", "type");
+            } else if (!type.equals("image/jpeg") && !type.equals("image/png")) {
+                result.put("image", "type");
+>>>>>>> Stashed changes
             }
             if (profileImg.getSize() > 10000000) {
                 result.put("status", "Invalid");
@@ -284,6 +296,7 @@ public class AdminController {
         result.put("target", "/admin/toManageinformationCaterer");
         return result;
     }
+<<<<<<< Updated upstream
     
     @GetMapping("/toHandlereportsCaterer")
     public String toHandlereportsCaterer(ModelMap model) {
@@ -347,6 +360,11 @@ public class AdminController {
     
     @GetMapping("/toManageinformationCustomer")
     public String toCustomerlist(ModelMap model) {
+=======
+
+    @GetMapping("/manageCustomer")
+    public String adminCustomerPage(ModelMap model) {
+>>>>>>> Stashed changes
         setTabAdminPage(model, "admincustomer", "Manage Customer");
         model.addAttribute("customerList", customerService.findAll());
         return "/AdminPage/Customer/manageinformation";
@@ -562,19 +580,18 @@ public class AdminController {
         model.addAttribute("pointUsedGap", cateringOrderService.getPointUsedGapByDay(today));
         return "/AdminPage/Customer/statisticalreport";
     }
-    
+
 //    @GetMapping("/manageCatererRank")
 //    public String adminCatererRankPage(ModelMap model) {
 //        setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
 //        return "AdminPage/admincatererrank";
 //    }
-    
     @GetMapping("/manageFeedback")
     public String adminFeedbackPage(ModelMap model) {
         setTabAdminPage(model, "adminfeedback", "Manage Feedback");
         return "AdminPage/adminfeedback";
     }
-    
+
     @GetMapping("/lineChart")
     @ResponseBody
     public Map<String, Object> getDataLineChart(@RequestParam("selectedValue") String selectedValue) {
@@ -585,7 +602,7 @@ public class AdminController {
             case "Day":
                 data.put("labels", labelsDay);
                 for (LocalDate day : days) {
-                    dataChart.add(catererService.getNewCatererByDay(day) + customerService.getNewCustomerByDay(day) );
+                    dataChart.add(catererService.getNewCatererByDay(day) + customerService.getNewCustomerByDay(day));
                 }
                 break;
             case "Month":
@@ -608,6 +625,7 @@ public class AdminController {
         data.put("data", dataChart);
         return data; // Chỉ trả về fragment cần cập nhật
     }
+<<<<<<< Updated upstream
     
     @GetMapping("/lineChartCaterer")
     @ResponseBody
@@ -675,13 +693,18 @@ public class AdminController {
         return data;
     }
     
+=======
+
+>>>>>>> Stashed changes
     @GetMapping("/polarAreaChart")
-    @ResponseBody Map<String, Object> getDataPolarAreaChart() {
+    @ResponseBody
+    Map<String, Object> getDataPolarAreaChart() {
         Map<String, Object> data = new HashMap<>();
-        data.put ("labels", paymentService.getLabelsList());
+        data.put("labels", paymentService.getLabelsList());
         data.put("data", paymentService.getValueByDay(LocalDate.now()).stream().mapToDouble(Float::doubleValue));
         return data;
     }
+<<<<<<< Updated upstream
     
     @GetMapping("/pieChartCaterer")
     @ResponseBody
@@ -692,6 +715,9 @@ public class AdminController {
         return result;
     }
     
+=======
+
+>>>>>>> Stashed changes
     @GetMapping("/barChart")
     @ResponseBody
     public Map<String, Object> getDataBarChart(@RequestParam("selectedValue") String selectedValue) {
@@ -718,6 +744,7 @@ public class AdminController {
         data.put("datasets", datasets);
         return data;
     }
+<<<<<<< Updated upstream
     
     @GetMapping("/barChartCaterer")
     @ResponseBody
@@ -761,12 +788,16 @@ public class AdminController {
         return data;
     }
     
+=======
+
+>>>>>>> Stashed changes
     @GetMapping("/toManageCatererRanks")
     public String toCatererRanklist(ModelMap model) {
         setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
         model.addAttribute("catererRankList", rankManageService.findAll());
         return "AdminPage/CatererRank/catererRanks";
     }
+<<<<<<< Updated upstream
     
     private String hash(String str) {
         MessageDigest md;
@@ -783,5 +814,70 @@ public class AdminController {
             hex.insert(0, '0');
         }
         return hex.toString();
+=======
+
+    @GetMapping("/editCatererRank")
+    public String toEditCatererRank(@RequestParam("id") int id, ModelMap model) {
+        CatererRank catererRank = rankManageService.findById(id);
+        if (catererRank != null) {
+            model.addAttribute("catererRank", catererRank);
+            return "AdminPage/CatererRank/editCatererRank";
+        } else {
+            return "redirect:/admin/toManageCatererRanks";
+        }
+    }
+
+    // Xử lý cập nhật Caterer Rank
+    @PostMapping("/editCatererRank")
+    public String updateCatererRank(
+            @RequestParam("rankID") int rankID,
+            @RequestParam("rankFee") double rankFee,
+            @RequestParam("rankCPO") double rankCPO,
+            @RequestParam("rankMaxDish") int rankMaxDish,
+            RedirectAttributes redirectAttributes) {
+        CatererRank catererRank = rankManageService.findById(rankID);
+        if (catererRank == null) {
+            redirectAttributes.addFlashAttribute("status", "Invalid Rank ID");
+            return "redirect:/admin/toManageCatererRanks";
+        }
+        catererRank.setRankFee(rankFee);
+        catererRank.setRankCPO(rankCPO);
+        catererRank.setRankMaxDish(rankMaxDish);
+        rankManageService.save(catererRank);
+        redirectAttributes.addFlashAttribute("status", "Success");
+        return "redirect:/admin/toManageCatererRanks";
+    }
+
+    // Xóa Caterer Rank
+    @PostMapping("/deleteCatererRank")
+    public String deleteCatererRank(@RequestParam("id") int id, RedirectAttributes redirectAttributes) {
+        rankManageService.deleteById(id);
+        redirectAttributes.addFlashAttribute("status", "Deleted");
+        return "redirect:/admin/toManageCatererRanks";
+    }
+
+    @GetMapping("/addCatererRank")
+    public String showAddCatererRankForm(ModelMap model) {
+        model.addAttribute("catererRank", new CatererRank());
+        return "AdminPage/CatererRank/addCatererRank";
+    }
+
+    @PostMapping("/addCatererRank")
+    public String addCatererRank(
+            @RequestParam("rankFee") double rankFee,
+            @RequestParam("rankCPO") double rankCPO,
+            @RequestParam("rankMaxDish") int rankMaxDish,
+            RedirectAttributes redirectAttributes) {
+
+        CatererRank catererRank = new CatererRank();
+        catererRank.setRankFee(rankFee);
+        catererRank.setRankCPO(rankCPO);
+        catererRank.setRankMaxDish(rankMaxDish);
+
+        rankManageService.save(catererRank);
+
+        redirectAttributes.addFlashAttribute("status", "Caterer Rank added successfully");
+        return "redirect:/admin/toManageCatererRanks";
+>>>>>>> Stashed changes
     }
 }

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/AdminPage/admin">
+    <head>
+        <title>Add New Caterer Rank</title>
+    </head>
+<body>
+    <div layout:fragment="contentAdminPage">
+        <div class="container mt-5">
+            <h2>Add Caterer Rank</h2>
+            <form th:action="@{/admin/addCatererRank}" method="post">
+                <div class="form-group">
+                    <label for="rankFee">Rank Fee</label>
+                    <input required="true" type="text" class="form-control" id="rankFee" name="rankFee">
+                </div>
+                <div class="form-group">
+                    <label for="rankCPO">Rank CPO</label>
+                    <input required="true" type="text" class="form-control" id="rankCPO" name="rankCPO">
+                </div>
+                <div class="form-group">
+                    <label for="rankMaxDish">Rank Max Dish</label>
+                    <input required="true" type="text" class="form-control" id="rankMaxDish" name="rankMaxDish">
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a th:href="@{/admin/toManageCatererRanks}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
