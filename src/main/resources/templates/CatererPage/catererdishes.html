@@ -29,7 +29,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             <tbody>
                 <tr th:each="d : ${dishes}">
                     <td>
-                        <img src="${d.dishImage}" />
+                        <img th:src="${d.dishImage}" />
                     </td>
                     <td th:text="${d.dishName}"></td>
                     <td th:text="${d.dishDescription}"></td>
@@ -50,8 +50,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
         <script>
             $(document).ready(function () {
                 var table = $('#dishList').DataTable({
-                    "pageLength": 5,
-                    "lengthMenu": [5, 10]
+                    pageLength: 5,
+                    lengthMenu: [5, 10],
+                    "scrollX": true, // Thêm thanh cuộn ngang
+                    "autoWidth": false,
                 });
             });
         </script>
