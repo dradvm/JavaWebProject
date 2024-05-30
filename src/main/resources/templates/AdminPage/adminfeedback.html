@@ -1,145 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{AdminPage/admin}">
+<html xmlns:th="https://www.thymeleaf.org/"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="/AdminPage/admin">
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="contentAdminPage">
+            <link rel="stylesheet" th:href="@{/lib/datatable/datatables.min.css}"/>
+            <a class="btn btn-success mb-3" href="/admin/toManageFeedbacks">Manage information</a>
+            <a class="btn btn-success mb-3" href="/admin/feedbackStatisticalReport">Statistical reports</a>
 
-<head>
+            <!-- Status Message -->
+            <div th:if="${status}" class="alert alert-info" th:text="${status}"></div>
 
-</head>
-
-<body>
-    <div layout:fragment="contentAdminPage">
-        <div class="m-3">
-            <div class="vstack gap-3">
-                <div class="d-flex justify-content-between">
-                    <div class="bg-white rounded px-3 py-2" style="width: 65%;">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="vstack">
-                                <div class="fw-bold">Today's Sales</div>
-                                <div class="fs-7">Sales Summary</div>
-                            </div>
-                            <div>
-                                Export
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-between mt-3">
-                            <div class="rounded p-3" style="width: 23%; background-color: #FFE2E6;">
-                                <div class="vstack">
-                                    <div class="d-flex align-items-center justify-content-around rounded-circle"
-                                        style="width: 34px; height: 34px; background-color: #FA5A7E;">
-                                        <i class="fs-7 fa-solid fa-hand-holding-dollar text-white"></i>
-                                    </div>
-                                    <!--                                        <div class="fs-4 fw-bold"
-                                    >
-                                </div>-->
-                                    <div class="fs-5 fw-bold"
-                                        th:text="${#numbers.formatDecimal(revenueToday, 0, 'COMMA', 0, 'POINT')}+'$'">
-                                    </div>
-                                    <div class="">
-                                        Today Revenue
-                                    </div>
-                                    <div th:class="'fs-7 ' + ${gapPercentRevenue >= 0 ? 'text-primary' : 'text-danger'} "
-                                        th:text="${gapPercentRevenue >= 0 ? '+' + gapPercentRevenue : gapPercentRevenue} + '%'">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="rounded p-3" style="width: 23%; background-color: #FFF4DE;">
-                                <div class="vstack">
-                                    <div class="d-flex align-items-center justify-content-around rounded-circle"
-                                        style="width: 34px; height: 34px; background-color: #FF947A;">
-                                        <i class="fs-7 fa-solid fa-file-contract text-white"></i>
-                                    </div>
-                                    <div class="fs-5 fw-bold" th:text="${newOrderToday}">
-                                    </div>
-                                    <div class="">
-                                        Total Order
-                                    </div>
-                                    <div th:class="'fs-7 ' + ${gapPercentOrder >= 0 ? 'text-primary' : 'text-danger'} "
-                                        th:text="${gapPercentOrder >= 0 ? '+' + gapPercentOrder : gapPercentOrder} + '%'">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="rounded p-3" style="width: 23%; background-color: #DCFCE7;">
-                                <div class="vstack">
-                                    <div class="d-flex align-items-center justify-content-around rounded-circle"
-                                        style="width: 34px; height: 34px; background-color: #3CD755;">
-                                        <i class="fs-7 fa-regular fa-bell text-white"></i>
-                                    </div>
-                                    <div class="fs-5 fw-bold" th:text="${newCatererToday}">
-                                    </div>
-                                    <div class="">
-                                        New Caterer
-                                    </div>
-                                    <div th:class="'fs-7 ' + ${gapPercentCaterer >= 0 ? 'text-primary' : 'text-danger'} "
-                                        th:text="${gapPercentCaterer >= 0 ? '+' + gapPercentCaterer : gapPercentCaterer} + '%'">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="rounded p-3" style="width: 23%; background-color: #F4E8FF;">
-                                <div class="vstack">
-                                    <div class="d-flex align-items-center justify-content-around rounded-circle"
-                                        style="width: 34px; height: 34px; background-color: #BF83FF;">
-                                        <i class="fs-7 fa-solid fa-user-plus text-white"></i>
-                                    </div>
-                                    <div class="fs-5 fw-bold" th:text="${newCustomerToday}">
-                                        10
-                                    </div>
-                                    <div class="">
-                                        New Customer
-                                    </div>
-                                    <div th:class="'fs-7 ' + ${gapPercentCustomer >= 0 ? 'text-primary' : 'text-danger'} "
-                                        th:text="${gapPercentCustomer >= 0 ? '+' + gapPercentCustomer : gapPercentCustomer} + '%'">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded px-3 py-2" style="width: 33%;">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="fw-bold">
-                                New Account
-                            </div>
-                            <select id="lineChartAdmin" class="form-select fs-7" style="width: 40%;">
-                                <option class="fs-7" value="Day">By Day</option>
-                                <option class="fs-7" value="Month">By Month</option>
-                                <option class="fs-7" value="Year">By Year</option>
-                            </select>
-                        </div>
-                        <div class="pt-3">
-                            <canvas id="myChart"></canvas>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="d-flex justify-content-between">
-                    <div class="bg-white rounded" style="width: 31%;">
-                        <div>
-                            <canvas id="myChart2"></canvas>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded px-3 py-2" style="width: 67%;">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="fw-bold">
-                                Revenue Report
-                            </div>
-                            <select id="barChartAdmin" class="form-select fs-7" style="width: 20%;">
-                                <option class="fs-7" value="Day">By Day</option>
-                                <option class="fs-7" value="Month">By Month</option>
-                                <option class="fs-7" value="Year">By Year</option>
-                            </select>
-                        </div>
-
-                        <div class="pt-4">
-                            <canvas id="myChart3"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <table id="rank-list" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Feedback ID</th>
+                        <th>Email</th>
+                        <th>Feedback Details</th>
+                        <th>Feedback Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Iterate through feedbackList -->
+                    <tr th:each="feedback : ${feedbackList}">
+                        <td th:text="${feedback.feedbackID}"></td>
+                        <td th:text="${feedback.email}"></td>
+                        <td th:text="${feedback.feedbackDetails}"></td>
+                        <td th:text="${feedback.feedbackDate}"></td>
+                        <td>
+                            <form th:action="@{/admin/deleteFeedback}" method="post" style="display:inline-block;" onsubmit="return confirmDelete();">
+                                <input type="hidden" name="id" th:value="${feedback.feedbackID}" />
+                                <button type="submit" class="btn btn-danger">Delete</button>                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <script th:src="@{/js/jquery.min.js}"></script>
+            <script th:src="@{/lib/datatable/datatables.min.js}"></script>
+            <script th:src="@{/js/managecatererrank.js}"></script>
+            <script>
+                function confirmDelete() {
+                    return confirm('Are you sure you want to delete this item?');
+                }
+            </script>
         </div>
-        <script th:src="@{/js/chart.js}"></script>
-        <script th:src="@{/js/jquery.min.js}"></script>
-        <script th:src="@{/js/admindashboard.js}"></script>
-
-    </div>
-</body>
-
+    </body>
 </html>

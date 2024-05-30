@@ -19,4 +19,7 @@ public interface CustomerRepository extends CrudRepository<Customer, String> {
     int countByCreateDate(LocalDate createDate);
     
     int countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
+
+    public boolean existsByCustomerEmail(String customerEmail);
+
 }

@@ -87,4 +87,8 @@ public class CustomerService {
     public int getNewCustomerGapByDay(LocalDate date) {
         return getNewCustomerByDay(date) - getNewCustomerByDay(date.minusDays(1));
     }
+
+    public boolean existsByCustomerEmail (String customerEmail) {
+        return customerRepository.existsByCustomerEmail(customerEmail);
+    }
 }
