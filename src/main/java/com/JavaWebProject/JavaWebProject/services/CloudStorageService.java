@@ -50,7 +50,7 @@ public class CloudStorageService {
     }
     
     public boolean uploadFile(String fileName, MultipartFile file) {
-//        fileName bao gom ca duong dan vi du /caterer/caterer1.jpg
+//        fileName bao gom ca duong dan vi du caterer/caterer1.jpg
         Bucket bucket = StorageClient.getInstance().bucket();
         try {
             bucket.create(fileName, file.getBytes());
@@ -63,7 +63,7 @@ public class CloudStorageService {
     }
     
     public boolean deleteFile(String fileName) {
-//        fileName bao gom ca duong dan vi du /caterer/caterer1.jpg
+//        fileName bao gom ca duong dan vi du caterer/caterer1.jpg
         Bucket bucket = StorageClient.getInstance().bucket();
         Blob blob = bucket.get(fileName);
         if (blob == null) {
