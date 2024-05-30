@@ -32,4 +32,7 @@ public class DishService {
     public void save(Dish dish) {
         dishRepository.save(dish);
     }
+    public void delete(Dish dish) {
+        dishRepository.delete(dish);
+    }
 }

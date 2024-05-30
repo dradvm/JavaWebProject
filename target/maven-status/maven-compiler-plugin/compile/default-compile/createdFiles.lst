@@ -2,6 +2,7 @@ com\JavaWebProject\JavaWebProject\models\Voucher.class
 com\JavaWebProject\JavaWebProject\repositories\ReportRepository.class
 com\JavaWebProject\JavaWebProject\models\Caterer.class
 com\JavaWebProject\JavaWebProject\controllers\MainController.class
+com\JavaWebProject\JavaWebProject\repositories\OrderDetailsRepository.class
 com\JavaWebProject\JavaWebProject\controllers\AdminController.class
 com\JavaWebProject\JavaWebProject\models\Notification.class
 com\JavaWebProject\JavaWebProject\controllers\CatererController.class
@@ -59,6 +60,7 @@ com\JavaWebProject\JavaWebProject\models\City.class
 com\JavaWebProject\JavaWebProject\services\CateringOrderService.class
 com\JavaWebProject\JavaWebProject\models\Admin.class
 com\JavaWebProject\JavaWebProject\models\CatererRating.class
+com\JavaWebProject\JavaWebProject\services\OrderDetailsService.class
 com\JavaWebProject\JavaWebProject\repositories\PaymentHistoryRepository.class
 com\JavaWebProject\JavaWebProject\services\CatererRankService.class
 com\JavaWebProject\JavaWebProject\models\PaymentType.class

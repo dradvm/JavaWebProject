@@ -1,0 +1,73 @@
+</html>
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{CatererPage/caterer}">
+
+<head>
+
+
+</head>
+
+<body>
+    <div layout:fragment="contentCatererPage">
+
+        <div class="container mt-5">
+            <form th:action="@{/caterer/addDish}" th:if="${dish == null}" method="post" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="dishName">Dish Name</label>
+                    <input required="true" type="text" class="form-control" id="dishName" name="dishName"
+                        maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label for="dishImage">Dish Image</label>
+                    <input required="true" type="file" class="form-control" id="dishImage" name="dishImage"
+                        accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="dishDescription">Dish Description</label>
+                    <textarea required="true" class="form-control" id="dishDescription" name="dishDescription"
+                        maxlength="200"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="dishPrice">Dish Price</label>
+                    <input required="true" type="number" class="form-control" id="dishPrice" name="dishPrice"
+                        step="0.01" min="0.01">
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a th:href="@{/caterer/myCaterer/dishes}" class="btn btn-secondary">Cancel</a>
+            </form>
+            <form th:action="@{/caterer/updateDish}" th:unless="${dish == null}" method="post"
+                enctype="multipart/form-data">
+                <input id="dishID" name="dishID" th:value="${dish.dishID}" type="hidden" />
+                <div class="form-group">
+                    <label for="dishName">Dish Name</label>
+                    <input th:value="${dish.dishName}" required="true" type="text" class="form-control" id="dishName"
+                        name="dishName" maxlength="50">
+                </div>
+                <div class="form-group">
+                    <label for="dishImage">Dish Image</label>
+                    <input th:value="${dish.dishImage}" required="true" type="file" class="form-control" id="dishImage"
+                        name="dishImage" accept="image/*">
+                </div>
+                <div class="form-group">
+                    <label for="dishDescription">Dish Description</label>
+                    <textarea th:value="${dish.dishDescription}" required="true" class="form-control"
+                        id="dishDescription" name="dishDescription" maxlength="200"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="dishPrice">Dish Price</label>
+                    <input th:value="${dish.dishPrice}" required="true" type="number" class="form-control"
+                        id="dishPrice" name="dishPrice" step="0.01" min="0.01">
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a th:href="@{/caterer/myCaterer/dishes}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
