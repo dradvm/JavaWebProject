@@ -31,4 +31,40 @@ public class RankManageService {
     public void deleteById(Integer id) { // Changed to Integer
         rankManageRepository.deleteById(id);
     }
+
+    public double averageRankFee() {
+        return rankManageRepository.averageRankFee();
+    }
+
+    public double maxRankFee() {
+        return rankManageRepository.maxRankFee();
+    }
+
+    public double minRankFee() {
+        return rankManageRepository.minRankFee();
+    }
+
+    public double averageRankCPO() {
+        return rankManageRepository.averageRankCPO();
+    }
+
+    public double maxRankCPO() {
+        return rankManageRepository.maxRankCPO();
+    }
+
+    public double minRankCPO() {
+        return rankManageRepository.minRankCPO();
+    }
+
+    public int averageRankMaxDish() {
+        return rankManageRepository.averageRankMaxDish();
+    }
+
+    public int maxRankMaxDish() {
+        return rankManageRepository.maxRankMaxDish();
+    }
+
+    public int minRankMaxDish() {
+        return rankManageRepository.minRankMaxDish();
+    }
 }

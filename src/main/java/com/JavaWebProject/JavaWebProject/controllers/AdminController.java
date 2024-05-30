@@ -34,6 +34,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -840,5 +841,30 @@ public class AdminController {
 
         redirectAttributes.addFlashAttribute("status", "Caterer Rank added successfully");
         return "redirect:/admin/toManageCatererRanks";
+    }
+    @GetMapping("/toStatisticalReport")
+    public String toStatisticalReport(Model model) {
+        
+        double averageRankFee = rankManageService.averageRankFee();
+        double maxRankFee = rankManageService.maxRankFee();
+        double minRankFee = rankManageService.minRankFee();
+        double averageRankCPO = rankManageService.averageRankCPO();
+        double maxRankCPO = rankManageService.maxRankCPO();
+        double minRankCPO = rankManageService.minRankCPO();
+        int averageRankMaxDish = rankManageService.averageRankMaxDish();
+        int maxRankMaxDish = rankManageService.maxRankMaxDish();
+        int minRankMaxDish = rankManageService.minRankMaxDish();
+
+        model.addAttribute("averageRankFee", averageRankFee);
+        model.addAttribute("maxRankFee", maxRankFee);
+        model.addAttribute("minRankFee", minRankFee);
+        model.addAttribute("averageRankCPO", averageRankCPO);
+        model.addAttribute("maxRankCPO", maxRankCPO);
+        model.addAttribute("minRankCPO", minRankCPO);
+        model.addAttribute("averageRankMaxDish", averageRankMaxDish);
+        model.addAttribute("maxRankMaxDish", maxRankMaxDish);
+        model.addAttribute("minRankMaxDish", minRankMaxDish);
+
+        return "AdminPage/CatererRank/rankStatisticalReport";
     }
 }
