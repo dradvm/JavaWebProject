@@ -10,6 +10,10 @@
             <a class="btn btn-success mb-3" href="/admin/toManageCatererRanks">Manage information</a>
             <a class="btn btn-success mb-3" href="/admin/addCatererRank">Add Caterer Rank</a>
             <a class="btn btn-success mb-3" href="/admin/toCatererlist">Statistical reports</a>
+            
+            <!-- Status Message -->
+    <div th:if="${status}" class="alert alert-info" th:text="${status}"></div>
+    
             <table id="rank-list" class="table table-striped">
                 <thead>
                     <tr>

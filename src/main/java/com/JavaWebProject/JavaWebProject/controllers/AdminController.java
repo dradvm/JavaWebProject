@@ -49,7 +49,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
  */
 @Controller
 @RequestMapping(value = "/admin")
-public class AdminController {  
+public class AdminController {
+
     @Autowired
     private CatererService catererService;
     @Autowired
@@ -79,34 +80,35 @@ public class AdminController {
     private ArrayList<String> labelsMonth;
     private ArrayList<String> labelsYear;
     private LocalDate today;
+
     public void setTabAdminPage(ModelMap model, String page, String title) {
         model.addAttribute("selectedPage", page);
         model.addAttribute("title", title);
     }
-    
+
     @GetMapping(value = "/dashboard")
     public String adminDashboardPage(ModelMap model) {
         days = new ArrayList<>();
         months = new ArrayList<>();
         years = new ArrayList<>();
         today = LocalDate.now();
-        for (int i = 6; i >=0; i--) {
+        for (int i = 6; i >= 0; i--) {
             days.add(today.minusDays(i));
             months.add(today.getMonth().minus(i));
             years.add(today.getYear() - i);
         }
-        labelsDay = days.stream().map(day -> 
-            String.valueOf(day.getDayOfMonth())+
-            "/"+
-            String.valueOf(day.getMonthValue())
+        labelsDay = days.stream().map(day
+                -> String.valueOf(day.getDayOfMonth())
+                + "/"
+                + String.valueOf(day.getMonthValue())
         ).collect(Collectors.toCollection(ArrayList::new));
-        labelsMonth = months.stream().map(month ->
-            String.valueOf(month.getValue())
+        labelsMonth = months.stream().map(month
+                -> String.valueOf(month.getValue())
         ).collect(Collectors.toCollection(ArrayList::new));
-        labelsYear = years.stream().map(year ->
-            String.valueOf(year)
+        labelsYear = years.stream().map(year
+                -> String.valueOf(year)
         ).collect(Collectors.toCollection(ArrayList::new));
-        model.addAttribute("newCatererToday",  catererService.getNewCatererByDay(today));
+        model.addAttribute("newCatererToday", catererService.getNewCatererByDay(today));
         model.addAttribute("newCustomerToday", customerService.getNewCustomerByDay(today));
         model.addAttribute("newOrderToday", paymentService.getNewOrderByDay(today));
         model.addAttribute("revenueToday", paymentService.getTotalValueByDay(today));
@@ -117,26 +119,26 @@ public class AdminController {
         setTabAdminPage(model, "admindashboard", "Dashboard");
         return "AdminPage/admindashboard";
     }
+
     @GetMapping("/toManageinformationCaterer")
     public String toCatererlist(ModelMap model) {
         setTabAdminPage(model, "admincaterer", "Manage Caterer");
         model.addAttribute("catererList", catererService.findAll());
         return "AdminPage/Caterer/manageinformation";
     }
-    
+
     @GetMapping("/changeCatererActive")
     public String changeCatererActive(@RequestParam("email") String email) {
         Caterer caterer = catererService.findById(email);
         if (caterer.getActive() == 0) {
             caterer.setActive(1);
-        }
-        else {
+        } else {
             caterer.setActive(0);
         }
         catererService.save(caterer);
         return "redirect:/admin/toManageinformationCaterer";
     }
-    
+
     @GetMapping("/toEditinformationCaterer")
     public String toEditinformationCaterer(@RequestParam("email") String email, ModelMap model) {
         setTabAdminPage(model, "admincaterer", "Manage Caterer");
@@ -147,7 +149,7 @@ public class AdminController {
         model.addAttribute("districtList", districtService.findAll());
         return "AdminPage/Caterer/editinformation";
     }
-    
+
     @PostMapping("/editinformationCaterer")
     @ResponseBody
     public Map<String, Object> editinformationCaterer(
@@ -174,8 +176,7 @@ public class AdminController {
             if (type == null || type.equals("application/octet-stream")) {
                 result.put("status", "Invalid");
                 return result;
-            }
-            else if (!type.equals("image/jpeg") && !type.equals("image/png")) {
+            } else if (!type.equals("image/jpeg") && !type.equals("image/png")) {
                 result.put("status", "Invalid");
                 return result;
             }
@@ -200,8 +201,7 @@ public class AdminController {
             int month = Integer.parseInt(endArr[1]);
             int day = Integer.parseInt(endArr[2]);
             endDate = new Date(year - 1900, month - 1, day);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             result.put("status", "Invalid");
             return result;
@@ -236,14 +236,12 @@ public class AdminController {
                 int month = Integer.parseInt(arr[1]);
                 int day = Integer.parseInt(arr[2]);
                 parsedBirthday = new Date(year - 1900, month - 1, day);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 result.put("status", "Invalid");
                 return result;
             }
-        }
-        else {
+        } else {
             parsedBirthday = null;
         }
         if (active != 0 && active != 1) {
@@ -260,8 +258,7 @@ public class AdminController {
             String fileName = cloudStorageService.generateFileName(profileImg);
             if (cloudStorageService.uploadFile("caterer/" + fileName, profileImg)) {
                 caterer.setProfileImage(fileName);
-            }
-            else {
+            } else {
                 result.put("status", "Fail");
                 return result;
             }
@@ -285,14 +282,14 @@ public class AdminController {
         result.put("target", "/admin/toManageinformationCaterer");
         return result;
     }
-    
+
     @GetMapping("/toHandlereportsCaterer")
     public String toHandlereportsCaterer(ModelMap model) {
         setTabAdminPage(model, "admincaterer", "Manage Caterer");
         model.addAttribute("reportList", reportService.findReportSentByCustomer());
         return "AdminPage/Caterer/handlereports";
     }
-    
+
     @GetMapping("/reportSuspendCaterer")
     public String reportSuspendCaterer(@RequestParam("id") int id) {
         Report report = reportService.findById(id);
@@ -303,7 +300,7 @@ public class AdminController {
         reportService.save(report);
         return "redirect:/admin/toHandlereportsCaterer";
     }
-    
+
     @GetMapping("/reportSkipCaterer")
     public String reportSkipCaterer(@RequestParam("id") int id) {
         Report report = reportService.findById(id);
@@ -311,7 +308,7 @@ public class AdminController {
         reportService.save(report);
         return "redirect:/admin/toHandlereportsCaterer";
     }
-    
+
     @GetMapping("/toStatisticalreportCaterer")
     public String toStatisticalreportCaterer(ModelMap model) {
         setTabAdminPage(model, "admincaterer", "Manage Caterer");
@@ -319,21 +316,21 @@ public class AdminController {
         months = new ArrayList<>();
         years = new ArrayList<>();
         today = LocalDate.now();
-        for (int i = 6; i >=0; i--) {
+        for (int i = 6; i >= 0; i--) {
             days.add(today.minusDays(i));
             months.add(today.getMonth().minus(i));
             years.add(today.getYear() - i);
         }
-        labelsDay = days.stream().map(day -> 
-            String.valueOf(day.getDayOfMonth())+
-            "/"+
-            String.valueOf(day.getMonthValue())
+        labelsDay = days.stream().map(day
+                -> String.valueOf(day.getDayOfMonth())
+                + "/"
+                + String.valueOf(day.getMonthValue())
         ).collect(Collectors.toCollection(ArrayList::new));
-        labelsMonth = months.stream().map(month ->
-            String.valueOf(month.getValue())
+        labelsMonth = months.stream().map(month
+                -> String.valueOf(month.getValue())
         ).collect(Collectors.toCollection(ArrayList::new));
-        labelsYear = years.stream().map(year ->
-            String.valueOf(year)
+        labelsYear = years.stream().map(year
+                -> String.valueOf(year)
         ).collect(Collectors.toCollection(ArrayList::new));
         model.addAttribute("numCatererGotOrdered", cateringOrderService.countDistinctCatererEmailByCreateDate(today));
         model.addAttribute("numAcceptedOrder", paymentService.getNewOrderByDay(today));
@@ -345,27 +342,26 @@ public class AdminController {
         model.addAttribute("numActiveVoucherGap", voucherService.getActiveVoucherGapByDay(today));
         return "/AdminPage/Caterer/statisticalreport";
     }
-    
+
     @GetMapping("/toManageinformationCustomer")
     public String toCustomerlist(ModelMap model) {
         setTabAdminPage(model, "admincustomer", "Manage Customer");
         model.addAttribute("customerList", customerService.findAll());
         return "/AdminPage/Customer/manageinformation";
     }
-    
+
     @GetMapping("/changeCustomerActive")
     public String changeCustomerActive(@RequestParam("email") String email) {
         Customer customer = customerService.findById(email);
         if (customer.getActive() == 0) {
             customer.setActive(1);
-        }
-        else {
+        } else {
             customer.setActive(0);
         }
         customerService.save(customer);
         return "redirect:/admin/toManageinformationCustomer";
     }
-    
+
     @GetMapping("/toEditinformationCustomer")
     public String toEditinformationCustomer(@RequestParam("email") String email, ModelMap model) {
         setTabAdminPage(model, "admincustomer", "Manage Customer");
@@ -375,7 +371,7 @@ public class AdminController {
         model.addAttribute("districtList", districtService.findAll());
         return "AdminPage/Customer/editinformation";
     }
-    
+
     @PostMapping("/editinformationCustomer")
     @ResponseBody
     public Map<String, Object> editinformationCustomer(
@@ -402,8 +398,7 @@ public class AdminController {
             if (type == null || type.equals("application/octet-stream")) {
                 result.put("status", "Invalid");
                 return result;
-            }
-            else if (!type.equals("image/jpeg") && !type.equals("image/png")) {
+            } else if (!type.equals("image/jpeg") && !type.equals("image/png")) {
                 result.put("status", "Invalid");
                 return result;
             }
@@ -454,14 +449,12 @@ public class AdminController {
                 int month = Integer.parseInt(arr[1]);
                 int day = Integer.parseInt(arr[2]);
                 parsedBirthday = new Date(year - 1900, month - 1, day);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 result.put("status", "Invalid");
                 return result;
             }
-        }
-        else {
+        } else {
             parsedBirthday = null;
         }
         if (active != 0 && active != 1) {
@@ -478,8 +471,7 @@ public class AdminController {
             String fileName = cloudStorageService.generateFileName(profileImg);
             if (cloudStorageService.uploadFile("customer/" + fileName, profileImg)) {
                 customer.setProfileImage(fileName);
-            }
-            else {
+            } else {
                 result.put("status", "Fail");
                 return result;
             }
@@ -503,14 +495,14 @@ public class AdminController {
         result.put("target", "/admin/toManageinformationCustomer");
         return result;
     }
-    
+
     @GetMapping("/toHandlereportsCustomer")
     public String toHandlereportsCustomer(ModelMap model) {
         setTabAdminPage(model, "admincustomer", "Manage Customer");
         model.addAttribute("reportList", reportService.findReportSentByCaterer());
         return "AdminPage/Customer/handlereports";
     }
-    
+
     @GetMapping("/reportSuspendCustomer")
     public String reportSuspendCustomer(@RequestParam("id") int id) {
         Report report = reportService.findById(id);
@@ -521,7 +513,7 @@ public class AdminController {
         reportService.save(report);
         return "redirect:/admin/toHandlereportsCustomer";
     }
-    
+
     @GetMapping("/reportSkipCustomer")
     public String reportSkipCustomer(@RequestParam("id") int id) {
         Report report = reportService.findById(id);
@@ -529,7 +521,7 @@ public class AdminController {
         reportService.save(report);
         return "redirect:/admin/toHandlereportsCustomer";
     }
-    
+
     @GetMapping("/toStatisticalreportCustomer")
     public String toStatisticalreportCustomer(ModelMap model) {
         setTabAdminPage(model, "admincustomer", "Manage Customer");
@@ -537,21 +529,21 @@ public class AdminController {
         months = new ArrayList<>();
         years = new ArrayList<>();
         today = LocalDate.now();
-        for (int i = 6; i >=0; i--) {
+        for (int i = 6; i >= 0; i--) {
             days.add(today.minusDays(i));
             months.add(today.getMonth().minus(i));
             years.add(today.getYear() - i);
         }
-        labelsDay = days.stream().map(day -> 
-            String.valueOf(day.getDayOfMonth())+
-            "/"+
-            String.valueOf(day.getMonthValue())
+        labelsDay = days.stream().map(day
+                -> String.valueOf(day.getDayOfMonth())
+                + "/"
+                + String.valueOf(day.getMonthValue())
         ).collect(Collectors.toCollection(ArrayList::new));
-        labelsMonth = months.stream().map(month ->
-            String.valueOf(month.getValue())
+        labelsMonth = months.stream().map(month
+                -> String.valueOf(month.getValue())
         ).collect(Collectors.toCollection(ArrayList::new));
-        labelsYear = years.stream().map(year ->
-            String.valueOf(year)
+        labelsYear = years.stream().map(year
+                -> String.valueOf(year)
         ).collect(Collectors.toCollection(ArrayList::new));
         model.addAttribute("numNewCustomer", customerService.getNewCustomerByDay(today));
         model.addAttribute("numOrder", cateringOrderService.countByCreateDate(today));
@@ -563,19 +555,18 @@ public class AdminController {
         model.addAttribute("pointUsedGap", cateringOrderService.getPointUsedGapByDay(today));
         return "/AdminPage/Customer/statisticalreport";
     }
-    
+
 //    @GetMapping("/manageCatererRank")
 //    public String adminCatererRankPage(ModelMap model) {
 //        setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
 //        return "AdminPage/admincatererrank";
 //    }
-    
     @GetMapping("/manageFeedback")
     public String adminFeedbackPage(ModelMap model) {
         setTabAdminPage(model, "adminfeedback", "Manage Feedback");
         return "AdminPage/adminfeedback";
     }
-    
+
     @GetMapping("/lineChart")
     @ResponseBody
     public Map<String, Object> getDataLineChart(@RequestParam("selectedValue") String selectedValue) {
@@ -586,7 +577,7 @@ public class AdminController {
             case "Day":
                 data.put("labels", labelsDay);
                 for (LocalDate day : days) {
-                    dataChart.add(catererService.getNewCatererByDay(day) + customerService.getNewCustomerByDay(day) );
+                    dataChart.add(catererService.getNewCatererByDay(day) + customerService.getNewCustomerByDay(day));
                 }
                 break;
             case "Month":
@@ -609,7 +600,7 @@ public class AdminController {
         data.put("data", dataChart);
         return data; // Chỉ trả về fragment cần cập nhật
     }
-    
+
     @GetMapping("/lineChartCaterer")
     @ResponseBody
     public Map<String, Object> getDataLineChartCaterer(@RequestParam("selectedValue") String selectedValue) {
@@ -642,7 +633,7 @@ public class AdminController {
         data.put("data", dataChart);
         return data;
     }
-    
+
     @GetMapping("/lineChartCustomer")
     @ResponseBody
     public Map<String, Object> getDataLineChartCustomer(@RequestParam("selectedValue") String selectedValue) {
@@ -675,15 +666,16 @@ public class AdminController {
         data.put("data", dataChart);
         return data;
     }
-    
+
     @GetMapping("/polarAreaChart")
-    @ResponseBody Map<String, Object> getDataPolarAreaChart() {
+    @ResponseBody
+    Map<String, Object> getDataPolarAreaChart() {
         Map<String, Object> data = new HashMap<>();
-        data.put ("labels", paymentService.getLabelsList());
+        data.put("labels", paymentService.getLabelsList());
         data.put("data", paymentService.getValueByDay(LocalDate.now()).stream().mapToDouble(Float::doubleValue));
         return data;
     }
-    
+
     @GetMapping("/pieChartCaterer")
     @ResponseBody
     public Map<String, Object> getPieChartCaterer() {
@@ -692,7 +684,7 @@ public class AdminController {
         result.put("data", bannerService.countActiveBannerPerTypeByDay(today));
         return result;
     }
-    
+
     @GetMapping("/barChart")
     @ResponseBody
     public Map<String, Object> getDataBarChart(@RequestParam("selectedValue") String selectedValue) {
@@ -719,7 +711,7 @@ public class AdminController {
         data.put("datasets", datasets);
         return data;
     }
-    
+
     @GetMapping("/barChartCaterer")
     @ResponseBody
     public Map<String, Object> getBarChartCaterer(@RequestParam("selectedValue") String selectedValue) {
@@ -728,19 +720,17 @@ public class AdminController {
         if (selectedValue.equals("Day")) {
             data.put("labels", labelsDay);
             datasets = paymentService.getValueBarChartCaterer(days);
-        }
-        else if (selectedValue.equals("Month")) {
+        } else if (selectedValue.equals("Month")) {
             data.put("labels", labelsMonth);
             datasets = paymentService.getValueBarChartCaterer(months);
-        }
-        else {
+        } else {
             data.put("labels", labelsYear);
             datasets = paymentService.getValueBarChartCaterer(years);
         }
         data.put("datasets", datasets);
         return data;
     }
-    
+
     @GetMapping("/barChartCustomer")
     @ResponseBody
     public Map<String, Object> getBarChartCustomer(@RequestParam("selectedValue") String selectedValue) {
@@ -749,32 +739,29 @@ public class AdminController {
         if (selectedValue.equals("Day")) {
             data.put("labels", labelsDay);
             datasets = paymentService.getValueBarChartCaterer(days);
-        }
-        else if (selectedValue.equals("Month")) {
+        } else if (selectedValue.equals("Month")) {
             data.put("labels", labelsMonth);
             datasets = paymentService.getValueBarChartCaterer(months);
-        }
-        else {
+        } else {
             data.put("labels", labelsYear);
             datasets = paymentService.getValueBarChartCaterer(years);
         }
         data.put("datasets", datasets);
         return data;
     }
-    
+
     @GetMapping("/toManageCatererRanks")
     public String toCatererRanklist(ModelMap model) {
         setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
         model.addAttribute("catererRankList", rankManageService.findAll());
         return "AdminPage/CatererRank/catererRanks";
     }
-    
+
     private String hash(String str) {
         MessageDigest md;
         try {
             md = MessageDigest.getInstance("SHA-256");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -785,6 +772,7 @@ public class AdminController {
         }
         return hex.toString();
     }
+
     @GetMapping("/editCatererRank")
     public String toEditCatererRank(@RequestParam("id") int id, ModelMap model) {
         CatererRank catererRank = rankManageService.findById(id);
@@ -820,6 +808,11 @@ public class AdminController {
     // Xóa Caterer Rank
     @PostMapping("/deleteCatererRank")
     public String deleteCatererRank(@RequestParam("id") int id, RedirectAttributes redirectAttributes) {
+        if (catererService.existsByRankID(id)) {
+            redirectAttributes.addFlashAttribute("status", "Cannot delete: Rank is in use");
+            return "redirect:/admin/toManageCatererRanks";
+        }
+
         rankManageService.deleteById(id);
         redirectAttributes.addFlashAttribute("status", "Deleted");
         return "redirect:/admin/toManageCatererRanks";

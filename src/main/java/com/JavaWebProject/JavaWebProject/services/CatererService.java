@@ -82,4 +82,7 @@ public class CatererService {
     public void save(Caterer caterer) {
         catererRepository.save(caterer);
     }
+    public boolean existsByRankID(int rankID) {
+        return catererRepository.existsByRankID_RankID(rankID);
+    }
 }
