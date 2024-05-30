@@ -32,7 +32,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <input id="searchCaterer" type="text" class="border-0 bg-transparent py-2 w-100" style="outline: none;"
                     ng-model="filterName">
             </div>
-            <div class="row gy-3 mt-3" id="listCaterer">
+            <div class="row my-row gy-3 mt-3" id="listCaterer">
                 <div class="col-3" ng-repeat="item in listCaterer | filter: {fullName : filterName}">
                     <div class="rounded border position-relative">
                         <div class="v-stack">

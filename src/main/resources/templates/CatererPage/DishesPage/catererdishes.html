@@ -1,0 +1,91 @@
+</html>
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{CatererPage/caterer}">
+
+<head>
+
+
+</head>
+
+<body>
+    <div layout:fragment="contentCatererPage">
+
+        <div class="d-flex p-2">
+            <a class="me-3" href="/caterer/myCaterer/dishes/reportsPage">
+                <button class="my-btn bg-main text-white fw-medium">
+                    Statistical reports
+                </button>
+            </a>
+            <a class="me-3" href="/caterer/myCaterer/dishes/addAndUpdateDishPage">
+                <button class="my-btn bg-main text-white fw-medium">
+                    Add new dish
+                </button>
+            </a>
+        </div>
+        <div class="px-2">
+            <table id="dishList" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Order</th>
+                        <th>Quantity</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="d : ${dishes}">
+                        <td>
+                            <div>
+                                <img th:src="${d.dishImage}" width="200" height="200" />
+                            </div>
+                        </td>
+                        <td th:text="${d.dishName}"></td>
+                        <td th:text="${d.dishDescription}"></td>
+                        <td th:text="${d.dishPrice}"></td>
+                        <td th:text="${d.dishOrder}"></td>
+                        <td th:text="${d.dishQuantity}"></td>
+                        <td>
+                            <div class="d-flex align-items-center justify-content-evenly">
+                                <a th:href="@{/caterer/editDish(ID=${d.dish.dishID})}">
+                                    <button class="btn btn-primary">Edit</button>
+                                </a>
+                                <a th:href="@{/caterer/deleteDish(ID=${d.dish.dishID})}">
+                                    <button class="btn btn-danger">Delete</button>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <script>
+            $(document).ready(function () {
+                var table = $('#dishList').DataTable({
+                    pageLength: 5,
+                    lengthMenu: [5, 10],
+                    "scrollX": true, // Thêm thanh cuộn ngang
+                    "autoWidth": false,
+                    columns: [
+                        { width: "25%" },
+                        { width: "15%" },
+                        { width: "25%" },
+                        { width: "5%" },
+                        { width: "5%" },
+                        { width: "5%" },
+                        { width: "20%" },
+                    ]
+                });
+            });
+        </script>
+    </div>
+</body>
+
+</html>
