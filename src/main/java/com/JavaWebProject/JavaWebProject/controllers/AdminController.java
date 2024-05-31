@@ -22,6 +22,7 @@ import com.JavaWebProject.JavaWebProject.services.PaymentService;
 import com.JavaWebProject.JavaWebProject.services.RankManageService;
 import com.JavaWebProject.JavaWebProject.services.ReportService;
 import com.JavaWebProject.JavaWebProject.services.VoucherService;
+import jakarta.servlet.http.HttpSession;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -567,8 +568,6 @@ public class AdminController {
 //        setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
 //        return "AdminPage/admincatererrank";
 //    }
-    
-
     @GetMapping("/lineChart")
     @ResponseBody
     public Map<String, Object> getDataLineChart(@RequestParam("selectedValue") String selectedValue) {
@@ -877,7 +876,7 @@ public class AdminController {
         model.addAttribute("feedbackList", feedbackList);
         return "AdminPage/adminfeedback";
     }
-    
+
     @PostMapping("/deleteFeedback")
     public String deleteFeedback(@RequestParam("id") int id, RedirectAttributes redirectAttributes) {
         Feedback feedback = feedbackService.findById(id);
@@ -893,5 +892,26 @@ public class AdminController {
             redirectAttributes.addFlashAttribute("status", "Invalid Feedback ID");
         }
         return "redirect:/admin/toManageFeedbacks";
+    }
+
+    @GetMapping("/toStatisticalreportFeedback")
+    public String statisticalReportFeedback(Model model) {
+
+        // Calculate feedback data for all time periods
+        int newFeedbackByDay = feedbackService.getNewFeedbackByDay(LocalDate.now());
+        float gapPercentFeedbackByDay = feedbackService.getGapPercentFeedbackByDay(LocalDate.now());
+        int newFeedbackByMonth = feedbackService.getNewFeedbackByMonth(LocalDate.now().getMonth());
+        int newFeedbackByYear = feedbackService.getNewFeedbackByYear(LocalDate.now().getYear());
+
+        // Calculate additional data if needed (e.g., previous month's feedback)
+        // ...
+
+        // Prepare model data for the view
+        model.addAttribute("newFeedbackByDay", newFeedbackByDay);
+        model.addAttribute("gapPercentFeedbackByDay", gapPercentFeedbackByDay);
+        model.addAttribute("newFeedbackByMonth", newFeedbackByMonth);
+        model.addAttribute("newFeedbackByYear", newFeedbackByYear);
+
+        return "/AdminPage/Feedback/feedbackstatisticalreport";
     }
 }
