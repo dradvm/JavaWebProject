@@ -7,15 +7,19 @@ import com.JavaWebProject.JavaWebProject.filters.LoginedFilter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
+import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.cache.*;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 
 @Configuration
+@EnableCaching
 public class Config {
-
+    
     @Bean
     public FirebaseApp firebaseApp() {
         try {

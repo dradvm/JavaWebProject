@@ -26,5 +26,8 @@ public interface CatererRepository extends CrudRepository<Caterer, String> {
     int countByCreateDateBetween(LocalDate startDate, LocalDate endDate);
 
     public boolean existsByRankID_RankID(int rankID);
+
+    public boolean existsByCatererEmail(String catererEmail);
+
     
 }

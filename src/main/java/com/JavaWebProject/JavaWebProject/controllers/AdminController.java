@@ -8,6 +8,7 @@ import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.CatererRank;
 import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.models.District;
+import com.JavaWebProject.JavaWebProject.models.Feedback;
 import com.JavaWebProject.JavaWebProject.models.Report;
 import com.JavaWebProject.JavaWebProject.services.BannerService;
 import com.JavaWebProject.JavaWebProject.services.CatererRankService;
@@ -16,6 +17,7 @@ import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
+import com.JavaWebProject.JavaWebProject.services.FeedbackService;
 import com.JavaWebProject.JavaWebProject.services.PaymentService;
 import com.JavaWebProject.JavaWebProject.services.RankManageService;
 import com.JavaWebProject.JavaWebProject.services.ReportService;
@@ -34,8 +36,10 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,6 +65,8 @@ public class AdminController {
     private CatererRankService catererRankService;
     @Autowired
     private RankManageService rankManageService;
+    @Autowired
+    private FeedbackService feedbackService;
     @Autowired
     private DistrictService districtService;
     @Autowired
@@ -561,11 +567,7 @@ public class AdminController {
 //        setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
 //        return "AdminPage/admincatererrank";
 //    }
-    @GetMapping("/manageFeedback")
-    public String adminFeedbackPage(ModelMap model) {
-        setTabAdminPage(model, "adminfeedback", "Manage Feedback");
-        return "AdminPage/adminfeedback";
-    }
+    
 
     @GetMapping("/lineChart")
     @ResponseBody
@@ -840,5 +842,56 @@ public class AdminController {
 
         redirectAttributes.addFlashAttribute("status", "Caterer Rank added successfully");
         return "redirect:/admin/toManageCatererRanks";
+    }
+
+    @GetMapping("/toStatisticalReport")
+    public String toStatisticalReport(Model model) {
+
+        double averageRankFee = rankManageService.averageRankFee();
+        double maxRankFee = rankManageService.maxRankFee();
+        double minRankFee = rankManageService.minRankFee();
+        double averageRankCPO = rankManageService.averageRankCPO();
+        double maxRankCPO = rankManageService.maxRankCPO();
+        double minRankCPO = rankManageService.minRankCPO();
+        int averageRankMaxDish = rankManageService.averageRankMaxDish();
+        int maxRankMaxDish = rankManageService.maxRankMaxDish();
+        int minRankMaxDish = rankManageService.minRankMaxDish();
+
+        model.addAttribute("averageRankFee", averageRankFee);
+        model.addAttribute("maxRankFee", maxRankFee);
+        model.addAttribute("minRankFee", minRankFee);
+        model.addAttribute("averageRankCPO", averageRankCPO);
+        model.addAttribute("maxRankCPO", maxRankCPO);
+        model.addAttribute("minRankCPO", minRankCPO);
+        model.addAttribute("averageRankMaxDish", averageRankMaxDish);
+        model.addAttribute("maxRankMaxDish", maxRankMaxDish);
+        model.addAttribute("minRankMaxDish", minRankMaxDish);
+
+        return "AdminPage/CatererRank/rankStatisticalReport";
+    }
+
+    //Feedback
+    @GetMapping("/toManageFeedbacks")
+    public String toManageFeedbacks(ModelMap model) {
+        List<Feedback> feedbackList = feedbackService.findAll();
+        model.addAttribute("feedbackList", feedbackList);
+        return "AdminPage/adminfeedback";
+    }
+    
+    @PostMapping("/deleteFeedback")
+    public String deleteFeedback(@RequestParam("id") int id, RedirectAttributes redirectAttributes) {
+        Feedback feedback = feedbackService.findById(id);
+        if (feedback != null) {
+            // Check if the feedback is associated with any customer or caterer
+            if (customerService.existsByCustomerEmail(feedback.getEmail()) || catererService.existsByCatererEmail(feedback.getEmail())) {
+                redirectAttributes.addFlashAttribute("status", "Cannot delete: Feedback is associated with a customer or caterer");
+            } else {
+                feedbackService.deleteById(id);
+                redirectAttributes.addFlashAttribute("status", "Feedback deleted successfully");
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("status", "Invalid Feedback ID");
+        }
+        return "redirect:/admin/toManageFeedbacks";
     }
 }

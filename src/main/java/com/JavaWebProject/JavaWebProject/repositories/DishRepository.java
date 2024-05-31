@@ -21,4 +21,6 @@ public interface DishRepository extends CrudRepository<Dish, Integer> {
     List<Dish> findByCatererEmailAndDishStatus(Caterer caterer, int dishStatus);
     
     Dish findByDishID(Integer dishID);
+    
+    int countByCatererEmail(Caterer caterer);
 }

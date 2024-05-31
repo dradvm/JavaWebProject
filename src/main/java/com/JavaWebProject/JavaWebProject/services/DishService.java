@@ -10,6 +10,7 @@ import com.JavaWebProject.JavaWebProject.repositories.DishRepository;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,11 @@ public class DishService {
     public List<Dish> findAllDishOfCaterer(Caterer caterer, int status) {
         return dishRepository.findByCatererEmailAndDishStatus(caterer, status);
     }
+    
+    public boolean isReachMaxDish(Caterer caterer) {
+        return caterer.getRankID().getRankMaxDish() <= dishRepository.countByCatererEmail(caterer);
+    }
+    
     public Dish findByDishID(Integer ID) {
         return dishRepository.findByDishID(ID);
     }

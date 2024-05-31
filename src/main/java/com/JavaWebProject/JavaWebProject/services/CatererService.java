@@ -21,23 +21,25 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class CatererService {
+
     @Autowired
     private CatererRepository catererRepository;
     @Autowired
     private AuthController authController;
-    
+
     public Caterer findById(String catererEmail) {
         Optional<Caterer> result = catererRepository.findById(catererEmail);
         return result.isPresent() ? result.get() : null;
     }
-    
+
     public List<Caterer> findAll() {
         return catererRepository.findAll();
     }
+
     public List<Caterer> findAllCatererActive() {
         return catererRepository.findByActive(1);
     }
-    
+
     public Caterer findByCatererEmailAndFullName(String fullName, String catererEmail) {
         List<Caterer> caterers = catererRepository.findByFullName(fullName);
         Caterer caterer = caterers.get(0);
@@ -49,10 +51,11 @@ public class CatererService {
         }
         return caterer;
     }
-    
+
     public int getNewCatererByDay(LocalDate date) {
         return catererRepository.countByCreateDate(date);
     }
+
     public float getGapPercentCatererByDay(LocalDate date) {
         float currentValue = getNewCatererByDay(date);
         float oldValue = getNewCatererByDay(date.minusDays(1));
@@ -62,8 +65,9 @@ public class CatererService {
             }
             return 100;
         }
-        return ((currentValue/oldValue) - 1) * 100;
+        return ((currentValue / oldValue) - 1) * 100;
     }
+
     public int getNewCatererByMonth(Month month) {
         int year = LocalDate.now().getYear();
         if (month.getValue() > LocalDate.now().getMonthValue()) {
@@ -73,16 +77,22 @@ public class CatererService {
         LocalDate endDate = YearMonth.of(year, month).atEndOfMonth();
         return catererRepository.countByCreateDateBetween(startDate, endDate);
     }
+
     public int getNewCatererByYear(int year) {
         LocalDate startDate = LocalDate.of(year, 1, 1);
         LocalDate endDate = LocalDate.of(year, 12, 31);
         return catererRepository.countByCreateDateBetween(startDate, endDate);
     }
-    
+
     public void save(Caterer caterer) {
         catererRepository.save(caterer);
     }
+
     public boolean existsByRankID(int rankID) {
         return catererRepository.existsByRankID_RankID(rankID);
+    }
+
+    public boolean existsByCatererEmail (String catererEmail) {
+        return catererRepository.existsByCatererEmail (catererEmail);
     }
 }

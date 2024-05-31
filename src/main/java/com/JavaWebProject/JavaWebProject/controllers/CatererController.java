@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -79,13 +80,16 @@ public class CatererController {
         dish.setDishImage(cloudStorageService.getDishImg(dish.getDishImage()));
         model.addAttribute("dish", dish);
         
-        return addAndUpdateDishPage();
+        return addAndUpdateDishPage(model);
     }
     
     @GetMapping("/myCaterer/dishes/addAndUpdateDishPage")
-    public String addAndUpdateDishPage() {
+    public String addAndUpdateDishPage(ModelMap model) {
+        model.addAttribute("selectedNav", "myCaterer");
+        model.addAttribute("selectedPage", "catererdishes");
         return "CatererPage/DishesPage/catererdishesaddupdate";
     }
+        
     
     public void addAndUpdateDish(Dish dish, String dishName, MultipartFile dishImage, String dishDescription, float dishPrice ) {
         dish.setCatererEmail(catererService.findById(user.getUsername()));
@@ -108,10 +112,18 @@ public class CatererController {
             @RequestParam("dishImage") MultipartFile dishImage,
             @RequestParam("dishDescription") String dishDescription,
             @RequestParam("dishPrice") float dishPrice,
-            Model model
+            Model model,
+            RedirectAttributes redirectAttributes
     ) {
         Dish dish = new Dish();
-        addAndUpdateDish(dish, dishName, dishImage, dishDescription, dishPrice);
+        
+        if (dishService.isReachMaxDish(catererService.findById(user.getUsername()))) {
+            redirectAttributes.addFlashAttribute("message", "You have reached max dish!!");
+        }
+        else {
+            addAndUpdateDish(dish, dishName, dishImage, dishDescription, dishPrice);
+        }
+        
         
         return "redirect:/caterer/myCaterer/dishes";
     }
