@@ -75,7 +75,9 @@ public class CatererController {
     }
     @GetMapping("/editDish")
     public String editDishPage(@RequestParam("ID") int dishID,ModelMap model) {
-        model.addAttribute("dish", dishService.findByDishID(dishID));
+        Dish dish = dishService.findByDishID(dishID);
+        dish.setDishImage(cloudStorageService.getDishImg(dish.getDishImage()));
+        model.addAttribute("dish", dish);
         
         return addAndUpdateDishPage();
     }
@@ -91,9 +93,12 @@ public class CatererController {
         dish.setDishName(dishName);
         dish.setDishPrice(dishPrice);
         dish.setDishStatus(1);
-        String fileName = cloudStorageService.generateFileName(dishImage, user.getUsername());
-        dish.setDishImage(fileName);
-        cloudStorageService.uploadFile("dish/" + fileName, dishImage);
+        if (dishImage != null) {
+            String fileName = cloudStorageService.generateFileName(dishImage, user.getUsername());
+            dish.setDishImage(fileName);
+            cloudStorageService.uploadFile("dish/" + fileName, dishImage);
+        } 
+        
         dishService.save(dish);
     }
     
@@ -111,7 +116,7 @@ public class CatererController {
         return "redirect:/caterer/myCaterer/dishes";
     }
     @PostMapping("/updateDish")
-    public String addDish(
+    public String updateDish(
             @RequestParam("dishID") int dishID,
             @RequestParam("dishName") String dishName,
             @RequestParam("dishImage") MultipartFile dishImage,

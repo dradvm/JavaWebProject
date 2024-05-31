@@ -48,14 +48,15 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <input th:value="${dish.dishName}" required="true" type="text" class="form-control" id="dishName"
                         name="dishName" maxlength="50">
                 </div>
+
+                <img th:src="${dish.dishImage}" width="200" height="200" />
                 <div class="form-group">
                     <label for="dishImage">Dish Image</label>
-                    <input th:value="${dish.dishImage}" required="true" type="file" class="form-control" id="dishImage"
-                        name="dishImage" accept="image/*">
+                    <input type="file" class="form-control" id="dishImage" name="dishImage" accept="image/*">
                 </div>
                 <div class="form-group">
                     <label for="dishDescription">Dish Description</label>
-                    <textarea th:value="${dish.dishDescription}" required="true" class="form-control"
+                    <textarea th:text="${dish.dishDescription}" required="true" class="form-control"
                         id="dishDescription" name="dishDescription" maxlength="200"></textarea>
                 </div>
                 <div class="form-group">
