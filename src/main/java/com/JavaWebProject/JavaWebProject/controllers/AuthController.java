@@ -12,6 +12,7 @@ import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.MailService;
 import com.JavaWebProject.JavaWebProject.services.PaymentService;
+import jakarta.servlet.http.HttpSession;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -36,6 +37,7 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 @RequestMapping("/auth")
 public class AuthController {
+
     @Autowired
     private CatererService catererService;
     @Autowired
@@ -57,7 +59,7 @@ public class AuthController {
     private String retrieveEmail;
     private Instant expireTime;
     private int code;
-    
+
     @RequestMapping(value = "/toLogin", method = RequestMethod.GET)
     public String toLogin() {
         role = null;
@@ -69,10 +71,10 @@ public class AuthController {
         code = 0;
         return "AuthPage/login";
     }
-    
+
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public String login(@RequestParam("username") String username, @RequestParam("password") String password) {
+    public String login(@RequestParam("username") String username, @RequestParam("password") String password, HttpSession session) {
         password = hash(password);
         Customer customer = customerService.findById(username);
         if (customer != null) {
@@ -82,9 +84,9 @@ public class AuthController {
                 }
                 this.username = username;
                 role = "Customer";
+                session.setAttribute("username", username);
                 return "/";
-            }
-            else {
+            } else {
                 return "Fail";
             }
         }
@@ -96,9 +98,9 @@ public class AuthController {
                 }
                 this.username = username;
                 role = "Caterer";
+                session.setAttribute("username", username);
                 return "/";
-            }
-            else {
+            } else {
                 return "Fail";
             }
         }
@@ -110,14 +112,14 @@ public class AuthController {
         }
         return "Fail";
     }
-    
+
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logout() {
         username = null;
         role = null;
         return "redirect:/";
     }
-    
+
     @RequestMapping(value = "/toRetrievepassword", method = RequestMethod.GET)
     public String toRetrievepassword() {
         retrieveEmail = null;
@@ -127,7 +129,7 @@ public class AuthController {
         code = 0;
         return "/AuthPage/retrievepassword";
     }
-    
+
     @RequestMapping(value = "/checkRetrieveEmail", method = RequestMethod.POST)
     @ResponseBody
     public String checkRetrieveEmail(@RequestParam("email") String email) {
@@ -141,7 +143,7 @@ public class AuthController {
         retrieveEmail = email;
         return "/auth/toEmailverificationRetrieve";
     }
-    
+
     @RequestMapping(value = "/toEmailverificationRetrieve", method = RequestMethod.GET)
     public String toEmailverificationRetrieve(ModelMap model) {
         model.addAttribute("command", "retrieve");
@@ -152,23 +154,21 @@ public class AuthController {
         mailService.sendMail(retrieveEmail, "Plate Portal verification code", "Your email verification code is " + code + ", it is effective in 5 minutes");
         return "/AuthPage/emailverification";
     }
-    
+
     @RequestMapping(value = "/verifyEmailRetrieve", method = RequestMethod.POST)
     @ResponseBody
     public String verifyEmailRetrieve(@RequestParam("code") int code) {
         if (Instant.now().isAfter(expireTime)) {
             return "Expired";
-        }
-        else if (code != this.code) {
+        } else if (code != this.code) {
             return "Incorrect";
-        }
-        else {
+        } else {
             expireTime = null;
             this.code = -1;
             return "/auth/toResetpassword";
         }
     }
-    
+
     @RequestMapping(value = "/toResetpassword", method = RequestMethod.GET)
     public String toResetpassword() {
         if (code != -1 || retrieveEmail == null) {
@@ -176,7 +176,7 @@ public class AuthController {
         }
         return "/AuthPage/resetpassword";
     }
-    
+
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
     @ResponseBody
     public String resetPassword(@RequestParam("password") String password) {
@@ -213,7 +213,7 @@ public class AuthController {
         code = 0;
         return "Fail";
     }
-    
+
     @RequestMapping(value = "/toSignup", method = RequestMethod.GET)
     public String toSignup(ModelMap model) {
         retrieveEmail = null;
@@ -225,7 +225,7 @@ public class AuthController {
         model.addAttribute("districtList", districtService.findAll());
         return "/AuthPage/signup";
     }
-    
+
     @RequestMapping(value = "/signupCustomer", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, String> signupCustomer(
@@ -269,8 +269,7 @@ public class AuthController {
                 int month = Integer.parseInt(arr[1]);
                 int day = Integer.parseInt(arr[2]);
                 date = new Date(year - 1900, month - 1, day);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 date = null;
                 valid = false;
@@ -292,8 +291,7 @@ public class AuthController {
         }
         if (!valid) {
             result.put("status", "Fail");
-        }
-        else {
+        } else {
             newCustomer = new Customer();
             newCustomer.setCustomerEmail(email);
             newCustomer.setPassword(hash(password));
@@ -315,7 +313,7 @@ public class AuthController {
         }
         return result;
     }
-    
+
     @RequestMapping(value = "/signupCaterer", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, String> signupCaterer(
@@ -360,8 +358,7 @@ public class AuthController {
                 int month = Integer.parseInt(arr[1]);
                 int day = Integer.parseInt(arr[2]);
                 date = new Date(year - 1900, month - 1, day);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 date = null;
                 valid = false;
@@ -383,8 +380,7 @@ public class AuthController {
         }
         if (!valid) {
             result.put("status", "Fail");
-        }
-        else {
+        } else {
             newCaterer = new Caterer();
             newCaterer.setCatererEmail(email);
             newCaterer.setPassword(hash(password));
@@ -407,7 +403,7 @@ public class AuthController {
         }
         return result;
     }
-    
+
     @RequestMapping(value = "/toEmailverificationSignup", method = RequestMethod.GET)
     public String toEmailverificationSignup(ModelMap model) {
         model.addAttribute("command", "signup");
@@ -419,17 +415,15 @@ public class AuthController {
         mailService.sendMail(email, "Plate Portal verification code", "Your email verification code is " + code + ", it is effective in 5 minutes.");
         return "/AuthPage/emailverification";
     }
-    
+
     @RequestMapping(value = "/verifyEmailSignup", method = RequestMethod.POST)
     @ResponseBody
     public String verifyEmailSignup(@RequestParam("code") int code) {
         if (Instant.now().isAfter(expireTime)) {
             return "Expired";
-        }
-        else if (code != this.code) {
+        } else if (code != this.code) {
             return "Incorrect";
-        }
-        else {
+        } else {
             expireTime = null;
             if (newCustomer != null) {
                 this.code = 0;
@@ -439,15 +433,14 @@ public class AuthController {
                 newCustomer = null;
                 newCaterer = null;
                 return "/";
-            }
-            else if (newCaterer != null) {
+            } else if (newCaterer != null) {
                 this.code = -1;
                 return "/rank/toBuyrankSignup";
             }
         }
         return "Fail";
     }
-    
+
     @RequestMapping(value = "/completeSignupCaterer", method = RequestMethod.GET)
     public String completeSignupCaterer() {
         code = 0;
@@ -470,13 +463,12 @@ public class AuthController {
         newCaterer = null;
         return "redirect:/";
     }
-    
+
     private String hash(String str) {
         MessageDigest md;
         try {
             md = MessageDigest.getInstance("SHA-256");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -491,11 +483,11 @@ public class AuthController {
     public String hash_public(String str) {
         return hash(str);
     }
-    
+
     public String getUsername() {
         return username;
     }
-    
+
     public String getRole() {
         return role;
     }

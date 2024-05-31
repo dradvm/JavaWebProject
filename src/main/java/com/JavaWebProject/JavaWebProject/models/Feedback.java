@@ -16,6 +16,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -102,7 +105,8 @@ public class Feedback implements Serializable {
     }
 
     public void setFeedbackDate(Date feedbackDate) {
-        this.feedbackDate = feedbackDate;
+        Date currentime = new Date();
+        this.feedbackDate = currentime;
     }
 
     @Override
@@ -129,5 +133,5 @@ public class Feedback implements Serializable {
     public String toString() {
         return "com.JavaWebProject.JavaWebProject.models.Feedback[ feedbackID=" + feedbackID + " ]";
     }
-    
+
 }

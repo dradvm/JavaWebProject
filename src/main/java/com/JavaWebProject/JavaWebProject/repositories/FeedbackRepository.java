@@ -5,6 +5,7 @@
 package com.JavaWebProject.JavaWebProject.repositories;
 
 import com.JavaWebProject.JavaWebProject.models.Feedback;
+import java.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
+
+    public int countByFeedbackDateBetween(LocalDate startDate, LocalDate endDate);
+
+    public int countByFeedbackDate(LocalDate date);
 
 }
 
