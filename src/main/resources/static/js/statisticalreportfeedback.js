@@ -1,41 +1,53 @@
 $(document).ready(function () {
-    $('#lineChartFeedback').change(function () {
+    $('#lineChartAdmin').change(function () {
         var selectedValue = $(this).val();
         $.ajax({
             type: 'GET',
             url: '/admin/lineChartFeedback',
             data: { selectedValue: selectedValue },
             success: function (response) {
+                console.log(response)
                 if (!lineChart) {
-                    initLineChart(response.labels, response.data);
+                    initLineChart(response.labels, response.data)
                 }
                 else {
-                    updateLineChart(response.labels, response.data);
+                    updateLineChart(response.labels, response.data)
                 }
             }
         });
     });
-    $("#lineChartFeedback").trigger("change");
-    $('#barChartCustomer').change(function () {
+
+    $("#lineChartAdmin").trigger("change")
+
+    $.ajax({
+        type: 'GET',
+        url: '/admin/pieChartFeedback',
+        success: function (response) {
+            initPieChart(response.labels, response.data);
+        }
+    });
+
+    $('#barChartAdmin').change(function () {
         var selectedValue = $(this).val();
         $.ajax({
             type: 'GET',
-            url: '/admin/barChartCustomer',
+            url: '/admin/barChart',
             data: { selectedValue: selectedValue },
             success: function (response) {
+                console.log(response)
                 if (!barChart) {
-                    initBarChart(response.labels, response.datasets);
+                    initBarChart(response.labels, response.datasets)
                 }
                 else {
-                    updateBarChart(response.labels, response.datasets);
+                    updateBarChart(response.labels, response.datasets)
                 }
             }
         });
     });
-    $("#barChartCustomer").trigger("change");
+    $("#barChartAdmin").trigger("change")
 });
 const ctx = document.getElementById('myChart');
-var lineChart;
+var lineChart
 function initLineChart(labels, data) {
     lineChart = new Chart(ctx, {
         type: 'line',
@@ -55,23 +67,61 @@ function initLineChart(labels, data) {
                 }
             },
             plugins: {
+
                 legend: {
                     display: false
-                }
+                },
             },
             responsive: true
         }
     });
 }
 function updateLineChart(labels, data) {
-    lineChart.data.labels = labels;
-    lineChart.data.datasets[0].data = data;
-    lineChart.update();
+    lineChart.data.labels = labels
+    lineChart.data.datasets[0].data = data
+    lineChart.update()
 }
+
 const ctx2 = document.getElementById('myChart2');
-var barChart;
+var pieChart;
+
+function initPieChart(labels, data) {
+    pieChart = new Chart(ctx2, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.5)', // Màu cho phản hồi tích cực
+                    'rgba(255, 99, 132, 0.5)', // Màu cho phản hồi tiêu cực
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: "Feedback Comparison"
+                }
+            }
+        }
+    });
+}
+
+const ctx3 = document.getElementById('myChart3');
+var barChart
 function initBarChart(labels, datasets) {
-    barChart = new Chart(ctx2, {
+    barChart = new Chart(ctx3, {
         type: 'bar',
         data: {
             labels: labels,
@@ -86,15 +136,15 @@ function initBarChart(labels, datasets) {
             responsive: true,
             plugins: {
                 legend: {
-                    position: 'top'
-                }
+                    position: 'top',
+                },
             },
             aspectRatio: 1 | 2
         }
     });
 }
 function updateBarChart(labels, datasets) {
-    barChart.data.labels = labels;
-    barChart.data.datasets = datasets;
-    barChart.update();
+    barChart.data.labels = labels
+    barChart.data.datasets = datasets
+    barChart.update()
 }

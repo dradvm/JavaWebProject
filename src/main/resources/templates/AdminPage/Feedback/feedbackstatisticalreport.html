@@ -1,43 +1,138 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Feedback Statistics</title>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load('current', {'packages': ['corechart']});
-        google.charts.setOnLoadCallback(drawVisualization);
+<html xmlns:th="https://www.thymeleaf.org/" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{AdminPage/admin}">
 
-        function drawVisualization() {
-            // Thymeleaf expressions to get feedback data
-            var newFeedbackByDay = /*[[${newFeedbackByDay}]]*/;
-            var newFeedbackByMonth = /*[[${newFeedbackByMonth}]]*/;
-            var newFeedbackByYear = /*[[${newFeedbackByYear}]]*/;
+    <head>
+    </head>
+    <body>
+        <div layout:fragment="contentAdminPage">
+            <div class="m-3">
+                <div class="vstack gap-3">
+                    <div class="d-flex justify-content-between">
+                        <div class="bg-white rounded px-3 py-2" style="width: 65%;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="vstack">
+                                    <div class="fw-bold">Today's Feedback</div>
+                                    <div class="fs-7"></div>
+                                </div>
+                                <div>
+                                    Export
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-3">
+                                <div class="rounded p-3" style="width: 23%; background-color: #FFE2E6;">
+                                    <div class="vstack">
+                                        <div class="d-flex align-items-center justify-content-around rounded-circle"
+                                             style="width: 34px; height: 34px; background-color: #FA5A7E;">
+                                            <i class="fs-7 fa-solid fa-hand-holding-dollar text-white"></i>
+                                        </div>
+                                        <div class="fs-5 fw-bold"
+                                             th:text="${newFeedbackByDay}">
+                                        </div>
+                                        <div class="">
+                                            New Feedback
+                                        </div>
+                                        <div th:class="'fs-7 ' + ${numFeedbackByDay >= 0 ? 'text-primary' : 'text-danger'} "
+                                             th:text="${numFeedbackByDay >= 0 ? '+' + numFeedbackByDay : numFeedbackByDay}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="rounded p-3" style="width: 23%; background-color: #FFF4DE;">
+                                    <div class="vstack">
+                                        <div class="d-flex align-items-center justify-content-around rounded-circle"
+                                             style="width: 34px; height: 34px; background-color: #FF947A;">
+                                            <i class="fs-7 fa-solid fa-file-contract text-white"></i>
+                                        </div>
+                                        <div class="fs-5 fw-bold" th:text="${numAcceptedOrder}">
+                                        </div>
+                                        <div class="">
+                                            New Customer Send Feedback
+                                        </div>
+                                        <div th:class="'fs-7 ' + ${getNewCustomerFeedbackGapByDay >= 0 ? 'text-primary' : 'text-danger'} "
+                                             th:text="${getNewCustomerFeedbackGapByDay >= 0 ? '+' + getNewCustomerFeedbackGapByDay : numAcceptedOrderGap}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="rounded p-3" style="width: 23%; background-color: #DCFCE7;">
+                                    <div class="vstack">
+                                        <div class="d-flex align-items-center justify-content-around rounded-circle"
+                                             style="width: 34px; height: 34px; background-color: #3CD755;">
+                                            <i class="fs-7 fa-regular fa-bell text-white"></i>
+                                        </div>
+                                        <div class="fs-5 fw-bold" th:text="${numAciveBanner}">
+                                        </div>
+                                        <div class="">
+                                            Positive Feedback
+                                        </div>
+                                        <div th:class="'fs-7 ' + ${numPositiveFeedbackGapByDay >= 0 ? 'text-primary' : 'text-danger'} "
+                                             th:text="${numPositiveFeedbackGapByDay >= 0 ? '+' + numPositiveFeedbackGapByDay : numPositiveFeedbackGapByDay}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="rounded p-3" style="width: 23%; background-color: #F4E8FF;">
+                                    <div class="vstack">
+                                        <div class="d-flex align-items-center justify-content-around rounded-circle"
+                                             style="width: 34px; height: 34px; background-color: #BF83FF;">
+                                            <i class="fs-7 fa-solid fa-user-plus text-white"></i>
+                                        </div>
+                                        <div class="fs-5 fw-bold" th:text="${numActiveVoucher}">
+                                        </div>
+                                        <div class="">
+                                            Negative Feedback
+                                        </div>
+                                        <div th:class="'fs-7 ' + ${numNegativeFeedbackGapByDay >= 0 ? 'text-primary' : 'text-danger'} "
+                                             th:text="${numNegativeFeedbackGapByDay >= 0 ? '+' + numNegativeFeedbackGapByDay : numNegativeFeedbackGapByDay}">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded px-3 py-2" style="width: 33%;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="fw-bold">
+                                    New Feedback
+                                </div>
+                                <select id="lineChartAdmin" class="form-select fs-7" style="width: 40%;">
+                                    <option class="fs-7" value="Day">By Day</option>
+                                    <option class="fs-7" value="Month">By Month</option>
+                                    <option class="fs-7" value="Year">By Year</option>
+                                </select>
+                            </div>
+                            <div class="pt-3">
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
 
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Time');
-            data.addColumn('number', 'New Feedback');
+                    <div class="d-flex justify-content-between">
+                        <div class="bg-white rounded" style="width: 31%;">
+                            <div>
+                                <canvas id="myChart2"></canvas>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded px-3 py-2" style="width: 67%;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="fw-bold">
+                                    Revenue Report
+                                </div>
+                                <select id="barChartAdmin" class="form-select fs-7" style="width: 20%;">
+                                    <option class="fs-7" value="Day">By Day</option>
+                                    <option class="fs-7" value="Month">By Month</option>
+                                    <option class="fs-7" value="Year">By Year</option>
+                                </select>
+                            </div>
 
-            // Add data for daily feedback
-            data.addRow(['Today', newFeedbackByDay]);
+                            <div class="pt-4">
+                                <canvas id="myChart3"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script th:src="@{/js/chart.js}"></script>
+            <script th:src="@{/js/statisticalreportfeedback.js}"></script>
 
-            // Add data for monthly feedback
-            data.addRow(['This Month', newFeedbackByMonth]);
+        </div>
+    </body>
 
-            // Add data for yearly feedback
-            data.addRow(['This Year', newFeedbackByYear]);
-
-            var options = {
-                title: 'New Feedback Statistics',
-                curveType: 'function',
-                legend: { position: 'bottom' }
-            };
-
-            var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
-            chart.draw(data, options);
-        }
-    </script>
-</head>
-<body>
-    <div id="curve_chart" style="width: 100%; height: 400px;"></div>
-</body>
 </html>
