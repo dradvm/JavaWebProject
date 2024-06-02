@@ -896,22 +896,93 @@ public class AdminController {
 
     @GetMapping("/toStatisticalreportFeedback")
     public String statisticalReportFeedback(Model model) {
-
+        days = new ArrayList<>();
+        months = new ArrayList<>();
+        years = new ArrayList<>();
+        today = LocalDate.now();
+        for (int i = 6; i >= 0; i--) {
+            days.add(today.minusDays(i));
+            months.add(today.getMonth().minus(i));
+            years.add(today.getYear() - i);
+        }
+        labelsDay = days.stream().map(day
+                -> String.valueOf(day.getDayOfMonth())
+                + "/"
+                + String.valueOf(day.getMonthValue())
+        ).collect(Collectors.toCollection(ArrayList::new));
+        labelsMonth = months.stream().map(month
+                -> String.valueOf(month.getValue())
+        ).collect(Collectors.toCollection(ArrayList::new));
+        labelsYear = years.stream().map(year
+                -> String.valueOf(year)
+        ).collect(Collectors.toCollection(ArrayList::new));
         // Calculate feedback data for all time periods
         int newFeedbackByDay = feedbackService.getNewFeedbackByDay(LocalDate.now());
         float gapPercentFeedbackByDay = feedbackService.getGapPercentFeedbackByDay(LocalDate.now());
         int newFeedbackByMonth = feedbackService.getNewFeedbackByMonth(LocalDate.now().getMonth());
         int newFeedbackByYear = feedbackService.getNewFeedbackByYear(LocalDate.now().getYear());
 
-        // Calculate additional data if needed (e.g., previous month's feedback)
-        // ...
-
+        int negativeFeedback = feedbackService.countNegativeFeedback();
+        int positiveFeedback = feedbackService.countPositiveFeedback();
+        int numFeedbackByDay = feedbackService.getNumFeedbackGapByDay(today);
+        int numPositiveFeedbackGapByDay = feedbackService.getNumPositiveFeedbackGapByDay(today);
+        int numNegativeFeedbackGapByDay = feedbackService.getNumNegativeFeedbackGapByDay(today);
+        int getNewCustomerFeedbackGapByDay = feedbackService.getNewCustomerFeedbackGapByDay(today);
         // Prepare model data for the view
+        model.addAttribute("getNewCustomerFeedbackGapByDay", getNewCustomerFeedbackGapByDay);        
+        model.addAttribute("numNegativeFeedbackGapByDay", numNegativeFeedbackGapByDay);
+        model.addAttribute("numFeedbackByDay", numFeedbackByDay);
+        model.addAttribute("numPositiveFeedbackGapByDay", numPositiveFeedbackGapByDay);
         model.addAttribute("newFeedbackByDay", newFeedbackByDay);
-        model.addAttribute("gapPercentFeedbackByDay", gapPercentFeedbackByDay);
         model.addAttribute("newFeedbackByMonth", newFeedbackByMonth);
         model.addAttribute("newFeedbackByYear", newFeedbackByYear);
+        model.addAttribute("gapPercentFeedbackByDay", gapPercentFeedbackByDay);
+        model.addAttribute("negativeFeedback", negativeFeedback);
+        model.addAttribute("positiveFeedback", positiveFeedback);
 
         return "/AdminPage/Feedback/feedbackstatisticalreport";
+    }
+
+    @GetMapping("/lineChartFeedback")
+    @ResponseBody
+    public Map<String, Object> getDataLineChartFeedback(@RequestParam("selectedValue") String selectedValue) {
+        // Xử lý logic dựa trên selectedValue
+        Map<String, Object> data = new HashMap<>();
+        ArrayList<Integer> dataChart = new ArrayList<>();
+        switch (selectedValue) {
+            case "Day":
+                data.put("labels", labelsDay);
+                for (LocalDate day : days) {
+                    dataChart.add(feedbackService.getNewFeedbackByDay(day));
+                }
+                break;
+            case "Month":
+                data.put("labels", labelsMonth);
+                for (Month month : months) {
+                    dataChart.add(feedbackService.getNewFeedbackByMonth(month));
+                }
+                break;
+            case "Year":
+                data.put("labels", labelsYear);
+                for (int year : years) {
+                    dataChart.add(feedbackService.getNewFeedbackByYear(year));
+                }
+                break;
+            default:
+                data.put("labels", new String[]{});
+                data.put("data", new int[]{});
+                break;
+        }
+        data.put("data", dataChart);
+        return data; // Chỉ trả về fragment cần cập nhật
+    }
+
+    @GetMapping("/pieChartFeedback")
+    @ResponseBody
+    public Map<String, Object> getPieChartFeedback() {
+        Map<String, Object> result = new HashMap();
+        result.put("labels", new String[]{"Positive Feedback", "Negative Feedback"});
+        result.put("data", new int[]{feedbackService.countPositiveFeedback(), feedbackService.countNegativeFeedback()});
+        return result;
     }
 }
