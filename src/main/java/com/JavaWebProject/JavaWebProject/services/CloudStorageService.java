@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +40,7 @@ public class CloudStorageService {
         }
         return null;
     }
-    
+    @Async
     public String getDishImg(String img) {
         Bucket bucket = StorageClient.getInstance().bucket();
         Blob blob = bucket.get("dish/" + img);
