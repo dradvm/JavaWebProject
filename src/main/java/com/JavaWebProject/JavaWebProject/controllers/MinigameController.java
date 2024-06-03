@@ -85,4 +85,11 @@ public class MinigameController {
         customerService.updatePointValue(user.getUsername(), value);
         return value;
     }
+    
+    
+    @GetMapping("/getPoint")
+    @ResponseBody
+    public int getPoint() {
+        return customerService.getPointOfCustomer(user.getUsername());
+    }
 }

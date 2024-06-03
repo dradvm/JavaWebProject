@@ -28,6 +28,7 @@ D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Or
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\filters\LoginedFilter.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\PaymentType.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\MinigameController.java
+D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\filters\CustomerFilter.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\MailService.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\BannerType.java
 D:\Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\CatererRating.java

@@ -2,6 +2,7 @@ package com.JavaWebProject.JavaWebProject.config;
 
 import com.JavaWebProject.JavaWebProject.filters.AdminFilter;
 import com.JavaWebProject.JavaWebProject.filters.CatererFilter;
+import com.JavaWebProject.JavaWebProject.filters.CustomerFilter;
 import com.JavaWebProject.JavaWebProject.filters.EmailVerificationFilter;
 import com.JavaWebProject.JavaWebProject.filters.LoginedFilter;
 import com.google.auth.oauth2.GoogleCredentials;
@@ -65,6 +66,15 @@ public class Config {
         FilterRegistrationBean<CatererFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new CatererFilter());
         registrationBean.addUrlPatterns("/caterer/*");
+        registrationBean.setOrder(5);
+        return registrationBean;
+    }
+    @Bean
+    public FilterRegistrationBean<CustomerFilter> customerVerificationFilter() {
+        FilterRegistrationBean<CustomerFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new CustomerFilter());
+        registrationBean.addUrlPatterns("/customer/*");
+        registrationBean.addUrlPatterns("/minigame");
         registrationBean.setOrder(5);
         return registrationBean;
     }

@@ -31,6 +31,7 @@ $(document).ready(function () {
         success: function (response) {
             items = response
             getRollChance()
+            getPoint()
             draw()
         }
     });
@@ -66,6 +67,17 @@ function getRollChance() {
             url: '/minigame/getRollChance',
             success: function (response) {
                 document.querySelector("#rollChance").innerHTML = response
+            }
+        });
+    })
+}
+function getPoint() {
+    $(document).ready(function () {
+        $.ajax({
+            type: 'GET',
+            url: '/minigame/getPoint',
+            success: function (response) {
+                document.querySelector("#point").innerHTML = response
             }
         });
     })
@@ -148,6 +160,7 @@ function animate() {
                 url: '/minigame/update',
                 data: { value: winItem },
                 success: function (response) {
+                    getPoint()
                     showModal(document.querySelector("#modal-point"), response)
                     winItem = 0
                 }

@@ -68,6 +68,7 @@ public class CustomerService {
     public void updatePointValue(String username, Integer point) {
         Customer customer = customerRepository.findByCustomerEmail(username);
         customer.setPoint(customer.getPoint() + point);
+        save(customer);
     }
     
     public void save(Customer customer) {
@@ -90,5 +91,9 @@ public class CustomerService {
 
     public boolean existsByCustomerEmail (String customerEmail) {
         return customerRepository.existsByCustomerEmail(customerEmail);
+    }
+    
+    public int getPointOfCustomer(String customerEmail) {
+        return customerRepository.findByCustomerEmail(customerEmail).getPoint().intValue();
     }
 }

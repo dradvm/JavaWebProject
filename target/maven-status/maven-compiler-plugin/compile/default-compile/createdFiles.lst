@@ -17,6 +17,7 @@ com\JavaWebProject\JavaWebProject\repositories\RankManageRepository.class
 com\JavaWebProject\JavaWebProject\filters\CatererFilter.class
 com\JavaWebProject\JavaWebProject\services\CatererService.class
 com\JavaWebProject\JavaWebProject\models\OrderDetailsPK.class
+com\JavaWebProject\JavaWebProject\filters\CustomerFilter.class
 com\JavaWebProject\JavaWebProject\services\PaymentService.class
 com\JavaWebProject\JavaWebProject\services\AdminService.class
 com\JavaWebProject\JavaWebProject\services\MailService$1.class

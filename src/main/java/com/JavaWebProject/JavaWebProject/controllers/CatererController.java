@@ -97,12 +97,11 @@ public class CatererController {
         dish.setDishName(dishName);
         dish.setDishPrice(dishPrice);
         dish.setDishStatus(1);
-        if (dishImage != null) {
+        if (!dishImage.isEmpty()) {
             String fileName = cloudStorageService.generateFileName(dishImage, user.getUsername());
             dish.setDishImage(fileName);
             cloudStorageService.uploadFile("dish/" + fileName, dishImage);
         } 
-        
         dishService.save(dish);
     }
     
@@ -156,4 +155,29 @@ public class CatererController {
         }
         return "redirect:/caterer/myCaterer/dishes";
     }
+    
+    @GetMapping(value = "/myCaterer/dishes/barChartDish")
+    @ResponseBody
+    public ArrayList getDataLineChartDish() {
+        ArrayList data = new ArrayList<>();
+        Map<String, Object> temp = new HashMap<>();
+        for (Dish d : dishService.findAllDishOfCaterer(catererService.findById(user.getUsername()), 1)) {
+            temp = new HashMap<>();
+            temp.put("name", d.getDishName());
+            temp.put("quantity", orderDetailsService.countQuanitySuccessWithDish(d.getDishID()));
+            temp.put("order", orderDetailsService.countOrderSuccessWithDish(d.getDishID()));
+            
+            data.add(temp);
+        }
+        return data;
+    }
+    
+    @GetMapping(value = "/myCaterer/dishes/report")
+    public String reportPage(ModelMap model) {
+        
+        model.addAttribute("selectedNav", "myCaterer");
+        model.addAttribute("selectedPage", "catererdishes");
+        return "/CatererPage/DishesPage/catererdishesreport";
+    }
+    
 }
