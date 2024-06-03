@@ -37,7 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CateringOrder.findByOrderTime", query = "SELECT c FROM CateringOrder c WHERE c.orderTime = :orderTime"),
     @NamedQuery(name = "CateringOrder.findByCreateDate", query = "SELECT c FROM CateringOrder c WHERE c.createDate = :createDate"),
     @NamedQuery(name = "CateringOrder.findByOrderState", query = "SELECT c FROM CateringOrder c WHERE c.orderState = :orderState"),
-    @NamedQuery(name = "CateringOrder.findByNumOfTables", query = "SELECT c FROM CateringOrder c WHERE c.numOfTables = :numOfTables"),
     @NamedQuery(name = "CateringOrder.findByPointDiscount", query = "SELECT c FROM CateringOrder c WHERE c.pointDiscount = :pointDiscount"),
     @NamedQuery(name = "CateringOrder.findByVoucherDiscount", query = "SELECT c FROM CateringOrder c WHERE c.voucherDiscount = :voucherDiscount"),
     @NamedQuery(name = "CateringOrder.findByValue", query = "SELECT c FROM CateringOrder c WHERE c.value = :value"),
