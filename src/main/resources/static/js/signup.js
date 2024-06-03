@@ -131,28 +131,10 @@ function signup(role) {
                 },
                 success: function (response) {
                     if (response.status === 'Fail') {
-                        if (response.general === 'fail') {
-                            $('#customer-error').text('Invalid page, please refresh');
-                            return;
-                        }
-                        if (response.email === 'fail') {
-                            $('#customer-email-error').text('Invalid email');
-                        }
-                        if (response.password === 'fail') {
-                            $('#customer-password-error').text('Password must have at least 8 characters and not contain only spaces');
-                        }
-                        if (response.name === 'fail') {
-                            $('#customer-name-error').text('Please enter your name');
-                        }
-                        if (response.phone === 'fail') {
-                            $('#customer-phone-error').text('Invalid phone number');
-                        }
-                        if (response.address === 'fail') {
-                            $('#customer-address-error').text('Please enter your address');
-                        }
-                        if (response.general === 'used') {
-                            $('#customer-email-error').text('This email has been used');
-                        }
+                        $('#customer-error').text('Invalid page, please refresh');
+                    }
+                    else if (response.status === 'Used') {
+                        $('#customer-email-error').text('This email has been used');
                     }
                     else if (response.status === "OK") {
                         location.href = response.target;
@@ -167,6 +149,7 @@ function signup(role) {
             $('#caterer-name-error').text('');
             $('#caterer-phone-error').text('');
             $('#caterer-address-error').text('');
+            $('#caterer-payment-information-error').text('');
             inputEmail = $('#caterer-email').val();
             inputPassword = $('#caterer-password').val();
             inputName = $('#caterer-name').val();
@@ -175,6 +158,7 @@ function signup(role) {
             inputBirthday = $('#caterer-birthday').val();
             inputAddress = $('#caterer-address').val();
             inputDistrict = $('#caterer-district').val();
+            inputPaymentInformation = $('#caterer-payment-information').val();
             inputDescription = $('#caterer-description').val();
             valid = true;
             regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -199,6 +183,11 @@ function signup(role) {
                 valid = false;
                 $('#caterer-address-error').text('Please enter your address');
             }
+            regex = /^[A-Za-z0-9]+ ([0-9]+ ?){1,}$/;
+            if (!regex.test(inputPaymentInformation)) {
+                valid = false;
+                $('#caterer-payment-information-error').text('Please enter valid payment information matching [Bank name] [Account number]');
+            }
             if (!valid) {
                 return;
             }
@@ -214,32 +203,15 @@ function signup(role) {
                     birthday: inputBirthday,
                     address: inputAddress,
                     district: inputDistrict,
+                    paymentInformation: inputPaymentInformation,
                     description: inputDescription
                 },
                 success: function (response) {
                     if (response.status === 'Fail') {
-                        if (response.general === 'fail') {
-                            $('#caterer-error').text('Invalid page, please refresh');
-                            return;
-                        }
-                        if (response.email === 'fail') {
-                            $('#caterer-email-error').text('Invalid email');
-                        }
-                        if (response.password === 'fail') {
-                            $('#caterer-password-error').text('Password must have at least 8 characters and not contain only spaces');
-                        }
-                        if (response.name === 'fail') {
-                            $('#caterer-name-error').text('Please enter your name');
-                        }
-                        if (response.phone === 'fail') {
-                            $('#caterer-phone-error').text('Invalid phone number');
-                        }
-                        if (response.address === 'fail') {
-                            $('#caterer-address-error').text('Please enter your address');
-                        }
-                        if (response.general === 'used') {
-                            $('#caterer-email-error').text('This email has been used');
-                        }
+                        $('#caterer-error').text('Invalid page, please refresh');
+                    }
+                    else if (response.status === 'Used') {
+                        $('#caterer-email-error').text('This email has been used');
                     }
                     else if (response.status === "OK") {
                         location.href = response.target;
