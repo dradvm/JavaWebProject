@@ -347,14 +347,14 @@ public class AdminController {
         model.addAttribute("numAcceptedOrderGap", paymentService.getNumAcceptedOrderGapByDay(today));
         model.addAttribute("numActiveBannerGap", bannerService.getActiveBannerGapByDay(today));
         model.addAttribute("numActiveVoucherGap", voucherService.getActiveVoucherGapByDay(today));
-        return "/AdminPage/Caterer/statisticalreport";
+        return "AdminPage/Caterer/statisticalreport";
     }
 
     @GetMapping("/toManageinformationCustomer")
     public String toCustomerlist(ModelMap model) {
         setTabAdminPage(model, "admincustomer", "Manage Customer");
         model.addAttribute("customerList", customerService.findAll());
-        return "/AdminPage/Customer/manageinformation";
+        return "AdminPage/Customer/manageinformation";
     }
 
     @GetMapping("/changeCustomerActive")
@@ -560,7 +560,7 @@ public class AdminController {
         model.addAttribute("numOrderGap", cateringOrderService.getNewOrderGapByDay(today));
         model.addAttribute("numCustomerOrderedGap", cateringOrderService.getNumCustomerOrderedGapByDay(today));
         model.addAttribute("pointUsedGap", cateringOrderService.getPointUsedGapByDay(today));
-        return "/AdminPage/Customer/statisticalreport";
+        return "AdminPage/Customer/statisticalreport";
     }
 
 //    @GetMapping("/manageCatererRank")
@@ -940,7 +940,7 @@ public class AdminController {
         model.addAttribute("negativeFeedback", negativeFeedback);
         model.addAttribute("positiveFeedback", positiveFeedback);
 
-        return "/AdminPage/Feedback/feedbackstatisticalreport";
+        return "AdminPage/Feedback/feedbackstatisticalreport";
     }
 
     @GetMapping("/lineChartFeedback")

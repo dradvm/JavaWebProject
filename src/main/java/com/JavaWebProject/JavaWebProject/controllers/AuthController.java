@@ -127,7 +127,7 @@ public class AuthController {
         newCaterer = null;
         expireTime = null;
         code = 0;
-        return "/AuthPage/retrievepassword";
+        return "AuthPage/retrievepassword";
     }
 
     @RequestMapping(value = "/checkRetrieveEmail", method = RequestMethod.POST)
@@ -152,7 +152,7 @@ public class AuthController {
         Random random = new Random();
         code = random.nextInt(100000, 1000000);
         mailService.sendMail(retrieveEmail, "Plate Portal verification code", "Your email verification code is " + code + ", it is effective in 5 minutes");
-        return "/AuthPage/emailverification";
+        return "AuthPage/emailverification";
     }
 
     @RequestMapping(value = "/verifyEmailRetrieve", method = RequestMethod.POST)
@@ -174,7 +174,7 @@ public class AuthController {
         if (code != -1 || retrieveEmail == null) {
             return "redirect:/";
         }
-        return "/AuthPage/resetpassword";
+        return "AuthPage/resetpassword";
     }
 
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
@@ -223,7 +223,7 @@ public class AuthController {
         code = 0;
         model.addAttribute("cityList", cityService.findAll());
         model.addAttribute("districtList", districtService.findAll());
-        return "/AuthPage/signup";
+        return "AuthPage/signup";
     }
 
     @RequestMapping(value = "/signupCustomer", method = RequestMethod.POST)
@@ -404,7 +404,7 @@ public class AuthController {
         Random random = new Random();
         code = random.nextInt(100000, 1000000);
         mailService.sendMail(email, "Plate Portal verification code", "Your email verification code is " + code + ", it is effective in 5 minutes.");
-        return "/AuthPage/emailverification";
+        return "AuthPage/emailverification";
     }
 
     @RequestMapping(value = "/verifyEmailSignup", method = RequestMethod.POST)

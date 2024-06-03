@@ -50,7 +50,7 @@ public class RankController {
         }
         model.addAttribute("command", "signup");
         model.addAttribute("catererRankList", catererRankService.findAll());
-        return "/RankPage/buyrank";
+        return "RankPage/buyrank";
     }
     
     @RequestMapping(value = "/verifyBuyOptionSignup", method = RequestMethod.POST)
@@ -78,7 +78,7 @@ public class RankController {
             return "redirect:/auth/completeSignupCaterer";
         }
         else {
-            return "/RankPage/paymenterror";
+            return "RankPage/paymenterror";
         }
     }
 }
