@@ -1,279 +1,291 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+              integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-    <script src="https://kit.fontawesome.com/b42e1089e2.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="../../static/css/mycss.css">
-    <link rel="stylesheet" th:href="@{/css/mycss.css}">
-    <title>Sign up</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
+        <script src="https://kit.fontawesome.com/b42e1089e2.js" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="../../static/css/mycss.css">
+        <link rel="stylesheet" th:href="@{/css/mycss.css}">
+        <title>Sign up</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
 
-<body>
+    <body>
 
-    <div class="container-fuild vh-100 bg-black">
-        <img th:src="@{/images/bg-login.png}" style="width: 100%; height: 100%;" />
-    </div>
-    <div class="d-flex fixed-top fixed-bottom justify-content-center align-items-center">
-        <div class="bg-white px-4 py-4" style="border-radius: 8px; width: 600px;">
-            <div class="v-stack">
-                <div class="mb-2 d-flex justify-content-around">
-                    <img th:src="@{/images/big_logo.png}" width="200" />
-                </div>
-                <div class="d-flex align-items-center">
-                    <label for="role" class="fw-medium w-50">
-                        You are a<span style="color: red;">*</span>
-                    </label>
-                    <select class="form-select w-50" id="role" onchange="changeForm()">
-                        <option value="customer">Customer</option>
-                        <option value="caterer">Caterer</option>
-                    </select>
-                </div>
-
-
-                <form id="customer-form">
-                    <!--Email-->
-                    <div>
-                        <label for="customer-email" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Email<span
-                                style="color: red;">*</span></label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                            <input type="email" class="form-control" placeholder="Type your customer-email"
-                                id="customer-email">
-                        </div>
-                        <div class="form-text text-danger" id="customer-email-error"></div>
+        <div class="container-fuild vh-100 bg-black">
+            <img th:src="@{/images/bg-login.png}" style="width: 100%; height: 100%;" />
+        </div>
+        <div class="d-flex fixed-top fixed-bottom justify-content-center align-items-center">
+            <div class="bg-white px-4 py-4" style="border-radius: 8px; width: 600px;">
+                <div class="v-stack">
+                    <div class="mb-2 d-flex justify-content-around">
+                        <img th:src="@{/images/big_logo.png}" width="200" />
                     </div>
-                    <!--Password-->
-                    <div>
-                        <label for="customer-password" class="form-label fs-7 fw-bold"
-                            style="margin-bottom: 0;">Password<span style="color: red;">*</span></label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" class="form-control" placeholder="Type your customer-password"
-                                id="customer-password">
-                        </div>
-                        <div class="form-text text-danger" id="customer-password-error"></div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <!--Full name-->
-                        <div>
-                            <label for="customer-name" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Full
-                                name<span style="color: red;">*</span></label>
-                            <div class="input-group my-input-form">
-                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                <input type="text" class="form-control" placeholder="Type your customer-name"
-                                    id="customer-name">
-                            </div>
-                            <div class="form-text text-danger" id="customer-name-error"></div>
-                        </div>
-                        <!--Phone-->
-                        <div>
-                            <label for="customer-phone" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Phone
-                                <span style="color: red;">*</span></label>
-                            <div class="input-group my-input-form">
-                                <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
-                                <input type="tel" class="form-control" placeholder="Type your customer-phone"
-                                    id="customer-phone">
-                            </div>
-                            <div class="form-text text-danger" id="customer-phone-error"></div>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <!--Gender-->
-                        <div>
-                            <label for="customer-birthday" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">
-                                Gender<span style="color: red;">*</span></label>
-                            <select class="form-select" id="customer-gender">
-                                <option th:value="0">Male</option>
-                                <option th:value="1">Female</option>
-                            </select>
-                        </div>
-                        <!--Birthday-->
-                        <div>
-                            <label for="customer-birthday" class="form-label fs-7 fw-bold"
-                                style="margin-bottom: 0;">Birthday
-                                <span style="color: red;">*</span></label>
-                            <div class="input-group my-input-form">
-                                <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-                                <input type="date" class="form-control" placeholder="Type your customer-birthday"
-                                    id="customer-birthday">
-                            </div>
-                        </div>
-                    </div>
-                    <!--Address-->
-                    <div>
-                        <label for="customer-address" class="form-label fs-7 fw-bold"
-                            style="margin-bottom: 0;">Address<span style="color: red;">*</span></label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-house"></i></span>
-                            <input type="text" class="form-control" placeholder="Type your customer-address"
-                                id="customer-address">
-                        </div>
-                        <div class="form-text text-danger" id="customer-address-error"></div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <!--City-->
-                        <select class="form-select" id="customer-city" onchange="getDistrictList('customer')">
-                            <option th:each="city : ${cityList}" th:value="${city.cityID}">
-                                <span th:text="${city.cityName}"></span>
-                            </option>
-                        </select>
-                        <!--District-->
-                        <select class="form-select" id="customer-district">
-                            <option th:each="district : ${districtList}" class="customer-district"
-                                th:city="${district.cityID.cityID}" th:value="${district.districtID}">
-                                <span th:text="${district.districtName}"></span>
-                            </option>
-                        </select>
-                    </div>
-                    <!--Submit-->
-                    <div id="customer-error"></div>
-                    <div class="mb-3 mt-4">
-                        <button type="button" onclick="signup('customer')"
-                            class="text-decoration-none my-btn w-100 bg-main d-flex align-items-center justify-content-around text-white py-2">
-                            Submit
-                        </button>
-                    </div>
-                </form>
-                <form id="caterer-form">
-                    <!--Email-->
-                    <div>
-                        <label for="caterer-email" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Email<span
-                                style="color: red;">*</span></label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                            <input type="email" class="form-control" placeholder="Type your caterer-email"
-                                id="caterer-email">
-                        </div>
-                        <div class="form-text text-danger" id="caterer-email-error"></div>
-                    </div>
-                    <!--Password-->
-                    <div>
-                        <label for="caterer-password" class="form-label fs-7 fw-bold"
-                            style="margin-bottom: 0;">Password<span style="color: red;">*</span></label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" class="form-control" placeholder="Type your caterer-password"
-                                id="caterer-password">
-                        </div>
-                        <div class="form-text text-danger" id="caterer-password-error"></div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <!--Full name-->
-                        <div>
-                            <label for="caterer-name" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Full
-                                name<span style="color: red;">*</span></label>
-                            <div class="input-group my-input-form">
-                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                                <input type="text" class="form-control" placeholder="Type your caterer-name"
-                                    id="caterer-name">
-                            </div>
-                            <div class="form-text text-danger" id="caterer-name-error"></div>
-                        </div>
-                        <!--Phone-->
-                        <div>
-                            <label for="caterer-phone" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Phone
-                                <span style="color: red;">*</span></label>
-                            <div class="input-group my-input-form">
-                                <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
-                                <input type="tel" class="form-control" placeholder="Type your caterer-phone"
-                                    id="caterer-phone">
-                            </div>
-                            <div class="form-text text-danger" id="caterer-phone-error"></div>
-                        </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <!--Gender-->
-                        <div>
-                            <label for="caterer-birthday" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">
-                                Gender<span style="color: red;">*</span></label>
-                            <select class="form-select" id="caterer-gender">
-                                <option th:value="0">Male</option>
-                                <option th:value="1">Female</option>
-                            </select>
-                        </div>
-                        <!--Birthday-->
-                        <div>
-                            <label for="caterer-birthday" class="form-label fs-7 fw-bold"
-                                style="margin-bottom: 0;">Birthday
-                                <span style="color: red;">*</span></label>
-                            <div class="input-group my-input-form">
-                                <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-                                <input type="date" class="form-control" placeholder="Type your caterer-birthday"
-                                    id="caterer-birthday">
-                            </div>
-                        </div>
-                    </div>
-                    <!--Address-->
-                    <div>
-                        <label for="caterer-address" class="form-label fs-7 fw-bold"
-                            style="margin-bottom: 0;">Address<span style="color: red;">*</span></label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-house"></i></span>
-                            <input type="text" class="form-control" placeholder="Type your caterer-address"
-                                id="caterer-address">
-                        </div>
-                        <div class="form-text text-danger" id="caterer-address-error"></div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <!--City-->
-                        <select class="form-select" id="caterer-city" onchange="getDistrictList('caterer')">
-                            <option th:each="city : ${cityList}" th:value="${city.cityID}">
-                                <span th:text="${city.cityName}"></span>
-                            </option>
-                        </select>
-                        <!--District-->
-                        <select class="form-select" id="caterer-district">
-                            <option th:each="district : ${districtList}" class="caterer-district"
-                                th:city="${district.cityID.cityID}" th:value="${district.districtID}">
-                                <span th:text="${district.districtName}"></span>
-                            </option>
-                        </select>
-                    </div>
-
-                    <!--Description-->
-                    <div>
-                        <label for="caterer-description" class="form-label fs-7 fw-bold"
-                            style="margin-bottom: 0;">Description</label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-note-sticky"></i></span>
-                            <input type="text" class="form-control" placeholder="Type your caterer-description"
-                                id="caterer-description">
-                        </div>
-                    </div>
-                    <!--Submit-->
-                    <div id="caterer-error"></div>
-                    <div class="mb-3 mt-4">
-                        <button type="button" onclick="signup('caterer')"
-                            class="text-decoration-none my-btn w-100 bg-main d-flex align-items-center justify-content-around text-white py-2">
-                            Submit
-                        </button>
-                    </div>
-
-                </form>
-                <div class="form-text text-danger" id="error" style="text-align: center;"></div>
-                <div class="d-flex justify-content-around">
                     <div class="d-flex align-items-center">
-                        <div class="fs-7">
-                            Already have an account?
+                        <label for="role" class="fw-medium w-50">
+                            You are a<span style="color: red;">*</span>
+                        </label>
+                        <select class="form-select w-50" id="role" onchange="changeForm()">
+                            <option value="customer">Customer</option>
+                            <option value="caterer">Caterer</option>
+                        </select>
+                    </div>
+
+
+                    <form id="customer-form">
+                        <!--Email-->
+                        <div>
+                            <label for="customer-email" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Email<span
+                                    style="color: red;">*</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                <input type="email" class="form-control" placeholder="Your email"
+                                       id="customer-email">
+                            </div>
+                            <div class="form-text text-danger" id="customer-email-error"></div>
                         </div>
-                        <a href="/auth/toLogin" class="ms-2 ">
-                            <button class="fs-7 text-main text-main-hover" style="cursor: pointer;">Login</button>
-                        </a>
+                        <!--Password-->
+                        <div>
+                            <label for="customer-password" class="form-label fs-7 fw-bold"
+                                   style="margin-bottom: 0;">Password<span style="color: red;">*</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" class="form-control" placeholder="Your password"
+                                       id="customer-password">
+                            </div>
+                            <div class="form-text text-danger" id="customer-password-error"></div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <!--Full name-->
+                            <div>
+                                <label for="customer-name" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Full
+                                    name<span style="color: red;">*</span></label>
+                                <div class="input-group my-input-form">
+                                    <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                    <input type="text" class="form-control" placeholder="Your name"
+                                           id="customer-name">
+                                </div>
+                                <div class="form-text text-danger" id="customer-name-error"></div>
+                            </div>
+                            <!--Phone-->
+                            <div>
+                                <label for="customer-phone" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Phone
+                                    <span style="color: red;">*</span></label>
+                                <div class="input-group my-input-form">
+                                    <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                                    <input type="tel" class="form-control" placeholder="Your phone number"
+                                           id="customer-phone">
+                                </div>
+                                <div class="form-text text-danger" id="customer-phone-error"></div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <!--Gender-->
+                            <div>
+                                <label for="customer-birthday" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">
+                                    Gender<span style="color: red;">*</span></label>
+                                <select class="form-select" id="customer-gender">
+                                    <option th:value="0">Male</option>
+                                    <option th:value="1">Female</option>
+                                </select>
+                            </div>
+                            <!--Birthday-->
+                            <div>
+                                <label for="customer-birthday" class="form-label fs-7 fw-bold"
+                                       style="margin-bottom: 0;">Birthday
+                                    <span style="color: red;">*</span></label>
+                                <div class="input-group my-input-form">
+                                    <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                                    <input type="date" class="form-control" placeholder="Your birthday"
+                                           id="customer-birthday">
+                                </div>
+                            </div>
+                        </div>
+                        <!--Address-->
+                        <div>
+                            <label for="customer-address" class="form-label fs-7 fw-bold"
+                                   style="margin-bottom: 0;">Address<span style="color: red;">*</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-house"></i></span>
+                                <input type="text" class="form-control" placeholder="Your address"
+                                       id="customer-address">
+                            </div>
+                            <div class="form-text text-danger" id="customer-address-error"></div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <!--City-->
+                            <select class="form-select" id="customer-city" onchange="getDistrictList('customer')">
+                                <option th:each="city : ${cityList}" th:value="${city.cityID}">
+                                <span th:text="${city.cityName}"></span>
+                                </option>
+                            </select>
+                            <!--District-->
+                            <select class="form-select" id="customer-district">
+                                <option th:each="district : ${districtList}" class="customer-district"
+                                        th:city="${district.cityID.cityID}" th:value="${district.districtID}">
+                                <span th:text="${district.districtName}"></span>
+                                </option>
+                            </select>
+                        </div>
+                        <!--Submit-->
+                        <div id="customer-error"></div>
+                        <div class="mb-3 mt-4">
+                            <button type="button" onclick="signup('customer')"
+                                    class="text-decoration-none my-btn w-100 bg-main d-flex align-items-center justify-content-around text-white py-2">
+                                Submit
+                            </button>
+                        </div>
+                    </form>
+                    <form id="caterer-form">
+                        <!--Email-->
+                        <div>
+                            <label for="caterer-email" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Email<span
+                                    style="color: red;">*</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                <input type="email" class="form-control" placeholder="Your email"
+                                       id="caterer-email">
+                            </div>
+                            <div class="form-text text-danger" id="caterer-email-error"></div>
+                        </div>
+                        <!--Password-->
+                        <div>
+                            <label for="caterer-password" class="form-label fs-7 fw-bold"
+                                   style="margin-bottom: 0;">Password<span style="color: red;">*</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" class="form-control" placeholder="Your password"
+                                       id="caterer-password">
+                            </div>
+                            <div class="form-text text-danger" id="caterer-password-error"></div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <!--Full name-->
+                            <div>
+                                <label for="caterer-name" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Full
+                                    name<span style="color: red;">*</span></label>
+                                <div class="input-group my-input-form">
+                                    <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                    <input type="text" class="form-control" placeholder="Your name"
+                                           id="caterer-name">
+                                </div>
+                                <div class="form-text text-danger" id="caterer-name-error"></div>
+                            </div>
+                            <!--Phone-->
+                            <div>
+                                <label for="caterer-phone" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Phone
+                                    <span style="color: red;">*</span></label>
+                                <div class="input-group my-input-form">
+                                    <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                                    <input type="tel" class="form-control" placeholder="Your phone number"
+                                           id="caterer-phone">
+                                </div>
+                                <div class="form-text text-danger" id="caterer-phone-error"></div>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <!--Gender-->
+                            <div>
+                                <label for="caterer-birthday" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">
+                                    Gender<span style="color: red;">*</span></label>
+                                <select class="form-select" id="caterer-gender">
+                                    <option th:value="0">Male</option>
+                                    <option th:value="1">Female</option>
+                                </select>
+                            </div>
+                            <!--Birthday-->
+                            <div>
+                                <label for="caterer-birthday" class="form-label fs-7 fw-bold"
+                                       style="margin-bottom: 0;">Birthday
+                                </label>
+                                <div class="input-group my-input-form">
+                                    <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                                    <input type="date" class="form-control" placeholder="Your birthday"
+                                           id="caterer-birthday">
+                                </div>
+                            </div>
+                        </div>
+                        <!--Address-->
+                        <div>
+                            <label for="caterer-address" class="form-label fs-7 fw-bold"
+                                   style="margin-bottom: 0;">Address<span style="color: red;">*</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-house"></i></span>
+                                <input type="text" class="form-control" placeholder="Your address"
+                                       id="caterer-address">
+                            </div>
+                            <div class="form-text text-danger" id="caterer-address-error"></div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <!--City-->
+                            <select class="form-select" id="caterer-city" onchange="getDistrictList('caterer')">
+                                <option th:each="city : ${cityList}" th:value="${city.cityID}">
+                                <span th:text="${city.cityName}"></span>
+                                </option>
+                            </select>
+                            <!--District-->
+                            <select class="form-select" id="caterer-district">
+                                <option th:each="district : ${districtList}" class="caterer-district"
+                                        th:city="${district.cityID.cityID}" th:value="${district.districtID}">
+                                <span th:text="${district.districtName}"></span>
+                                </option>
+                            </select>
+                        </div>
+                        <!--Payment information-->
+                        <div>
+                            <label for="caterer-payment-information" class="form-label fs-7 fw-bold"
+                                   style="margin-bottom: 0;">
+                                Payment information<span style="color: red;">*</span>
+                            </label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-note-sticky"></i></span>
+                                <input type="text" class="form-control" placeholder="Your payment description, ex: NCB 0123456789"
+                                       id="caterer-payment-information">
+                            </div>
+                            <div class="form-text text-danger" id="caterer-payment-information-error"></div>
+                        </div>
+                        <!--Description-->
+                        <div>
+                            <label for="caterer-description" class="form-label fs-7 fw-bold"
+                                   style="margin-bottom: 0;">Description</label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-note-sticky"></i></span>
+                                <textarea type="text" class="form-control" placeholder="Type your caterer-description"
+                                          id="caterer-description"></textarea>
+                            </div>
+                        </div>
+                        <!--Submit-->
+                        <div id="caterer-error"></div>
+                        <div class="mb-3 mt-4">
+                            <button type="button" onclick="signup('caterer')"
+                                    class="text-decoration-none my-btn w-100 bg-main d-flex align-items-center justify-content-around text-white py-2">
+                                Submit
+                            </button>
+                        </div>
+
+                    </form>
+                    <div class="form-text text-danger" id="error" style="text-align: center;"></div>
+                    <div class="d-flex justify-content-around">
+                        <div class="d-flex align-items-center">
+                            <div class="fs-7">
+                                Already have an account?
+                            </div>
+                            <a href="/auth/toLogin" class="ms-2 ">
+                                <button class="fs-7 text-main text-main-hover" style="cursor: pointer;">Login</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script th:src="@{/js/jquery.min.js}"></script>
-    <script th:src="@{/js/signup.js}"></script>
-    <script src="../../static/js/jquery.min.js"></script>
-    <script src="../../static/js/signup.js"></script>
-</body>
+        <script th:src="@{/js/jquery.min.js}"></script>
+        <script th:src="@{/js/signup.js}"></script>
+        <script src="../../static/js/jquery.min.js"></script>
+        <script src="../../static/js/signup.js"></script>
+    </body>
 
 </html>

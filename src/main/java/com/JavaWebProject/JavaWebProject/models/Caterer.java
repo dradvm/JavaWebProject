@@ -46,6 +46,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Caterer.findByCreateDate", query = "SELECT c FROM Caterer c WHERE c.createDate = :createDate")})
 public class Caterer implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 50)
+    @Column(name = "PaymentInformation")
+    private String paymentInformation;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -309,6 +315,14 @@ public class Caterer implements Serializable {
     @Override
     public String toString() {
         return "com.JavaWebProject.JavaWebProject.models.Caterer[ catererEmail=" + catererEmail + " ]";
+    }
+
+    public String getPaymentInformation() {
+        return paymentInformation;
+    }
+
+    public void setPaymentInformation(String paymentInformation) {
+        this.paymentInformation = paymentInformation;
     }
     
 }

@@ -238,28 +238,27 @@ public class AuthController {
             @RequestParam("address") String address,
             @RequestParam("district") int district) {
         Map<String, String> result = new HashMap<>();
-        boolean valid = true;
         Pattern pattern = Pattern.compile("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))");
         if (email == null || !pattern.matcher(email).matches()) {
-            valid = false;
-            result.put("email", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         if (password == null || password.trim().length() < 8) {
-            valid = false;
-            result.put("password", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         if (name == null || name.trim().length() == 0) {
-            valid = false;
-            result.put("name", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         pattern = Pattern.compile("^(?:[0-9] ?){7,11}$");
         if (phone == null || !pattern.matcher(phone).matches()) {
-            valid = false;
-            result.put("phone", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         if (gender != 0 && gender != 1) {
-            valid = false;
-            result.put("gender", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         Date date = new Date();
         if (birthday != null && birthday.trim().length() > 0) {
@@ -271,46 +270,39 @@ public class AuthController {
                 date = new Date(year - 1900, month - 1, day);
             } catch (Exception e) {
                 e.printStackTrace();
-                date = null;
-                valid = false;
-                result.put("general", "fail");
+                result.put("status", "Fail");
+                return result;
             }
         }
         if (address == null || address.trim().length() == 0) {
-            valid = false;
-            result.put("address", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         District districtID = districtService.findById(district);
         if (districtID == null) {
-            valid = false;
-            result.put("general", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         if (customerService.findById(email) != null || catererService.findById(email) != null || adminService.findById(email) != null) {
-            valid = false;
-            result.put("general", "used");
+            result.put("status", "Used");
+            return result;
         }
-        if (!valid) {
-            result.put("status", "Fail");
-        } else {
-            newCustomer = new Customer();
-            newCustomer.setCustomerEmail(email);
-            newCustomer.setPassword(hash(password));
-            newCustomer.setFullName(name);
-            newCustomer.setPoint(0);
-            newCustomer.setRollChance(0);
-            newCustomer.setActive(1);
-            newCustomer.setFullName(name);
-            newCustomer.setPhone(phone);
-            newCustomer.setGender(gender);
-            newCustomer.setAddress(address);
-            if (date != null) {
-                newCustomer.setBirthday(date);
-            }
-            newCustomer.setCreateDate(new Date());
-            newCustomer.setDistrictID(districtID);
-            result.put("status", "OK");
-            result.put("target", "/auth/toEmailverificationSignup");
-        }
+        newCustomer = new Customer();
+        newCustomer.setCustomerEmail(email);
+        newCustomer.setPassword(hash(password));
+        newCustomer.setFullName(name);
+        newCustomer.setPoint(0);
+        newCustomer.setRollChance(0);
+        newCustomer.setActive(1);
+        newCustomer.setFullName(name);
+        newCustomer.setPhone(phone);
+        newCustomer.setGender(gender);
+        newCustomer.setAddress(address);
+        newCustomer.setBirthday(date);
+        newCustomer.setCreateDate(new Date());
+        newCustomer.setDistrictID(districtID);
+        result.put("status", "OK");
+        result.put("target", "/auth/toEmailverificationSignup");
         return result;
     }
 
@@ -325,30 +317,30 @@ public class AuthController {
             @RequestParam("birthday") String birthday,
             @RequestParam("address") String address,
             @RequestParam("district") int district,
+            @RequestParam("paymentInformation") String paymentInformation,
             @RequestParam("description") String description) {
         Map<String, String> result = new HashMap<>();
-        boolean valid = true;
         Pattern pattern = Pattern.compile("^(([^<>()\\[\\]\\\\.,;:\\s@\"]+(\\.[^<>()\\[\\]\\\\.,;:\\s@\"]+)*)|(\".+\"))@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\])|(([a-zA-Z\\-0-9]+\\.)+[a-zA-Z]{2,}))");
         if (email == null || !pattern.matcher(email).matches()) {
-            valid = false;
-            result.put("email", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         if (password == null || password.trim().length() < 8) {
-            valid = false;
-            result.put("password", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         if (name == null || name.trim().length() == 0) {
-            valid = false;
-            result.put("name", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         pattern = Pattern.compile("^(?:[0-9] ?){7,11}$");
         if (phone == null || !pattern.matcher(phone).matches()) {
-            valid = false;
-            result.put("phone", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         if (gender != 0 && gender != 1) {
-            valid = false;
-            result.put("gender", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         Date date = new Date();
         if (birthday != null && birthday.trim().length() > 0) {
@@ -360,47 +352,46 @@ public class AuthController {
                 date = new Date(year - 1900, month - 1, day);
             } catch (Exception e) {
                 e.printStackTrace();
-                date = null;
-                valid = false;
-                result.put("general", "fail");
+                result.put("status", "Fail");
+                return result;
             }
         }
         if (address == null || address.trim().length() == 0) {
-            valid = false;
-            result.put("address", "fail");
+            result.put("status", "Fail");
+            return result;
         }
         District districtID = districtService.findById(district);
         if (districtID == null) {
-            valid = false;
-            result.put("general", "fail");
+            result.put("status", "Fail");
+            return result;
+        }
+        pattern = Pattern.compile("^[A-Za-z0-9]+ ([0-9]+ ?){1,}$");
+        if (paymentInformation == null || !pattern.matcher(paymentInformation).matches()) {
+            result.put("status", "Fail");
+            return result;
         }
         if (customerService.findById(email) != null || catererService.findById(email) != null || adminService.findById(email) != null) {
-            valid = false;
-            result.put("general", "used");
+            result.put("status", "Used");
+            return result;
         }
-        if (!valid) {
-            result.put("status", "Fail");
-        } else {
-            newCaterer = new Caterer();
-            newCaterer.setCatererEmail(email);
-            newCaterer.setPassword(hash(password));
-            newCaterer.setFullName(name);
-            newCaterer.setActive(1);
-            newCaterer.setFullName(name);
-            newCaterer.setPhone(phone);
-            newCaterer.setGender(gender);
-            newCaterer.setAddress(address);
-            if (description != null && description.trim().length() > 0) {
-                newCaterer.setDescription(description);
-            }
-            if (date != null) {
-                newCaterer.setBirthday(date);
-            }
-            newCaterer.setCreateDate(new Date());
-            newCaterer.setDistrictID(districtID);
-            result.put("status", "OK");
-            result.put("target", "/auth/toEmailverificationSignup");
+        newCaterer = new Caterer();
+        newCaterer.setCatererEmail(email);
+        newCaterer.setPassword(hash(password));
+        newCaterer.setFullName(name);
+        newCaterer.setActive(1);
+        newCaterer.setFullName(name);
+        newCaterer.setPhone(phone);
+        newCaterer.setGender(gender);
+        newCaterer.setAddress(address);
+        newCaterer.setPaymentInformation(paymentInformation);
+        if (description != null && description.trim().length() > 0) {
+            newCaterer.setDescription(description);
         }
+        newCaterer.setBirthday(date);
+        newCaterer.setCreateDate(new Date());
+        newCaterer.setDistrictID(districtID);
+        result.put("status", "OK");
+        result.put("target", "/auth/toEmailverificationSignup");
         return result;
     }
 
