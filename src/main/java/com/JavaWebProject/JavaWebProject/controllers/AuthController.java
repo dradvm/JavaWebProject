@@ -485,6 +485,61 @@ public class AuthController {
         }
         return "redirect:/";
     }
+    
+    @RequestMapping(value = "/toChangepassword", method = RequestMethod.GET)
+    public String toChangepassword() {
+        if (username == null) {
+            return "redirect:/";
+        }
+        return "AuthPage/changepassword";
+    }
+    
+    @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> changePassword(
+            @RequestParam("password") String password,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword) {
+        Map<String, Object> result = new HashMap();
+        if (newPassword == null || newPassword.trim().length() < 8) {
+            result.put("status", "Fail");
+            return result;
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            result.put("status", "Fail");
+            return result;
+        }
+        if (role.equals("Customer")) {
+            Customer customer = customerService.findById(username);
+            String current = customer.getPassword();
+            String input = hash(password);
+            if (!current.equals(input)) {
+                result.put("status", "Incorrect");
+                return result;
+            }
+            else {
+                customer.setPassword(hash(newPassword));
+                customerService.save(customer);
+                result.put("status", "OK");
+            }
+        }
+        else if (role.equals("Caterer")) {
+            Caterer caterer = catererService.findById(username);
+            String current = caterer.getPassword();
+            String input = hash(password);
+            if (!current.equals(input)) {
+                result.put("status", "Incorrect");
+                return result;
+            }
+            else {
+                caterer.setPassword(hash(newPassword));
+                catererService.save(caterer);
+                result.put("status", "OK");
+            }
+        }
+        result.put("target", "/auth/toProfile");
+        return result;
+    }
 
     private String hash(String str) {
         MessageDigest md;
