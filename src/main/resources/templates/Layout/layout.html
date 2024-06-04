@@ -4,15 +4,20 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to c
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
 -->
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <div th:insert="Config/config :: link"></div>
 </head>
+
 <body>
     <div th:insert="Layout/header :: header"></div>
     <div layout:fragment="contentMainPage">
     </div>
+    <div layout:fragment="subContentMainPage">
+    </div>
     <div layout:fragment="script"></div>
 </body>
+
 </html>

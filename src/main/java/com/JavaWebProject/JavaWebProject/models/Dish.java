@@ -18,6 +18,7 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -63,7 +64,7 @@ public class Dish implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "DishPrice")
-    private double dishPrice;
+    private BigDecimal dishPrice;
     @Basic(optional = false)
     @NotNull
     @Column(name = "DishStatus")
@@ -81,7 +82,7 @@ public class Dish implements Serializable {
         this.dishID = dishID;
     }
 
-    public Dish(Integer dishID, String dishName, String dishImage, double dishPrice, int dishStatus) {
+    public Dish(Integer dishID, String dishName, String dishImage, BigDecimal dishPrice, int dishStatus) {
         this.dishID = dishID;
         this.dishName = dishName;
         this.dishImage = dishImage;
@@ -121,11 +122,11 @@ public class Dish implements Serializable {
         this.dishDescription = dishDescription;
     }
 
-    public double getDishPrice() {
+    public BigDecimal getDishPrice() {
         return dishPrice;
     }
 
-    public void setDishPrice(double dishPrice) {
+    public void setDishPrice(BigDecimal dishPrice) {
         this.dishPrice = dishPrice;
     }
 

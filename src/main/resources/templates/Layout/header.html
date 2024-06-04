@@ -35,6 +35,12 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     <a th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role == 'Caterer'}"
                         th:class="'mx-3 menu-item-nav fs-7 ' + ${selectedNav == 'myCaterer' ? 'menu-item-nav-selected' : 'menu-item-nav-hover'}"
                         href="/caterer/myCaterer/orders">My Caterer</a>
+                    <a th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role == 'Customer'}"
+                        th:class="'mx-3 menu-item-nav fs-7 ' + ${selectedNav == 'orders' ? 'menu-item-nav-selected' : 'menu-item-nav-hover'}"
+                        href="/customer/orders">Orders</a>
+                    <a th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role == 'Customer'}"
+                        th:class="'mx-3 menu-item-nav fs-7 ' + ${selectedNav == 'minigame' ? 'menu-item-nav-selected' : 'menu-item-nav-hover'}"
+                        href="/minigame">Minigame</a>
                 </div>
             </div>
             <div th:if="${session.get('scopedTarget.authController') == null || session.get('scopedTarget.authController').role == null}"

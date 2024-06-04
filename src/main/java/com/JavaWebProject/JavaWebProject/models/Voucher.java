@@ -19,6 +19,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
@@ -50,13 +51,11 @@ public class Voucher implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "StartDate")
-    @Temporal(TemporalType.DATE)
-    private Date startDate;
+    private LocalDate startDate;
     @Basic(optional = false)
     @NotNull
     @Column(name = "EndDate")
-    @Temporal(TemporalType.DATE)
-    private Date endDate;
+    private LocalDate endDate;
     @Basic(optional = false)
     @NotNull
     @Column(name = "VoucherValue")
@@ -80,7 +79,7 @@ public class Voucher implements Serializable {
         this.voucherID = voucherID;
     }
 
-    public Voucher(Integer voucherID, Date startDate, Date endDate, double voucherValue) {
+    public Voucher(Integer voucherID, LocalDate startDate, LocalDate endDate, double voucherValue) {
         this.voucherID = voucherID;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -95,19 +94,19 @@ public class Voucher implements Serializable {
         this.voucherID = voucherID;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

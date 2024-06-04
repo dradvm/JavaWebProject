@@ -9,6 +9,7 @@ import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.DishService;
 import com.JavaWebProject.JavaWebProject.services.OrderDetailsService;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -91,11 +92,11 @@ public class CatererController {
     }
         
     
-    public void addAndUpdateDish(Dish dish, String dishName, MultipartFile dishImage, String dishDescription, float dishPrice ) {
+    public void addAndUpdateDish(Dish dish, String dishName, MultipartFile dishImage, String dishDescription, double dishPrice ) {
         dish.setCatererEmail(catererService.findById(user.getUsername()));
         dish.setDishDescription(dishDescription);
         dish.setDishName(dishName);
-        dish.setDishPrice(dishPrice);
+        dish.setDishPrice(BigDecimal.valueOf(dishPrice));
         dish.setDishStatus(1);
         if (!dishImage.isEmpty()) {
             String fileName = cloudStorageService.generateFileName(dishImage, user.getUsername());
@@ -110,7 +111,7 @@ public class CatererController {
             @RequestParam("dishName") String dishName,
             @RequestParam("dishImage") MultipartFile dishImage,
             @RequestParam("dishDescription") String dishDescription,
-            @RequestParam("dishPrice") float dishPrice,
+            @RequestParam("dishPrice") double dishPrice,
             Model model,
             RedirectAttributes redirectAttributes
     ) {
@@ -132,7 +133,7 @@ public class CatererController {
             @RequestParam("dishName") String dishName,
             @RequestParam("dishImage") MultipartFile dishImage,
             @RequestParam("dishDescription") String dishDescription,
-            @RequestParam("dishPrice") float dishPrice,
+            @RequestParam("dishPrice") double dishPrice,
             Model model
     ) {
         Dish dish = dishService.findByDishID(dishID);

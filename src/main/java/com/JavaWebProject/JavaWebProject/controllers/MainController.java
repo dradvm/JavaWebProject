@@ -5,6 +5,7 @@ import com.JavaWebProject.JavaWebProject.models.Dish;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.DishService;
+import com.JavaWebProject.JavaWebProject.services.VoucherService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +26,8 @@ public class MainController {
     AuthController authController;
     @Autowired
     CloudStorageService cloudStorageService;
+    @Autowired
+    VoucherService voucherService;
     
     public void setTabNavBar(ModelMap model, String page) {
         model.addAttribute("selectedNav", page);
@@ -98,8 +101,14 @@ public class MainController {
             }
             temp.put("tooltip", d.getDishDescription());
             temp.put("image", cloudStorageService.getDishImg(d.getDishImage()));
+            temp.put("id", d.getDishID());
             data.add(temp);
         }
         return data;
+    }
+    @GetMapping("/getCatererVoucher/{fullName_Email}")
+    @ResponseBody
+    public ArrayList getCatererVoucher(@PathVariable("fullName_Email") String fullName_Email) {
+        return voucherService.findAllVoucherAvailable(findCaterer(fullName_Email));
     }
 }

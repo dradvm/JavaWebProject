@@ -29,7 +29,7 @@ public class DishService {
     }
     
     public boolean isReachMaxDish(Caterer caterer) {
-        return caterer.getRankID().getRankMaxDish() > dishRepository.countByCatererEmailAndDishStatus(caterer, 1);
+        return caterer.getRankID().getRankMaxDish() <= dishRepository.countByCatererEmailAndDishStatus(caterer, 1);
     }
     
     public Dish findByDishID(Integer ID) {

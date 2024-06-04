@@ -40,7 +40,7 @@ public class CloudStorageService {
         }
         return null;
     }
-    @Async
+    
     public String getDishImg(String img) {
         Bucket bucket = StorageClient.getInstance().bucket();
         Blob blob = bucket.get("dish/" + img);

@@ -41,7 +41,7 @@ public class MinigameController {
     @GetMapping("")
     public String minigamePage(Model model) {
         data = minigameRewardService.getAllMinigameReward();
-        
+        model.addAttribute("selectedNav", "minigame");
         return "/MinigamePage/minigame";
     }
     
