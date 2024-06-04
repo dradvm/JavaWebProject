@@ -6,9 +6,7 @@
     </head>
     <body>
         <div layout:fragment="contentAdminPage">
-            <a href="/admin/toManageinformationCaterer">
-                <button>Back</button>
-            </a>
+            <a href="/admin/toManageinformationCaterer" class="btn btn-primary">Back</a>
             <img th:src="@{${img == null ? '/images/default-avatar.png' : img}}" style="height: 180px; width: 320px">
             <div>
                 Email: <span th:text="${caterer.catererEmail}"></span>
@@ -103,7 +101,7 @@
                 </select>
                 <!--Submit-->
                 <div id="error"></div>
-                <button type="button" onclick="editCatererInformation()">Submit</button>
+                <button type="button" onclick="editCatererInformation()" class="btn btn-success">Submit</button>
             </form>
             <script th:src="@{/js/editinformationcaterer.js}"></script>
         </div>

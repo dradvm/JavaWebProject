@@ -15,6 +15,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
+        <a th:if="${command == 'buy'}" href="/auth/toProfile">
+            <button>Back</button>
+        </a>
         <div th:each="catererRank : ${catererRankList}" 
              th:rank="${catererRank.rankID}" 
              th:onclick="|choose(${catererRank.rankID})|"
@@ -31,7 +34,7 @@
                 Can showcase maximum <span th:text="${catererRank.rankMaxDish}"></span> dishes
             </div>
         </div>
-        <div>You cannot refund after purchasing, changing rank during duration will result in replacing current expire date with the new one's</div>
+        <div>You cannot refund after purchasing. Changing rank during duration will result in setting the expire date to 30 days after the purchasing date instead of extending rank duration</div>
         <div id="error"></div>
         <button onclick="buy()">Confirm</button>
         <script th:src="@{/js/jquery.min.js}"></script>

@@ -580,6 +580,10 @@ public class AuthController {
     public Caterer getNewCaterer() {
         return newCaterer;
     }
+    
+    public void setNewCaterer(Caterer caterer) {
+        newCaterer = caterer;
+    }
 
     public String getRetrieveEmail() {
         return retrieveEmail;
