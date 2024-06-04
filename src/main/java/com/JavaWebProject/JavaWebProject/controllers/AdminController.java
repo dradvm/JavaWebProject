@@ -162,7 +162,6 @@ public class AdminController {
     public Map<String, Object> editinformationCaterer(
             @RequestParam("email") String email,
             @RequestParam("profileImg") MultipartFile profileImg,
-            @RequestParam("password") String password,
             @RequestParam("rankID") int rankID,
             @RequestParam("rankEndDate") String rankEndDate,
             @RequestParam("name") String name,
@@ -171,6 +170,8 @@ public class AdminController {
             @RequestParam("address") String address,
             @RequestParam("districtID") int districtID,
             @RequestParam("birthday") String birthday,
+            @RequestParam("point") int point,
+            @RequestParam("description") String description,
             @RequestParam("active") int active) {
         Map<String, Object> result = new HashMap();
         Caterer caterer = catererService.findById(email);
@@ -191,10 +192,6 @@ public class AdminController {
                 result.put("status", "Invalid");
                 return result;
             }
-        }
-        if (password != null && password.trim().length() > 0 && password.trim().length() < 8) {
-            result.put("status", "Invalid");
-            return result;
         }
         CatererRank rank = catererRankService.findById(rankID);
         if (rank == null) {
@@ -248,8 +245,13 @@ public class AdminController {
                 result.put("status", "Invalid");
                 return result;
             }
-        } else {
+        } 
+        else {
             parsedBirthday = null;
+        }
+        if (point < 0) {
+            result.put("status", "Invalid");
+            return result;
         }
         if (active != 0 && active != 1) {
             result.put("status", "Invalid");
@@ -270,9 +272,6 @@ public class AdminController {
                 return result;
             }
         }
-        if (password != null && password.trim().length() >= 8) {
-            caterer.setPassword(hash(password));
-        }
         caterer.setRankID(rank);
         caterer.setRankEndDate(endDate);
         caterer.setFullName(name);
@@ -283,6 +282,8 @@ public class AdminController {
         if (parsedBirthday != null) {
             caterer.setBirthday(parsedBirthday);
         }
+        caterer.setPoint(point);
+        caterer.setDescription(description);
         caterer.setActive(active);
         catererService.save(caterer);
         result.put("status", "OK");

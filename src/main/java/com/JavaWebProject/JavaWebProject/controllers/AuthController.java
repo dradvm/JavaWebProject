@@ -8,6 +8,7 @@ import com.JavaWebProject.JavaWebProject.models.PaymentHistory;
 import com.JavaWebProject.JavaWebProject.services.AdminService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CityService;
+import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.MailService;
@@ -37,7 +38,6 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 @RequestMapping("/auth")
 public class AuthController {
-
     @Autowired
     private CatererService catererService;
     @Autowired
@@ -52,6 +52,8 @@ public class AuthController {
     private DistrictService districtService;
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private CloudStorageService cloudStorageService;
     private String role;
     private String username;
     private Customer newCustomer;
@@ -274,6 +276,9 @@ public class AuthController {
                 return result;
             }
         }
+        else {
+            date = null;
+        }
         if (address == null || address.trim().length() == 0) {
             result.put("status", "Fail");
             return result;
@@ -298,7 +303,9 @@ public class AuthController {
         newCustomer.setPhone(phone);
         newCustomer.setGender(gender);
         newCustomer.setAddress(address);
-        newCustomer.setBirthday(date);
+        if (date != null) {
+            newCustomer.setBirthday(date);
+        }
         newCustomer.setCreateDate(new Date());
         newCustomer.setDistrictID(districtID);
         result.put("status", "OK");
@@ -356,6 +363,9 @@ public class AuthController {
                 return result;
             }
         }
+        else {
+            date = null;
+        }
         if (address == null || address.trim().length() == 0) {
             result.put("status", "Fail");
             return result;
@@ -384,10 +394,13 @@ public class AuthController {
         newCaterer.setGender(gender);
         newCaterer.setAddress(address);
         newCaterer.setPaymentInformation(paymentInformation);
+        newCaterer.setPoint(0);
         if (description != null && description.trim().length() > 0) {
             newCaterer.setDescription(description);
         }
-        newCaterer.setBirthday(date);
+        if (date != null) {
+            newCaterer.setBirthday(date);
+        }
         newCaterer.setCreateDate(new Date());
         newCaterer.setDistrictID(districtID);
         result.put("status", "OK");
@@ -452,6 +465,24 @@ public class AuthController {
         payment.setValue(newCaterer.getRankID().getRankFee());
         paymentService.savePaymentHistory(payment);
         newCaterer = null;
+        return "redirect:/";
+    }
+    
+    @RequestMapping(value = "/toProfile", method = RequestMethod.GET)
+    public String toProfile(ModelMap model) {
+        if (role == null) {
+            return "redirect:/";
+        }
+        if (role.equals("Customer")) {
+            Customer customer = customerService.findById(username);
+            model.addAttribute("img", cloudStorageService.getProfileImg("Customer", customer.getProfileImage()));
+            model.addAttribute("customer", customer);
+            model.addAttribute("districtList", districtService.findAll());
+            return "CustomerPage/profile";
+        }
+        if (role.equals("Caterer")) {
+            return "CatererPage/profile";
+        }
         return "redirect:/";
     }
 

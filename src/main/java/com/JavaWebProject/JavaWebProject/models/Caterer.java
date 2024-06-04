@@ -46,6 +46,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Caterer.findByCreateDate", query = "SELECT c FROM Caterer c WHERE c.createDate = :createDate")})
 public class Caterer implements Serializable {
 
+    @Column(name = "Point")
+    private Integer point;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -323,6 +326,14 @@ public class Caterer implements Serializable {
 
     public void setPaymentInformation(String paymentInformation) {
         this.paymentInformation = paymentInformation;
+    }
+
+    public Integer getPoint() {
+        return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
     }
     
 }

@@ -2,14 +2,12 @@ function editCustomerInformation() {
     $(document).ready(function () {
         $('#error').text('');
         $('#profile-img-error').text('');
-        $('#password-error').text('');
         $('#name-error').text('');
         $('#point-error').text('');
         $('#roll-chance-error').text('');
         $('#phone-error').text('');
         $('#address-error').text('');
         inputProfileImg = $('#profile-img').prop('files')[0] ? $('#profile-img').prop('files')[0] : null;
-        inputPassword = $('#password').val();
         inputName = $('#name').val();
         inputPoint = $('#point').val();
         inputRollChance = $('#roll-chance').val();
@@ -19,10 +17,6 @@ function editCustomerInformation() {
         if (inputProfileImg !== null && inputProfileImg.size > 10000000) {
             valid = false;
             $('#profile-img-error').text('We only support images smaller than 10MB');
-        }
-        if (inputPassword.trim().length > 0 && inputPassword.trim().length < 8) {
-            valid = false;
-            $('#password-error').text("Password must have at least 8 characters, leave this field empty if you don't want to change it");
         }
         if (inputName.trim().length === 0) {
             valid = false;

@@ -48,24 +48,20 @@ function editCatererInformation() {
     $(document).ready(function () {
         $('#error').text('');
         $('#profile-img-error').text('');
-        $('#password-error').text('');
         $('#name-error').text('');
         $('#phone-error').text('');
         $('#address-error').text('');
+        $('#point-error').text('');
         inputProfileImg = $('#profile-img').prop('files')[0] ? $('#profile-img').prop('files')[0] : null;
-        inputPassword = $('#password').val();
         inputRankID = $('#rank-id').val();
         inputName = $('#name').val();
         inputPhone = $('#phone').val();
         inputAddress = $('#address').val();
+        inputPoint = $('#point').val();
         valid = true;
         if (inputProfileImg !== null && inputProfileImg.size > 10000000) {
             valid = false;
             $('#profile-img-error').text('We only support images smaller than 10MB');
-        }
-        if (inputPassword.trim().length > 0 && inputPassword.trim().length < 8) {
-            valid = false;
-            $('#password-error').text("Password must have at least 8 characters, leave this field empty if you don't want to change it");
         }
         if (inputName.trim().length === 0) {
             valid = false;
@@ -79,6 +75,10 @@ function editCatererInformation() {
         if (inputAddress.trim().length === 0) {
             valid = false;
             $('#address-error').text('Please enter address');
+        }
+        if (inputPoint < 0) {
+            valid = false;
+            $('#point-error').text('Point cannot be less than 0');
         }
         if (!valid) {
             return;
