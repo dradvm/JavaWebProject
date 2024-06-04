@@ -26,12 +26,9 @@ public class CustomerFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) rs;
         HttpSession session = request.getSession();
         AuthController authController = (AuthController) session.getAttribute("scopedTarget.authController");
-        if (authController == null) {
+        if (authController == null || authController.getRole() == null || !authController.getRole().equals("Customer")) {
             response.sendRedirect("/");
         } 
-        else if (authController.getRole() != "Customer") {
-            response.sendRedirect("/");
-        }
         else {
             fc.doFilter(request, response);
         }

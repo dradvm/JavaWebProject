@@ -1,9 +1,11 @@
 package com.JavaWebProject.JavaWebProject.controllers;
 
 import com.JavaWebProject.JavaWebProject.models.Customer;
+import com.JavaWebProject.JavaWebProject.models.DeliveryAddress;
 import com.JavaWebProject.JavaWebProject.models.District;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
+import com.JavaWebProject.JavaWebProject.services.DeliveryAddressService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import jakarta.servlet.http.HttpSession;
 import java.util.Date;
@@ -12,6 +14,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +32,8 @@ public class CustomerController {
     private CloudStorageService cloudStorageService;
     @Autowired
     private DistrictService districtService;
+    @Autowired
+    private DeliveryAddressService deliveryAddressService;
     
     @RequestMapping(value = "/editProfile", method = RequestMethod.POST)
     @ResponseBody
@@ -43,10 +48,6 @@ public class CustomerController {
         Map<String, Object> result = new HashMap();
         AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
         Customer customer = customerService.findById(auth.getUsername());
-        if (customer == null) {
-            result.put("status", "Invalid");
-            return result;
-        }
         if (!profileImg.isEmpty()) {
             String type = profileImg.getContentType();
             if (type == null || type.equals("application/octet-stream")) {
@@ -128,5 +129,96 @@ public class CustomerController {
         result.put("status", "OK");
         result.put("target", "/auth/toProfile");
         return result;
+    }
+    
+    @RequestMapping(value = "/toDeliveryaddress", method = RequestMethod.GET)
+    public String toDeliveryaddress(ModelMap model) {
+        AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
+        Customer customer = customerService.findById(auth.getUsername());
+        model.addAttribute("deliveryAddressList", deliveryAddressService.findByCustomerEmail(customer));
+        return "CustomerPage/deliveryaddress";
+    }
+    
+    @RequestMapping(value = "/toEditdeliveryaddress", method = RequestMethod.POST)
+    public String toEditdeliveryaddress(ModelMap model, @RequestParam("id") int id) {
+        AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
+        DeliveryAddress address = deliveryAddressService.findById(id);
+        if (address == null || !address.getCustomerEmail().getCustomerEmail().equals(auth.getUsername())) {
+            return "redirect:/customer/toDeliveraddress";
+        }
+        model.addAttribute("deliveryAddress", address);
+        model.addAttribute("districtList", districtService.findAll());
+        return "CustomerPage/editdeliveryaddress";
+    }
+    
+    @RequestMapping(value = "/editDeliveryaddress", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> editDeliveryaddress(
+            @RequestParam("id") int id,
+            @RequestParam("address") String address,
+            @RequestParam("districtID") int districtID) {
+        Map<String, Object> result = new HashMap();
+        AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
+        DeliveryAddress addressEdit = deliveryAddressService.findById(id);
+        if (addressEdit == null || !addressEdit.getCustomerEmail().getCustomerEmail().equals(auth.getUsername())) {
+            result.put("status", "Fail");
+            return result;
+        }
+        if (address == null || address.trim().length() == 0) {
+            result.put("status", "Fail");
+            return result;
+        }
+        District district = districtService.findById(districtID);
+        if (district == null) {
+            result.put("status", "Fail");
+            return result;
+        }
+        addressEdit.setAddress(address);
+        addressEdit.setDistrictID(district);
+        deliveryAddressService.save(addressEdit);
+        result.put("status", "OK");
+        result.put("target", "/customer/toDeliveryaddress");
+        return result;
+    }
+    
+    @RequestMapping(value = "/toAdddeliveryaddress", method = RequestMethod.GET)
+    public String toAdddeliveryaddress(ModelMap model) {
+        model.addAttribute("districtList", districtService.findAll());
+        return "CustomerPage/adddeliveryaddress";
+    }
+    
+    @RequestMapping(value = "/addDeliveryaddress", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> addDeliveryaddress(@RequestParam("address") String address, @RequestParam("districtID") int districtID) {
+        Map<String, Object> result = new HashMap();
+        if (address == null || address.trim().length() == 0) {
+            result.put("status", "Fail");
+            return result;
+        }
+        District district = districtService.findById(districtID);
+        if (district == null) {
+            result.put("status", "Fail");
+            return result;
+        }
+        AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
+        Customer customer = customerService.findById(auth.getUsername());
+        DeliveryAddress da = new DeliveryAddress();
+        da.setAddress(address);
+        da.setCustomerEmail(customer);
+        da.setDistrictID(district);
+        deliveryAddressService.save(da);
+        result.put("status", "OK");
+        result.put("target", "/customer/toDeliveryaddress");
+        return result;
+    }
+    
+    @RequestMapping(value = "/deleteDeliveryaddress", method = RequestMethod.POST)
+    public String deleteDeliveryaddress(@RequestParam("id") int id) {
+        AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
+        DeliveryAddress address = deliveryAddressService.findById(id);
+        if (address != null && address.getCustomerEmail().getCustomerEmail().equals(auth.getUsername())) {
+            deliveryAddressService.delete(address);
+        }
+        return "redirect:/customer/toDeliveryaddress";
     }
 }
