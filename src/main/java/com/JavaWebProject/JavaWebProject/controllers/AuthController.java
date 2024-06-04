@@ -8,6 +8,7 @@ import com.JavaWebProject.JavaWebProject.models.PaymentHistory;
 import com.JavaWebProject.JavaWebProject.services.AdminService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CityService;
+import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.MailService;
@@ -37,7 +38,6 @@ import org.springframework.web.context.annotation.SessionScope;
 @SessionScope
 @RequestMapping("/auth")
 public class AuthController {
-
     @Autowired
     private CatererService catererService;
     @Autowired
@@ -52,6 +52,8 @@ public class AuthController {
     private DistrictService districtService;
     @Autowired
     private PaymentService paymentService;
+    @Autowired
+    private CloudStorageService cloudStorageService;
     private String role;
     private String username;
     private Customer newCustomer;
@@ -127,7 +129,7 @@ public class AuthController {
         newCaterer = null;
         expireTime = null;
         code = 0;
-        return "/AuthPage/retrievepassword";
+        return "AuthPage/retrievepassword";
     }
 
     @RequestMapping(value = "/checkRetrieveEmail", method = RequestMethod.POST)
@@ -152,7 +154,7 @@ public class AuthController {
         Random random = new Random();
         code = random.nextInt(100000, 1000000);
         mailService.sendMail(retrieveEmail, "Plate Portal verification code", "Your email verification code is " + code + ", it is effective in 5 minutes");
-        return "/AuthPage/emailverification";
+        return "AuthPage/emailverification";
     }
 
     @RequestMapping(value = "/verifyEmailRetrieve", method = RequestMethod.POST)
@@ -174,7 +176,7 @@ public class AuthController {
         if (code != -1 || retrieveEmail == null) {
             return "redirect:/";
         }
-        return "/AuthPage/resetpassword";
+        return "AuthPage/resetpassword";
     }
 
     @RequestMapping(value = "/resetPassword", method = RequestMethod.POST)
@@ -223,7 +225,7 @@ public class AuthController {
         code = 0;
         model.addAttribute("cityList", cityService.findAll());
         model.addAttribute("districtList", districtService.findAll());
-        return "/AuthPage/signup";
+        return "AuthPage/signup";
     }
 
     @RequestMapping(value = "/signupCustomer", method = RequestMethod.POST)
@@ -274,6 +276,9 @@ public class AuthController {
                 return result;
             }
         }
+        else {
+            date = null;
+        }
         if (address == null || address.trim().length() == 0) {
             result.put("status", "Fail");
             return result;
@@ -298,7 +303,9 @@ public class AuthController {
         newCustomer.setPhone(phone);
         newCustomer.setGender(gender);
         newCustomer.setAddress(address);
-        newCustomer.setBirthday(date);
+        if (date != null) {
+            newCustomer.setBirthday(date);
+        }
         newCustomer.setCreateDate(new Date());
         newCustomer.setDistrictID(districtID);
         result.put("status", "OK");
@@ -356,6 +363,9 @@ public class AuthController {
                 return result;
             }
         }
+        else {
+            date = null;
+        }
         if (address == null || address.trim().length() == 0) {
             result.put("status", "Fail");
             return result;
@@ -384,10 +394,13 @@ public class AuthController {
         newCaterer.setGender(gender);
         newCaterer.setAddress(address);
         newCaterer.setPaymentInformation(paymentInformation);
+        newCaterer.setPoint(0);
         if (description != null && description.trim().length() > 0) {
             newCaterer.setDescription(description);
         }
-        newCaterer.setBirthday(date);
+        if (date != null) {
+            newCaterer.setBirthday(date);
+        }
         newCaterer.setCreateDate(new Date());
         newCaterer.setDistrictID(districtID);
         result.put("status", "OK");
@@ -404,7 +417,7 @@ public class AuthController {
         Random random = new Random();
         code = random.nextInt(100000, 1000000);
         mailService.sendMail(email, "Plate Portal verification code", "Your email verification code is " + code + ", it is effective in 5 minutes.");
-        return "/AuthPage/emailverification";
+        return "AuthPage/emailverification";
     }
 
     @RequestMapping(value = "/verifyEmailSignup", method = RequestMethod.POST)
@@ -453,6 +466,83 @@ public class AuthController {
         paymentService.savePaymentHistory(payment);
         newCaterer = null;
         return "redirect:/";
+    }
+    
+    @RequestMapping(value = "/toProfile", method = RequestMethod.GET)
+    public String toProfile(ModelMap model) {
+        if (role == null) {
+            return "redirect:/";
+        }
+        if (role.equals("Customer")) {
+            Customer customer = customerService.findById(username);
+            model.addAttribute("img", cloudStorageService.getProfileImg("Customer", customer.getProfileImage()));
+            model.addAttribute("customer", customer);
+            model.addAttribute("districtList", districtService.findAll());
+            return "CustomerPage/profile";
+        }
+        if (role.equals("Caterer")) {
+            Caterer caterer = catererService.findById(username);
+            model.addAttribute("img", cloudStorageService.getProfileImg("Caterer", caterer.getProfileImage()));
+            model.addAttribute("caterer", caterer);
+            model.addAttribute("districtList", districtService.findAll());
+            return "CatererPage/profile";
+        }
+        return "redirect:/";
+    }
+    
+    @RequestMapping(value = "/toChangepassword", method = RequestMethod.GET)
+    public String toChangepassword() {
+        if (username == null) {
+            return "redirect:/";
+        }
+        return "AuthPage/changepassword";
+    }
+    
+    @RequestMapping(value = "/changePassword", method = RequestMethod.POST)
+    @ResponseBody
+    public Map<String, Object> changePassword(
+            @RequestParam("password") String password,
+            @RequestParam("newPassword") String newPassword,
+            @RequestParam("confirmPassword") String confirmPassword) {
+        Map<String, Object> result = new HashMap();
+        if (newPassword == null || newPassword.trim().length() < 8) {
+            result.put("status", "Fail");
+            return result;
+        }
+        if (!newPassword.equals(confirmPassword)) {
+            result.put("status", "Fail");
+            return result;
+        }
+        if (role.equals("Customer")) {
+            Customer customer = customerService.findById(username);
+            String current = customer.getPassword();
+            String input = hash(password);
+            if (!current.equals(input)) {
+                result.put("status", "Incorrect");
+                return result;
+            }
+            else {
+                customer.setPassword(hash(newPassword));
+                customerService.save(customer);
+                result.put("status", "OK");
+            }
+        }
+        else if (role.equals("Caterer")) {
+            Caterer caterer = catererService.findById(username);
+            String current = caterer.getPassword();
+            String input = hash(password);
+            if (!current.equals(input)) {
+                result.put("status", "Incorrect");
+                return result;
+            }
+            else {
+                caterer.setPassword(hash(newPassword));
+                catererService.save(caterer);
+                result.put("status", "OK");
+            }
+        }
+        result.put("target", "/auth/toProfile");
+        return result;
     }
 
     private String hash(String str) {

@@ -3,25 +3,8 @@ package com.JavaWebProject.JavaWebProject.controllers;
 import com.JavaWebProject.JavaWebProject.models.CatererRank;
 import com.JavaWebProject.JavaWebProject.services.CatererRankService;
 import com.JavaWebProject.JavaWebProject.services.PaymentService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.TimeZone;
-import javax.crypto.Mac;
-import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -50,7 +33,7 @@ public class RankController {
         }
         model.addAttribute("command", "signup");
         model.addAttribute("catererRankList", catererRankService.findAll());
-        return "/RankPage/buyrank";
+        return "RankPage/buyrank";
     }
     
     @RequestMapping(value = "/verifyBuyOptionSignup", method = RequestMethod.POST)
@@ -78,7 +61,7 @@ public class RankController {
             return "redirect:/auth/completeSignupCaterer";
         }
         else {
-            return "/RankPage/paymenterror";
+            return "RankPage/paymenterror";
         }
     }
 }

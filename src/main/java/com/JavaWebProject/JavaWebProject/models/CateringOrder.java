@@ -37,7 +37,6 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CateringOrder.findByOrderTime", query = "SELECT c FROM CateringOrder c WHERE c.orderTime = :orderTime"),
     @NamedQuery(name = "CateringOrder.findByCreateDate", query = "SELECT c FROM CateringOrder c WHERE c.createDate = :createDate"),
     @NamedQuery(name = "CateringOrder.findByOrderState", query = "SELECT c FROM CateringOrder c WHERE c.orderState = :orderState"),
-    @NamedQuery(name = "CateringOrder.findByNumOfTables", query = "SELECT c FROM CateringOrder c WHERE c.numOfTables = :numOfTables"),
     @NamedQuery(name = "CateringOrder.findByPointDiscount", query = "SELECT c FROM CateringOrder c WHERE c.pointDiscount = :pointDiscount"),
     @NamedQuery(name = "CateringOrder.findByVoucherDiscount", query = "SELECT c FROM CateringOrder c WHERE c.voucherDiscount = :voucherDiscount"),
     @NamedQuery(name = "CateringOrder.findByValue", query = "SELECT c FROM CateringOrder c WHERE c.value = :value"),
@@ -78,10 +77,6 @@ public class CateringOrder implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "OrderState")
     private String orderState;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "NumOfTables")
-    private int numOfTables;
     @Column(name = "VoucherDiscount")
     private Double voucherDiscount;
     @Basic(optional = false)
@@ -111,13 +106,12 @@ public class CateringOrder implements Serializable {
         this.orderID = orderID;
     }
 
-    public CateringOrder(Integer orderID, String orderAddress, Date orderTime, Date createDate, String orderState, int numOfTables, double value) {
+    public CateringOrder(Integer orderID, String orderAddress, Date orderTime, Date createDate, String orderState, double value) {
         this.orderID = orderID;
         this.orderAddress = orderAddress;
         this.orderTime = orderTime;
         this.createDate = createDate;
         this.orderState = orderState;
-        this.numOfTables = numOfTables;
         this.value = value;
     }
 
@@ -160,15 +154,6 @@ public class CateringOrder implements Serializable {
     public void setOrderState(String orderState) {
         this.orderState = orderState;
     }
-
-    public int getNumOfTables() {
-        return numOfTables;
-    }
-
-    public void setNumOfTables(int numOfTables) {
-        this.numOfTables = numOfTables;
-    }
-
 
     public Double getVoucherDiscount() {
         return voucherDiscount;

@@ -112,7 +112,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </div>
                 <div class="row my-row mt-5  gy-2">
                     <div class="col-3" ng-virtual-scroll ng-repeat="(index, item) in listDish">
-                        <div id="dish-{{$index}}" class="overflow-hidden v-stack bg-white border"
+                        <div id="dish-{{item.id}}" class="overflow-hidden v-stack bg-white border"
                             style="border-radius: 12px;">
                             <div>
                                 <img ng:src="{{item.image}}" alt="" class="w-100" style="height: 150px;">
@@ -257,8 +257,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         var orderCaterer = JSON.parse(sessionStorage.getItem(x[n - 1]))
                         var data = []
                         quantity = parseInt(document.querySelector(`#dish-${index}`).querySelector("input[name='product-qty']").value)
-                        console.log(dish, index)
-                        dish.id = index
+
                         if (orderCaterer) {
                             currentDish = orderCaterer.find((item) => item.id == index)
                             if (currentDish && parseInt(currentDish.quantity) + quantity <= 999) {

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+    <head>
+        <title>Add new delivery address</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" th:href="@{/css/mycss.css}"/>
+    </head>
+    <body>
+        <a href="/customer/toDeliveryaddress">
+            <button>Back</button>
+        </a>
+        <form>
+            <!--Address-->
+            <label for="address">
+                Address<span style="color: red;">*</span>:
+            </label>
+            <input id="address">
+            <div id="address-error"></div>
+            <!--District-->
+            <label>
+                District<span style="color: red;">*</span>:
+            </label>
+            <select id="district-id">
+                <option th:each="district : ${districtList}"
+                        th:value="${district.districtID}"
+                        th:text="${district.districtName + ', ' + district.cityID.cityName}">
+                </option>
+            </select>
+            <!--Submit-->
+            <div id="error"></div>
+            <button type="button" onclick="addDeliveryAddress()">Submit</button>
+        </form>
+        <script th:src="@{/js/jquery.min.js}"></script>
+        <script th:src="@{/js/adddeliveryaddress.js}"></script>
+    </body>
+</html>

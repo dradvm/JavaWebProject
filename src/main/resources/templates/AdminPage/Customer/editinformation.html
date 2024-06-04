@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/" 
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/AdminPage/admin">
+      layout:decorate="@{../templates/AdminPage/admin}">
     <head>
     </head>
     <body>
@@ -20,33 +20,29 @@
                 <label for="profile-img">New profile image: </label>
                 <input id="profile-img" name="profileImg" type="file" accept=".jpg, .jpeg, .png"/>
                 <div id="profile-img-error"></div>
-                <!--Password-->
-                <label for="password">New password: </label>
-                <input id="password" name="password" type="password"/>
-                <div id="password-error"></div>
                 <!--Name-->
                 <label for="name">
-                    Full name <span style="color: red;">*</span>
+                    Full name<span style="color: red;">*</span>:
                 </label>
                 <input id="name" name="name" th:value="${customer.fullName}"/>
                 <div id="name-error"></div>
                 <!--Point-->
-                <label for="point">Point</label>
+                <label for="point">Point: </label>
                 <input id="point" name="point" type="number" th:value="${customer.point}"/>
                 <div id="point-error"></div>
                 <!--Roll chance-->
-                <label for="point">Roll chance</label>
+                <label for="point">Roll chance: </label>
                 <input id="roll-chance" name="rollChance" type="number" th:value="${customer.rollChance}"/>
                 <div id="roll-chance-error"></div>
                 <!--Phone-->
                 <label for="phone">
-                    Phone <span style="color: red;">*</span>
+                    Phone<span style="color: red;">*</span>: 
                 </label>
                 <input id="phone" name="phone" th:value="${customer.phone}"/>
                 <div id="phone-error"></div>
                 <!--Gender-->
                 <label for="gender">
-                    Gender <span style="color: red;">*</span>
+                    Gender<span style="color: red;">*</span>: 
                 </label>
                 <select id="gender" name="gender">
                     <option value="0" th:selected="${customer.gender == 0}">Male</option>
@@ -54,7 +50,7 @@
                 </select>
                 <!--Address-->
                 <label for="address">
-                    Address <span style="color: red;">*</span>
+                    Address<span style="color: red;">*</span>: 
                 </label>
                 <input id="address" name="address" th:value="${customer.address}"/>
                 <div id="address-error"></div>
@@ -69,9 +65,13 @@
                 <!--Birthday-->
                 <label for="birthday">Birthday: </label>
                 <input id="birthday" name="birthday" type="date" th:value="${#dates.format(customer.birthday, 'yyyy-MM-dd')}"/>
+                <!--Create date-->
+                <div>
+                    Create date: <span th:text="${#dates.format(customer.createDatem 'yyyy-MM-dd')}"></span>
+                </div>
                 <!--Active-->
                 <label for="active">
-                    Active <span style="color: red;">*</span>
+                    Active<span style="color: red;">*</span>: 
                 </label>
                 <select id="active" name="active">
                     <option value="0" th:selected="${customer.active == 0}">Suspended</option>
