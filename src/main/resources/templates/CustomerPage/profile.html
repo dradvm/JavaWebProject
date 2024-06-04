@@ -25,16 +25,16 @@
             <div>
                 Email: <span th:text="${customer.customerEmail}"></span>
             </div>
-            <!--Profile image-->
-            <label for="profile-img">New profile image: </label>
-            <input id="profile-img" name="profileImg" type="file" accept=".jpg, .jpeg, .png"/>
-            <div id="profile-img-error"></div>
             <!--Name-->
             <label for="name">
                 Full name<span style="color: red;">*</span>:
             </label>
             <input id="name" name="name" th:value="${customer.fullName}"/>
             <div id="name-error"></div>
+            <!--Profile image-->
+            <label for="profile-img">New profile image: </label>
+            <input id="profile-img" name="profileImg" type="file" accept=".jpg, .jpeg, .png"/>
+            <div id="profile-img-error"></div>
             <!--Point-->
             <div>
                 Point: <span th:text="${customer.point}"></span>

@@ -481,6 +481,10 @@ public class AuthController {
             return "CustomerPage/profile";
         }
         if (role.equals("Caterer")) {
+            Caterer caterer = catererService.findById(username);
+            model.addAttribute("img", cloudStorageService.getProfileImg("Caterer", caterer.getProfileImage()));
+            model.addAttribute("caterer", caterer);
+            model.addAttribute("districtList", districtService.findAll());
             return "CatererPage/profile";
         }
         return "redirect:/";

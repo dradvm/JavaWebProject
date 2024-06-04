@@ -4,15 +4,21 @@
  */
 package com.JavaWebProject.JavaWebProject.controllers;
 
+import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.Dish;
+import com.JavaWebProject.JavaWebProject.models.District;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.DishService;
+import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.OrderDetailsService;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +49,10 @@ public class CatererController {
     private OrderDetailsService orderDetailsService;
     @Autowired
     private CloudStorageService cloudStorageService;
+    @Autowired
+    private HttpSession session;
+    @Autowired
+    private DistrictService districtService;
     
     @GetMapping(value = "/myCaterer/orders")
     public String orderPage(ModelMap model) {
@@ -180,4 +190,108 @@ public class CatererController {
         return "/CatererPage/DishesPage/catererdishesreport";
     }
     
+    @PostMapping(value = "/editProfile")
+    @ResponseBody
+    public Map<String, Object> editProfile(
+            @RequestParam("name") String name,
+            @RequestParam("profileImg") MultipartFile profileImg,
+            @RequestParam("paymentInformation") String paymentInformation,
+            @RequestParam("description") String description,
+            @RequestParam("phone") String phone,
+            @RequestParam("gender") int gender,
+            @RequestParam("address") String address,
+            @RequestParam("districtID") int districtID,
+            @RequestParam("birthday") String birthday) {
+        Map<String, Object> result = new HashMap();
+        AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
+        Caterer caterer = catererService.findById(auth.getUsername());
+        if (!profileImg.isEmpty()) {
+            String type = profileImg.getContentType();
+            if (type == null || type.equals("application/octet-stream")) {
+                result.put("status", "Invalid");
+                return result;
+            } else if (!type.equals("image/jpeg") && !type.equals("image/png")) {
+                result.put("status", "Invalid");
+                return result;
+            }
+            if (profileImg.getSize() > 10000000) {
+                result.put("status", "Invalid");
+                return result;
+            }
+        }
+        if (name == null || name.trim().length() == 0) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        Pattern pattern = Pattern.compile("^[A-Za-z0-9]+ ([0-9]+ ?){1,}$");
+        if (paymentInformation == null || !pattern.matcher(paymentInformation).matches()) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        pattern = Pattern.compile("^(?:[0-9] ?){7,11}$");
+        if (phone == null || !pattern.matcher(phone).matches()) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        if (gender != 0 && gender != 1) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        if (address == null || address.trim().length() == 0) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        District district = districtService.findById(districtID);
+        if (district == null) {
+            result.put("status", "Invalid");
+            return result;
+        }
+        Date parsedBirthday = new Date();
+        if (birthday != null && birthday.trim().length() > 0) {
+            String[] arr = birthday.split("-");
+            try {
+                int year = Integer.parseInt(arr[0]);
+                int month = Integer.parseInt(arr[1]);
+                int day = Integer.parseInt(arr[2]);
+                parsedBirthday = new Date(year - 1900, month - 1, day);
+            } catch (Exception e) {
+                e.printStackTrace();
+                result.put("status", "Invalid");
+                return result;
+            }
+        } 
+        else {
+            parsedBirthday = null;
+        }
+        if (!profileImg.isEmpty()) {
+            if (caterer.getProfileImage() != null) {
+                if (!cloudStorageService.deleteFile("caterer/" + caterer.getProfileImage())) {
+                    result.put("status", "Fail");
+                    return result;
+                }
+            }
+            String fileName = cloudStorageService.generateFileName(profileImg);
+            if (cloudStorageService.uploadFile("caterer/" + fileName, profileImg)) {
+                caterer.setProfileImage(fileName);
+            } 
+            else {
+                result.put("status", "Fail");
+                return result;
+            }
+        }
+        caterer.setFullName(name);
+        caterer.setPaymentInformation(paymentInformation);
+        caterer.setDescription(description);
+        caterer.setPhone(phone);
+        caterer.setGender(gender);
+        caterer.setAddress(address);
+        caterer.setDistrictID(district);
+        if (parsedBirthday != null) {
+            caterer.setBirthday(parsedBirthday);
+        }
+        catererService.save(caterer);
+        result.put("status", "OK");
+        result.put("target", "/auth/toProfile");
+        return result;
+    }
 }
