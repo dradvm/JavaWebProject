@@ -22,11 +22,11 @@ function editCustomerInformation() {
             valid = false;
             $('#name-error').text('Please enter name');
         }
-        if (inputPoint < 0) {
+        if (inputPoint === '' || inputPoint < 0) {
             valid = false;
             $('#point-error').text('Point cannot be less than 0');
         }
-        if (inputRollChance < 0) {
+        if (inputRollChance === '' || inputRollChance < 0) {
             valid = false;
             $('#roll-chance-error').text('Roll chance cannot be less than 0');
         }

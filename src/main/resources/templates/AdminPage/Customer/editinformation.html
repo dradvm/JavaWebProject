@@ -67,7 +67,7 @@
                 <input id="birthday" name="birthday" type="date" th:value="${#dates.format(customer.birthday, 'yyyy-MM-dd')}"/>
                 <!--Create date-->
                 <div>
-                    Create date: <span th:text="${#dates.format(customer.createDatem 'yyyy-MM-dd')}"></span>
+                    Create date: <span th:text="${#dates.format(customer.createDate, 'yyyy-MM-dd')}"></span>
                 </div>
                 <!--Active-->
                 <label for="active">
