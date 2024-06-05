@@ -23,6 +23,7 @@ D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\s
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\District.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\JavaWebProjectApplication.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\DistrictService.java
+D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\BannerManageRepository.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\CateringOrder.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\DeliveryAddress.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\MinigameReward.java
@@ -33,9 +34,11 @@ D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\c
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\CloudStorageService.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\CatererController.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\RankController.java
+D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\BannerManageService.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\OrderDetails.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\CatererRankService.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Notification.java
+D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\BannerController.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\RankManageRepository.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Feedback.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\filters\CatererFilter.java
@@ -53,6 +56,7 @@ D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\f
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\CityService.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\models\Dish.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\VoucherRepository.java
+D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\BannerTypeService.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\controllers\RankManageController.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\services\CateringOrderService.java
 D:\Project Java\JavaWebProject\src\main\java\com\JavaWebProject\JavaWebProject\repositories\CatererRankRepository.java

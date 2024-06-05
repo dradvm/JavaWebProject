@@ -24,24 +24,29 @@ public class FeedbackController {
     @GetMapping("")
     public String showFeedbackForm(Model model) {
         model.addAttribute("feedback", new Feedback());
-        return "Feedback/feedback";
+        return "index";
     }
 
     @PostMapping("/addFeedback")
     public String submitFeedback(@ModelAttribute Feedback feedback, Model model, HttpSession session) {
-//        String username = (String) session.getAttribute("username");
-//        feedback.setEmail(username);
-        Date currentime = new Date();      
+
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            model.addAttribute("message", "Please login to submit feedback.");
+            return "redirect:/auth/toLogin";
+        }
+        feedback.setEmail(username);
+        Date currentime = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String formattedDate = formatter.format(currentime);
         feedback.setFeedbackDate(currentime);
         feedbackService.save(feedback);
-        
+
         model.addAttribute("email", feedback.getEmail());
         model.addAttribute("feedbackDetails", feedback.getFeedbackDetails());
         model.addAttribute("feedbackDate", formattedDate);
         model.addAttribute("message", "Feedback submitted successfully");
-        return "Feedback/feedback";
+        return "index";
     }
 
 }

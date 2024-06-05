@@ -5,8 +5,11 @@
 package com.JavaWebProject.JavaWebProject.services;
 
 import com.JavaWebProject.JavaWebProject.models.CatererRank;
+import com.JavaWebProject.JavaWebProject.repositories.CatererRepository;
 import com.JavaWebProject.JavaWebProject.repositories.RankManageRepository;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +17,15 @@ import org.springframework.stereotype.Service;
 public class RankManageService {
 
     @Autowired
+    private CatererRepository catererRepository;
+    @Autowired
     private RankManageRepository rankManageRepository;
 
     public List<CatererRank> findAll() {
         return rankManageRepository.findAll();
     }
 
-    public CatererRank findById(Integer id) { // Changed to Integer
+    public CatererRank findById(Integer id) {
         return rankManageRepository.findById(id).orElse(null);
     }
 
@@ -28,9 +33,11 @@ public class RankManageService {
         rankManageRepository.save(catererRank);
     }
 
-    public void deleteById(Integer id) { // Changed to Integer
+    public void deleteById(Integer id) {
         rankManageRepository.deleteById(id);
     }
+
+    
 
     public double averageRankFee() {
         return rankManageRepository.averageRankFee();
@@ -67,4 +74,5 @@ public class RankManageService {
     public int minRankMaxDish() {
         return rankManageRepository.minRankMaxDish();
     }
+
 }

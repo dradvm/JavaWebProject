@@ -1,5 +1,6 @@
 package com.JavaWebProject.JavaWebProject.services;
 
+import com.JavaWebProject.JavaWebProject.models.Banner;
 import com.JavaWebProject.JavaWebProject.models.BannerType;
 import com.JavaWebProject.JavaWebProject.repositories.BannerRepository;
 import com.JavaWebProject.JavaWebProject.repositories.BannerTypeRepository;
@@ -36,4 +37,5 @@ public class BannerService {
         });
         return result;
     }
+
 }
