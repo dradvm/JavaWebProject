@@ -19,11 +19,80 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 </head>
 
 <body>
+    <header th:fragment="header">
+        <div class="shadow-sm container-fuild px-5 py-2 d-flex justify-content-between align-items-center fw-medium">
+            <div class="d-flex align-items-center" style="width: 20%;">
+                <div class="d-flex justify-content-between align-items-center" style="cursor: pointer;">
+                    <img th:src="@{/images/big_logo.png}" width="200" />
+                </div>
+            </div>
+            <div class="d-flex justify-content-around" style="width: 60%;">
+                <div class="d-flex align-items-center">
+                    <a th:class="'mx-3 menu-item-nav fs-7 ' + ${selectedNav == 'home' ? 'menu-item-nav-selected' : 'menu-item-nav-hover'}"
+                        href="/">Home</a>
+                    <a th:class="'mx-3 menu-item-nav fs-7 ' + ${selectedNav == 'listCaterer' ? 'menu-item-nav-selected' : 'menu-item-nav-hover'}"
+                        href="/listCaterer">Caterers</a>
+                    <a th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role == 'Caterer'}"
+                        th:class="'mx-3 menu-item-nav fs-7 ' + ${selectedNav == 'myCaterer' ? 'menu-item-nav-selected' : 'menu-item-nav-hover'}"
+                        href="/caterer/myCaterer/orders">My Caterer</a>
+                    <a th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role == 'Customer'}"
+                        th:class="'mx-3 menu-item-nav fs-7 ' + ${selectedNav == 'orders' ? 'menu-item-nav-selected' : 'menu-item-nav-hover'}"
+                        href="/caterer/myCaterer/orders">Orders</a>
+                    <a th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role == 'Customer'}"
+                        th:class="'mx-3 menu-item-nav fs-7 ' + ${selectedNav == 'minigame' ? 'menu-item-nav-selected' : 'menu-item-nav-hover'}"
+                        href="/caterer/myCaterer/orders">Minigame</a>
+                </div>
+            </div>
+            <div th:if="${session.get('scopedTarget.authController') == null || session.get('scopedTarget.authController').role == null}"
+                class="d-flex align-items-center justify-content-end" style="width: 20%;">
+                <a href="/auth/toLogin" class="text-decoration-none mx-3 menu-item-nav px-3 py-2 fs-7">
+                    Log in
+                </a>
+                <a href="/auth/toSignup">
+                    <button class="fw-bold mx-1 my-btn bg-main px-3 py-2 text-white rounded fs-7">
+                        Sign up
+                    </button>
+                </a>
+            </div>
+            <div th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role != null}"
+                class="d-flex align-items-center justify-content-end" style="width: 20%;">
+                <div class="dropdown no-focus-visible">
+                    <button class="btn p-1 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-circle-user fs-4"></i>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item dropdown-item-custom d-flex align-items-center" href="#">
+                                <i style="width: 20px;" class="me-3 fa-solid fa-house-user"></i>
+                                <span>My Profile</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item dropdown-item-custom d-flex align-items-center" href="/auth/logout">
+                                <i style="width: 20px;" class="me-3 fa-solid fa-arrow-right-from-bracket"></i>
+                                <span>Logout</span>
+
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </header>
     <div layout:fragment="contentMainPage">
-        <div class="w-100">
-            <div class="w-100 px-5 pt-5" style="background-color: #eee;">
+        <div class="w-100" style="background-color: #eee;">
+            <div class="w-100 px-5 pt-3">
                 <div class="d-flex align-items-center justify-content-between">
-                    <div class="fs-4 fw-bold">Orders</div>
+                    <div class="d-flex">
+                        <div class="d-flex align-items-center order-nav-item order-nav-item-selected fw-medium me-5 ">
+                            <span>All</span>
+                        </div>
+                        <div class="d-flex align-items-center order-nav-item fw-medium me-5 ">
+                            <span>In progress</span>
+                            <div class="ms-3 rounded-pill fs-7 bg-main text-white px-2">10</div>
+                        </div>
+
+                    </div>
                     <a href="">
                         <button class="my-btn text-white bg-main fw-bold d-flex align-items-center px-3 py-2 shadow-sm">
                             <i class="fa-solid fa-plus me-3"></i>
@@ -31,16 +100,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         </button>
                     </a>
                 </div>
-                <div class="d-flex mt-4">
-                    <div class="d-flex align-items-center order-nav-item order-nav-item-selected fw-medium me-5 ">
-                        <span>All</span>
-                    </div>
-                    <div class="d-flex align-items-center order-nav-item fw-medium me-5 ">
-                        <span>In progress</span>
-                        <div class="ms-3 rounded-pill fs-7 bg-main text-white px-2">10</div>
-                    </div>
 
-                </div>
             </div>
             <div class="container"></div>
         </div>

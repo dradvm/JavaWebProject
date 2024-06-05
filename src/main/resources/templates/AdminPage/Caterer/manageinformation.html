@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/" 
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/AdminPage/admin">
+      layout:decorate="@{../templates/AdminPage/admin}">
     <head>
     </head>
     <body>
         <div layout:fragment="contentAdminPage">
             <link rel="stylesheet" th:href="@{/lib/datatable/datatables.min.css}"/>
-            <a href="/admin/toManageinformationCaterer">Manage information</a>
-            <a href="/admin/toHandlereportsCaterer">Handle reports</a>
-            <a href="/admin/toStatisticalreportCaterer">Statistical reports</a>
+            <a href="/admin/toManageinformationCaterer" class="btn btn-success">Manage information</a>
+            <a href="/admin/toHandlereportsCaterer" class="btn btn-success">Handle reports</a>
+            <a href="/admin/toStatisticalreportCaterer" class="btn btn-success">Statistical reports</a>
             <table id="caterer-list" class="table table-striped">
                 <thead>
                     <tr>
@@ -37,10 +37,8 @@
                         <td th:text="${#dates.format(caterer.createDate, 'dd-MM-yyyy')}"></td>
                         <td th:text="${caterer.active == 1 ? 'Active' : 'Suspended'}"></td>
                         <td>
-                            <a th:href="@{/admin/toEditinformationCaterer(email=${caterer.catererEmail})}">
-                                <button>Edit</button>
-                            </a>
-                            <a th:href="@{/admin/changeCatererActive(email=${caterer.catererEmail})}">
+                            <a th:href="@{/admin/toEditinformationCaterer(email=${caterer.catererEmail})}" class="btn btn-primary">Edit</a>
+                            <a th:href="@{/admin/changeCatererActive(email=${caterer.catererEmail})}" class="btn btn-danger">
                                 <button th:text="${caterer.active == 1 ? 'Suspend' : 'Unsuspend'}"></button>
                             </a>
                         </td>

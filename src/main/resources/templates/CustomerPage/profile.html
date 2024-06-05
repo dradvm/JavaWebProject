@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+    <head>
+        <title>Profile</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" th:href="@{/css/mycss.css}"/>
+    </head>
+    <body>
+        <a href="/">
+            <button>Main Page</button>
+        </a>
+        <a href="/auth/toProfile">
+            <button>Manage profile</button>
+        </a>
+        <a href="/auth/toChangepassword">
+            <button>Change password</button>
+        </a>
+        <a href="/customer/toDeliveryaddress">
+            <button>Manage delivery address</button>
+        </a>
+        <img th:src="@{${img == null ? '/images/default-avatar.png' : img}}" style="height: 200px; width: 200px">
+        <form id="profile">
+            <!--Email-->
+            <div>
+                Email: <span th:text="${customer.customerEmail}"></span>
+            </div>
+            <!--Name-->
+            <label for="name">
+                Full name<span style="color: red;">*</span>:
+            </label>
+            <input id="name" name="name" th:value="${customer.fullName}"/>
+            <div id="name-error"></div>
+            <!--Profile image-->
+            <label for="profile-img">New profile image: </label>
+            <input id="profile-img" name="profileImg" type="file" accept=".jpg, .jpeg, .png"/>
+            <div id="profile-img-error"></div>
+            <!--Point-->
+            <div>
+                Point: <span th:text="${customer.point}"></span>
+            </div>
+            <!--Roll chance-->
+            <div>
+                Roll chance: <span th:text="${customer.rollChance}"></span>
+            </div>
+            <!--Phone-->
+            <label for="phone">
+                Phone<span style="color: red;">*</span>: 
+            </label>
+            <input id="phone" name="phone" th:value="${customer.phone}"/>
+            <div id="phone-error"></div>
+            <!--Gender-->
+            <label for="gender">
+                Gender<span style="color: red;">*</span>: 
+            </label>
+            <select id="gender" name="gender">
+                <option value="0" th:selected="${customer.gender == 0}">Male</option>
+                <option value="1" th:selected="${customer.gender == 1}">Female</option>
+            </select>
+            <!--Address-->
+            <label for="address">
+                Address<span style="color: red;">*</span>: 
+            </label>
+            <input id="address" name="address" th:value="${customer.address}"/>
+            <div id="address-error"></div>
+            <!--District-->
+            <select id="district-id" name="districtID">
+                <option th:each="district : ${districtList}"
+                        th:value="${district.districtID}"
+                        th:text="${district.districtName + ', ' + district.cityID.cityName}"
+                        th:selected="${customer.districtID.districtID == district.districtID}">
+                </option>
+            </select>
+            <!--Birthday-->
+            <label for="birthday">Birthday: </label>
+            <input id="birthday" name="birthday" type="date" th:value="${#dates.format(customer.birthday, 'yyyy-MM-dd')}"/>
+            <!--Create date-->
+            <div>
+                Create date: <span th:text="${#dates.format(customer.createDate, 'yyyy-MM-dd')}"></span>
+            </div>
+            <!--Submit-->
+            <div id="error"></div>
+            <button type="button" onclick="editProfile()">Submit</button>
+        </form>
+        <script th:src="@{/js/jquery.min.js}"></script>
+        <script th:src="@{/js/profilecustomer.js}"></script>
+    </body>
+</html>

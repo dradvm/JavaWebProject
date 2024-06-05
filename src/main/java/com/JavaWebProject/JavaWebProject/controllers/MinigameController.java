@@ -41,7 +41,7 @@ public class MinigameController {
     @GetMapping("")
     public String minigamePage(Model model) {
         data = minigameRewardService.getAllMinigameReward();
-        
+        model.addAttribute("selectedNav", "minigame");
         return "/MinigamePage/minigame";
     }
     
@@ -84,5 +84,12 @@ public class MinigameController {
     public int update(@RequestParam("value") int value) {
         customerService.updatePointValue(user.getUsername(), value);
         return value;
+    }
+    
+    
+    @GetMapping("/getPoint")
+    @ResponseBody
+    public int getPoint() {
+        return customerService.getPointOfCustomer(user.getUsername());
     }
 }

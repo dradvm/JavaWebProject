@@ -1,0 +1,44 @@
+</html>
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{CatererPage/caterer}">
+
+<head>
+
+
+</head>
+
+<body>
+
+    <div layout:fragment="contentCatererPage">
+        <div class="my-3 mx-3 bg-white rounded p-3">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="fs-4 fw-bold">
+                    Report Dish
+                </div>
+                <div class="d-flex align-items-center justify-content-between">
+                    <select id="byType" class="form-select fs-7" style="width: 43%;">
+                        <option class="fs-7" value="Order">By Order</option>
+                        <option class="fs-7" value="Quantity">By Quantity</option>
+                    </select>
+                    <select id="bySort" class="form-select fs-7" style="width: 55%;">
+                        <option class="fs-7" value="Descending">By Descending</option>
+                        <option class="fs-7" value="Ascending">By Ascending</option>
+                    </select>
+                </div>
+            </div>
+
+            <canvas id="myChart" width="400" height="500"></canvas>
+            <script th:src="@{/js/catererdishreport.js}"></script>
+        </div>
+    </div>
+</body>
+
+</html>
+
+</html>
+<!DOCTYPE html>

@@ -2,9 +2,11 @@ package com.JavaWebProject.JavaWebProject.controllers;
 
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.Dish;
+import com.JavaWebProject.JavaWebProject.models.Voucher;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.DishService;
+import com.JavaWebProject.JavaWebProject.services.VoucherService;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,6 +27,8 @@ public class MainController {
     AuthController authController;
     @Autowired
     CloudStorageService cloudStorageService;
+    @Autowired
+    VoucherService voucherService;
     
     public void setTabNavBar(ModelMap model, String page) {
         model.addAttribute("selectedNav", page);
@@ -72,9 +76,7 @@ public class MainController {
     @GetMapping("/listCaterer/{fullName_Email}")
     public String detailsCatererPage(@PathVariable("fullName_Email") String fullName_Email, ModelMap model) {
         
-        System.out.println(fullName_Email + "A");
         Caterer c = findCaterer(fullName_Email);
-        System.out.println(c.getCatererEmail());
         c.setProfileImage(cloudStorageService.getProfileImg("Caterer", c.getProfileImage()));
         model.addAttribute("caterer", c);
         model.addAttribute("listDish", getDetailsCaterer(fullName_Email));
@@ -98,6 +100,22 @@ public class MainController {
             }
             temp.put("tooltip", d.getDishDescription());
             temp.put("image", cloudStorageService.getDishImg(d.getDishImage()));
+            temp.put("id", d.getDishID());
+            data.add(temp);
+        }
+        return data;
+    }
+    @GetMapping("/getCatererVoucher/{fullName_Email}")
+    @ResponseBody
+    public ArrayList getCatererVoucher(@PathVariable("fullName_Email") String fullName_Email) {
+        ArrayList data = new ArrayList<>();
+        Map<String, Object> temp = new HashMap<>();
+        for (Voucher v : voucherService.findAllVoucherAvailable(findCaterer(fullName_Email))) {
+            temp = new HashMap<>();
+            temp.put("ID", v.getVoucherID());
+            temp.put("type", v.getTypeID().getTypeID());
+            temp.put("value", v.getVoucherValue());
+            temp.put("maxValue", v.getMaxValue());
             data.add(temp);
         }
         return data;

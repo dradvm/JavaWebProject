@@ -2,7 +2,7 @@ package com.JavaWebProject.JavaWebProject.config;
 
 import com.JavaWebProject.JavaWebProject.filters.AdminFilter;
 import com.JavaWebProject.JavaWebProject.filters.CatererFilter;
-import com.JavaWebProject.JavaWebProject.filters.EmailVerificationFilter;
+import com.JavaWebProject.JavaWebProject.filters.CustomerFilter;
 import com.JavaWebProject.JavaWebProject.filters.LoginedFilter;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
@@ -50,21 +50,21 @@ public class Config {
         registrationBean.setOrder(3);
         return registrationBean;
     }
-
-    @Bean
-    public FilterRegistrationBean<EmailVerificationFilter> emailVerificationFilter() {
-        FilterRegistrationBean<EmailVerificationFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new EmailVerificationFilter());
-        registrationBean.addUrlPatterns("/auth/toEmailverification");
-        registrationBean.setOrder(4);
-        return registrationBean;
-    }
     
     @Bean
     public FilterRegistrationBean<CatererFilter> catererVerificationFilter() {
         FilterRegistrationBean<CatererFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new CatererFilter());
         registrationBean.addUrlPatterns("/caterer/*");
+        registrationBean.setOrder(4);
+        return registrationBean;
+    }
+    @Bean
+    public FilterRegistrationBean<CustomerFilter> customerVerificationFilter() {
+        FilterRegistrationBean<CustomerFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new CustomerFilter());
+        registrationBean.addUrlPatterns("/customer/*");
+        registrationBean.addUrlPatterns("/minigame");
         registrationBean.setOrder(5);
         return registrationBean;
     }

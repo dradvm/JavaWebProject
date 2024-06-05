@@ -19,12 +19,9 @@ public class CatererFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) rs;
         HttpSession session = request.getSession();
         AuthController authController = (AuthController) session.getAttribute("scopedTarget.authController");
-        if (authController == null) {
+        if (authController == null || authController.getRole() == null || !authController.getRole().equals("Caterer")) {
             response.sendRedirect("/");
         } 
-        else if (authController.getRole() != "Caterer") {
-            response.sendRedirect("/");
-        }
         else {
             fc.doFilter(request, response);
         }

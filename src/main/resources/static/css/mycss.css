@@ -329,3 +329,28 @@ input::-webkit-inner-spin-button {
 .my-row {
     --bs-gutter-x: 1.5rem
 }
+
+.fade {
+    animation: fade .2s ease forwards;
+}
+
+
+@keyframes fade {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes left-in {
+    0% {
+        transform: translateX(-100%);
+    }
+
+    100% {
+        transform: translateX(0s);
+    }
+}

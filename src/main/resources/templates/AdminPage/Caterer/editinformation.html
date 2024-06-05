@@ -1,14 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/" 
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="/AdminPage/admin">
+      layout:decorate="@{../templates/AdminPage/admin}">
     <head>
     </head>
     <body>
         <div layout:fragment="contentAdminPage">
-            <a href="/admin/toManageinformationCaterer">
-                <button>Back</button>
-            </a>
+            <a href="/admin/toManageinformationCaterer" class="btn btn-primary">Back</a>
             <img th:src="@{${img == null ? '/images/default-avatar.png' : img}}" style="height: 180px; width: 320px">
             <div>
                 Email: <span th:text="${caterer.catererEmail}"></span>
@@ -23,13 +21,9 @@
                 <label for="profile-img">New profile image: </label>
                 <input id="profile-img" name="profileImg" type="file" accept=".jpg, .jpeg, .png"/>
                 <div id="profile-img-error"></div>
-                <!--Password-->
-                <label for="password">New password: </label>
-                <input id="password" name="password" type="password"/>
-                <div id="password-error"></div>
                 <!--Rank-->
                 <label for="rank-id">
-                    Rank ID <span style="color: red;">*</span>
+                    Rank ID<span style="color: red;">*</span>: 
                 </label>
                 <select id="rank-id" name="rankID" onchange="selectRank()">
                     <option th:each="rank : ${rankList}" th:value="${rank.rankID}" th:text="${rank.rankID}" th:selected="${rank.rankID == caterer.rankID.rankID}"></option>
@@ -42,24 +36,24 @@
                 </div>
                 <!--Rank ending date-->
                 <label for="rank-end-date">
-                    Rank ending date <span style="color: red;">*</span>
+                    Rank ending date<span style="color: red;">*</span>: 
                 </label>
                 <input id="rank-end-date" name="rankEndDate" type="date" th:value="${#dates.format(caterer.rankEndDate, 'yyyy-MM-dd')}"/>
                 <!--Name-->
                 <label for="name">
-                    Full name <span style="color: red;">*</span>
+                    Full name<span style="color: red;">*</span>: 
                 </label>
                 <input id="name" name="name" th:value="${caterer.fullName}"/>
                 <div id="name-error"></div>
                 <!--Phone-->
                 <label for="phone">
-                    Phone <span style="color: red;">*</span>
+                    Phone<span style="color: red;">*</span>: 
                 </label>
                 <input id="phone" name="phone" th:value="${caterer.phone}"/>
                 <div id="phone-error"></div>
                 <!--Gender-->
                 <label for="gender">
-                    Gender <span style="color: red;">*</span>
+                    Gender<span style="color: red;">*</span>: 
                 </label>
                 <select id="gender" name="gender">
                     <option value="0" th:selected="${caterer.gender == 0}">Male</option>
@@ -67,7 +61,7 @@
                 </select>
                 <!--Address-->
                 <label for="address">
-                    Address <span style="color: red;">*</span>
+                    Address<span style="color: red;">*</span>: 
                 </label>
                 <input id="address" name="address" th:value="${caterer.address}"/>
                 <div id="address-error"></div>
@@ -82,9 +76,24 @@
                 <!--Birthday-->
                 <label for="birthday">Birthday: </label>
                 <input id="birthday" name="birthday" type="date" th:value="${#dates.format(caterer.birthday, 'yyyy-MM-dd')}"/>
+                <!--Payment information-->
+                <div>
+                    Payment information: <span th:text="${caterer.paymentInformation}"></span>
+                </div>
+                <!--Point-->
+                <label for="point">Point: </label>
+                <input id="point" name="point" type="number" th:value="${caterer.point}">
+                <div id="point-error"></div>
+                <!--Description-->
+                <label for="description">Description: </label>
+                <textarea id="description" name="description" th:text="${caterer.description}"></textarea>
+                <!--Create date-->
+                <div>
+                    Create date: <span th:text="${#dates.format(caterer.createDate, 'yyyy-MM-dd')}"></span>
+                </div>
                 <!--Active-->
                 <label for="active">
-                    Active <span style="color: red;">*</span>
+                    Active<span style="color: red;">*</span>: 
                 </label>
                 <select id="active" name="active">
                     <option value="0" th:selected="${caterer.active == 0}">Suspended</option>
@@ -92,7 +101,7 @@
                 </select>
                 <!--Submit-->
                 <div id="error"></div>
-                <button type="button" onclick="editCatererInformation()">Submit</button>
+                <button type="button" onclick="editCatererInformation()" class="btn btn-success">Submit</button>
             </form>
             <script th:src="@{/js/editinformationcaterer.js}"></script>
         </div>
