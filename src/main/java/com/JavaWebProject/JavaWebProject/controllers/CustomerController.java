@@ -1,8 +1,10 @@
 package com.JavaWebProject.JavaWebProject.controllers;
 
+import com.JavaWebProject.JavaWebProject.models.CateringOrder;
 import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.models.DeliveryAddress;
 import com.JavaWebProject.JavaWebProject.models.District;
+import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DeliveryAddressService;
@@ -15,6 +17,7 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,6 +37,10 @@ public class CustomerController {
     private DistrictService districtService;
     @Autowired
     private DeliveryAddressService deliveryAddressService;
+    @Autowired
+    private CateringOrderService cateringOrderService;
+    @Autowired
+    private AuthController user;
     
     @RequestMapping(value = "/editProfile", method = RequestMethod.POST)
     @ResponseBody
@@ -221,4 +228,13 @@ public class CustomerController {
         }
         return "redirect:/customer/toDeliveryaddress";
     }
+
+
+    @GetMapping("/orders")
+    public String ordersCustomerPage(ModelMap model) {
+        model.addAttribute("selectedNav", "orders" );
+        model.addAttribute("listOrder", cateringOrderService.findAllByCustomer(customerService.findById(user.getUsername())));
+        return "CustomerPage/customerorders";
+    }
+        
 }
