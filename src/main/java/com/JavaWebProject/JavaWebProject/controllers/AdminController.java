@@ -856,9 +856,11 @@ public class AdminController {
         int averageRankMaxDish = rankManageService.averageRankMaxDish();
         int maxRankMaxDish = rankManageService.maxRankMaxDish();
         int minRankMaxDish = rankManageService.minRankMaxDish();
+        
 
+        
         model.addAttribute("averageRankFee", averageRankFee);
-        model.addAttribute("maxRankFee", maxRankFee);
+        model.addAttribute("maxRankFee", maxRankFee);   
         model.addAttribute("minRankFee", minRankFee);
         model.addAttribute("averageRankCPO", averageRankCPO);
         model.addAttribute("maxRankCPO", maxRankCPO);
@@ -930,7 +932,7 @@ public class AdminController {
         int numNegativeFeedbackGapByDay = feedbackService.getNumNegativeFeedbackGapByDay(today);
         int getNewCustomerFeedbackGapByDay = feedbackService.getNewCustomerFeedbackGapByDay(today);
         // Prepare model data for the view
-        model.addAttribute("getNewCustomerFeedbackGapByDay", getNewCustomerFeedbackGapByDay);        
+        model.addAttribute("getNewCustomerFeedbackGapByDay", getNewCustomerFeedbackGapByDay);
         model.addAttribute("numNegativeFeedbackGapByDay", numNegativeFeedbackGapByDay);
         model.addAttribute("numFeedbackByDay", numFeedbackByDay);
         model.addAttribute("numPositiveFeedbackGapByDay", numPositiveFeedbackGapByDay);

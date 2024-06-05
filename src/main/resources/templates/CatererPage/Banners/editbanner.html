@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{CatererPage/caterer}">
+
+    <head>
+        <title>Edit Banner</title>
+    </head>
+
+    <body>
+        <div layout:fragment="contentCatererPage">
+            <div class="container mt-5">
+                <!-- Form to update an existing banner -->
+                <form th:action="@{/caterer/updateBanner}" th:unless="${banner == null}" method="post" enctype="multipart/form-data">
+                    <input type="hidden" name="bannerID" th:value="${banner.bannerID}" />
+
+                    <div class="form-group">
+                        <img th:src="${bannerImageUrl}" width="200" height="200" />
+                        <label for="bannerImage">Banner Image</label>
+                        <input required="true" type="file" class="form-control" id="bannerImage" name="bannerImage" accept="image/*">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="enddate">End Date</label>
+                        <input th:value="${banner.bannerEndDate}" readonly type="text" class="form-control" id="bannerEndDate"
+                               name="bannerEndDate" >
+                        <select required="true" class="form-control" id="enddate" name="enddate">
+                            <option value="15" th:selected="${banner.bannerEndDate == 15}">15 days</option>
+                            <option value="30" th:selected="${banner.bannerEndDate == 30}">1 month</option>
+                            <option value="90" th:selected="${banner.bannerEndDate == 90}">3 months</option>
+                            <option value="180" th:selected="${banner.bannerEndDate == 180}">6 months</option>
+                            <option value="270" th:selected="${banner.bannerEndDate == 270}">9 months</option>
+                            <option value="365" th:selected="${banner.bannerEndDate == 365}">1 year</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="typeID">Banner Position</label>
+                        <select required="true" class="form-control" id="typeID" name="typeID">
+                            <option value="1" th:selected="${banner.typeID == 1}">On top</option>
+                            <option value="2" th:selected="${banner.typeID == 2}">On left</option>
+                            <option value="3" th:selected="${banner.typeID == 3}">On right</option>
+                            <option value="4" th:selected="${banner.typeID == 4}">At Bottom</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a th:href="@{/caterer/myCaterer/banners}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

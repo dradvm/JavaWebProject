@@ -54,6 +54,10 @@ public class CatererController {
     private HttpSession session;
     @Autowired
     private DistrictService districtService;
+    @Autowired
+    private BannerManageService bannerManageService;
+    @Autowired
+    private BannerTypeService bannerTypeService;
     
     @GetMapping(value = "/myCaterer/orders")
     public String orderPage(ModelMap model) {
@@ -294,5 +298,143 @@ public class CatererController {
         result.put("status", "OK");
         result.put("target", "/auth/toProfile");
         return result;
+    }
+    @GetMapping("/myCaterer/banners")
+    public String bannerPage(ModelMap model, HttpSession session) {
+
+        ArrayList<Map<String, Object>> data = new ArrayList<>();
+        Map<String, Object> temp;
+        if (user != null) {
+            for (Banner b : bannerManageService.findAllBannersByCaterer(catererService.findById(user.getUsername()))) {
+                temp = new HashMap<>();
+                temp.put("banner", b);
+                temp.put("bannerID", b.getBannerID());
+                temp.put("bannerImage", cloudStorageService.getBannerImg(b.getBannerImage()));
+                temp.put("bannerStartDate", b.getBannerStartDate());
+                temp.put("bannerEndDate", b.getBannerEndDate());
+                data.add(temp);
+            }
+        }
+
+        model.addAttribute("banners", data);
+        model.addAttribute("selectedNav", "myCaterer");
+        model.addAttribute("selectedPage", "catererbanners");
+        return "CatererPage/Banners/catererbanners";
+    }
+
+    @GetMapping("/myCaterer/banners/addPage")
+    public String addBannerPage(ModelMap model) {
+        model.addAttribute("selectedNav", "myCaterer");
+        model.addAttribute("selectedPage", "catererbanners");
+        return "CatererPage/Banners/addbanner";
+    }
+
+    @PostMapping("/add")
+    public String addBanner(
+            @RequestParam("bannerImage") MultipartFile bannerImage,
+            @RequestParam("enddate") int endDays,
+            @RequestParam("typeID") Integer typeID,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+        Banner banner = new Banner();
+        Date currentDate = new Date(); // Ngày hiện tại
+        banner.setBannerStartDate(currentDate);
+
+        // Tính toán ngày kết thúc
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DAY_OF_YEAR, endDays);
+        Date bannerEndDate = calendar.getTime();
+        banner.setBannerEndDate(bannerEndDate);
+
+        // Lấy đối tượng BannerType từ cơ sở dữ liệu
+        BannerType bannerType = bannerTypeService.findById(typeID);
+        if (bannerType != null) {
+            banner.setTypeID(bannerType);
+        } else {
+            throw new IllegalArgumentException("Invalid Banner Type ID");
+        }
+
+        banner.setCatererEmail(catererService.findById(user.getUsername()));
+        if (bannerImage != null && !bannerImage.isEmpty()) {
+            String fileName = cloudStorageService.generateFileName(bannerImage, user.getUsername());
+            cloudStorageService.uploadFile("banner/" + fileName, bannerImage);
+            banner.setBannerImage(fileName);
+        }
+
+        bannerManageService.save(banner);
+        return "redirect:/caterer/myCaterer/banners";
+    }
+
+    @GetMapping("/myCaterer/banners/editPage")
+    public String editBannerPage(@RequestParam("bannerID") int bannerID, Model model) {
+        Banner banner = bannerManageService.findById(bannerID);
+        if (banner == null) {
+            // Xử lý khi không tìm thấy banner
+        } else {
+            // Truyền thông tin banner vào model để hiển thị trên form chỉnh sửa
+            model.addAttribute("banner", banner);
+        }
+        model.addAttribute("bannerImageUrl", cloudStorageService.getBannerImg(banner.getBannerImage()));
+        model.addAttribute("selectedNav", "myCaterer");
+        model.addAttribute("selectedPage", "catererbanners");
+        return "CatererPage/Banners/editbanner";
+
+    }
+
+    @PostMapping("/updateBanner")
+    public String updateBanner(
+            @RequestParam("bannerID") int bannerID,
+            @RequestParam("bannerImage") MultipartFile bannerImage,
+            @RequestParam("enddate") int endDays,
+            @RequestParam("typeID") Integer typeID,
+            HttpSession session,
+            RedirectAttributes redirectAttributes
+    ) {
+        Banner banner = bannerManageService.findById(bannerID);
+        if (banner == null) {
+            redirectAttributes.addFlashAttribute("message", "Banner not found!");
+            return "redirect:/caterer/myCaterer/banners";
+        }
+        // Thực hiện việc cập nhật thông tin của banner từ các tham số
+        Date currentDate = new Date();
+        banner.setBannerStartDate(currentDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+        calendar.add(Calendar.DAY_OF_YEAR, endDays);
+        Date bannerEndDate = calendar.getTime();
+        banner.setBannerEndDate(bannerEndDate);
+        BannerType bannerType = bannerTypeService.findById(typeID);
+        if (bannerType != null) {
+            banner.setTypeID(bannerType);
+        } else {
+            throw new IllegalArgumentException("Invalid Banner Type ID");
+        }
+        if (bannerImage != null && !bannerImage.isEmpty()) {
+            String fileName = cloudStorageService.generateFileName(bannerImage, user.getUsername());
+            cloudStorageService.uploadFile("banner/" + fileName, bannerImage);
+            banner.setBannerImage(fileName);
+        }
+        bannerManageService.save(banner);
+        return "redirect:/caterer/myCaterer/banners";
+    }
+
+    @GetMapping("/deleteBanner")
+    public String deleteBanner(@RequestParam("ID") int ID, RedirectAttributes redirectAttributes) {
+        Banner banner = bannerManageService.findById(ID);
+
+        if (banner == null) {
+            redirectAttributes.addFlashAttribute("message", "Banner not found!");
+            return "redirect:/caterer/myCaterer/banners";
+        }
+
+        if (bannerManageService.isBannerActive(ID)) {
+            redirectAttributes.addFlashAttribute("message", "Active banners cannot be deleted!");
+            return "redirect:/caterer/myCaterer/banners";
+        }
+        cloudStorageService.deleteFile("banner/" + banner.getBannerImage());
+        bannerManageService.delete(banner);
+        return "redirect:/caterer/myCaterer/banners";
     }
 }
