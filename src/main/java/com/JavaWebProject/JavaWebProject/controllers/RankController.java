@@ -94,7 +94,7 @@ public class RankController {
                 int catererPoint = caterer.getPoint() != null ? (int) caterer.getPoint() : 0;
                 double discount = catererPoint > rank.getRankFee() ? rank.getRankFee() : catererPoint;
                 long fee = (long) ((rank.getRankFee() - discount) * 25000);
-                if (caterer.getRankID().getRankID() == id) {
+                if (caterer.getRankID().getRankID() == id && caterer.getRankEndDate().before(new Date())) {
                     Calendar calendar = Calendar.getInstance();
                     calendar.setTime(caterer.getRankEndDate());
                     calendar.add(Calendar.DAY_OF_MONTH, 30);
