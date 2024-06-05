@@ -1,5 +1,7 @@
 package com.JavaWebProject.JavaWebProject.services;
 
+import com.JavaWebProject.JavaWebProject.models.CateringOrder;
+import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.repositories.CateringOrderRepository;
 import java.time.LocalDate;
 import java.time.Month;
@@ -114,5 +116,9 @@ public class CateringOrderService {
             datasets.add(set);
         }
         return datasets;
+    }
+    
+    public List<CateringOrder> findAllByCustomer(Customer customer) {
+        return cateringOrderRepository.findAllByCustomerEmail(customer);
     }
 }
