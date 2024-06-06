@@ -27,4 +27,7 @@ public interface CateringOrderRepository extends CrudRepository<CateringOrder, I
     int countByCreateDateYear(int year);
     
     List<CateringOrder> findAllByCustomerEmail(Customer customer);
+    
+    @Query("select max(u.orderID) from CateringOrder u")
+    Optional<Integer> maxID();
 }

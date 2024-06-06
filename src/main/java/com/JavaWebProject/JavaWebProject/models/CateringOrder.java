@@ -43,6 +43,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "CateringOrder.findByNote", query = "SELECT c FROM CateringOrder c WHERE c.note = :note")})
 public class CateringOrder implements Serializable {
 
+    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PointDiscount")
     private Integer pointDiscount;
 
