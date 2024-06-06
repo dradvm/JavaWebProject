@@ -104,6 +104,7 @@ public class CatererController {
         model.addAttribute("totalOrder", cateringOrderService.countTotalOrderFinished(catererService.findById(user.getUsername())));
         model.addAttribute("totalRevenue", cateringOrderService.countTotalRevenue(catererService.findById(user.getUsername())));
         model.addAttribute("totalCancelled", cateringOrderService.countTotalOrderCancelled(catererService.findById(user.getUsername())));
+        model.addAttribute("listOrder", cateringOrderService.findAllByCaterer(catererService.findById(user.getUsername())));
         return "CatererPage/OrderPage/catererorders";
     }
     

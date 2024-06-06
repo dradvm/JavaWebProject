@@ -195,31 +195,33 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         <tr th:each="d : ${listOrder}">
                             <td th:text="${d.customerEmail.customerEmail}"></td>
                             <td th:text="${d.createDate}"></td>
-                            <td th:text="${d.orderDate}"></td>
+                            <td th:text="${d.orderTime}"></td>
                             <td th:text="${d.orderState}"></td>
-                            <td><button class="btn btn-primary">Dishes</button></td>
+                            <td><button class="btn btn-primary" th:onclick="openModal([[${d.orderID}]])">Dishes</button>
+                            </td>
                             <td th:text="${d.value}"></td>
                             <td th:text="${d.note}"></td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-evenly">
-                                    <form th:if="${d.orderState == 'Accepted' }" th:action="@{/orders/changeState}">
+                                    <form th:if="${d.orderState == 'Waiting' }" th:action="@{/orders/changeState}"
+                                        method="post">
                                         <input id="id" name="id" th:value="${d.orderID}" type="hidden" />
-                                        <input id="state" name="state" th:value="'Waiting confirm'" type="hidden" />
-                                        <button class="btn btn-success">Pay</button>
+                                        <input id="state" name="state" th:value="'Accepted'" type="hidden" />
+                                        <button class="btn btn-success">Accept</button>
                                     </form>
-
-                                    <form th:if="${d.orderState == 'Paid' }" th:action="@{/orders/changeState}"
-                                        onsubmit="return confirmDelete();">
+                                    <form th:if="${d.orderState == 'Waiting confirm' }"
+                                        th:action="@{/orders/changeState}" method="post">
                                         <input id="id" name="id" th:value="${d.orderID}" type="hidden" />
                                         <input id="state" name="state" th:value="'Paid'" type="hidden" />
                                         <button class="btn btn-success">Confirm</button>
                                     </form>
                                     <form
                                         th:if="${d.orderState != 'Paid' && d.orderState != 'Finished' && d.orderState != 'Cancelled' }"
-                                        th:action="@{/orders/changeState}" onsubmit="return confirmDelete();">
+                                        th:action="@{/orders/changeState}" onsubmit="return confirmDelete();"
+                                        method="post">
                                         <input id="id" name="id" th:value="${d.orderID}" type="hidden" />
-                                        <input id="state" name="state" th:value="'Canceled'" type="hidden" />
-                                        <button class="btn btn-danger">Cancel</button>
+                                        <input id="state" name="state" th:value="'Cancelled'" type="hidden" />
+                                        <button class="btn btn-danger">Reject</button>
                                     </form>
                                 </div>
                             </td>
@@ -228,6 +230,96 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 </table>
             </div>
         </div>
+        <script>
+            $(document).ready(function () {
+                var table = $('#orderList').DataTable({
+                    pageLength: 10,
+                    lengthMenu: [5, 10],
+                    "scrollX": true, // Thêm thanh cuộn ngang
+                    "autoWidth": false,
+                    columns: [
+                        { width: "10%" },
+                        { width: "10%" },
+                        { width: "15%" },
+                        { width: "10%" },
+                        { width: "10%" },
+                        { width: "10%" },
+                        { width: "20%" },
+                        { width: "15%" },
+                    ]
+                });
+            });
+        </script>
+        <div id="Modal" class="position-fixed top-50 start-50 translate-middle">
+            <div class="rounded overflow-hidden border bg-white position-relative" style="width: 70vw; height: 80vh;">
+                <div class="position-absolute" style="top: 3%; right: 3%">
+                    <button type="button" onclick="closeModal()"><i
+                            class="fa-solid fa-xmark fs-3 text-white"></i></button>
+                </div>
+                <div class="d-flex align-items-center justify-content-around bg-main fw-medium fs-5 text-white"
+                    style="height: 10%;">
+                    Order Details</div>
+                <div class="d-flex" style="height: 90%;">
+                    <div class="h-100 overflow-auto p-3" style="width: 70%;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Image</th>
+                                    <th scope="col">First</th>
+                                    <th scope="col">Last</th>
+                                    <th scope="col">Handle</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="w-25"><img src="../../../static/images/empty-cart.png" alt=""
+                                            class="w-100"></td>
+                                    <td class="w-25">Mark</td>
+                                    <td class="w-25">Otto</td>
+                                    <td class="w-25">@mdo</td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25"><img src="../../../static/images/empty-cart.png" alt=""
+                                            class="w-100"></td>
+                                    <td class="w-25">Mark</td>
+                                    <td class="w-25">Otto</td>
+                                    <td class="w-25">@mdo</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="h-100 v-stack bg-sub p-3" style="width: 30%;">
+                        <div class="d-flex">
+                            <div class="fw-medium">
+                                Address Delivery:
+                            </div>
+                            <div id="address"></div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="fw-medium">
+                                Point discount:
+                            </div>
+                            <div id="point"></div>
+                        </div>
+                        <div class="d-flex">
+                            <div class="fw-medium">
+                                Voucher discount:
+                            </div>
+                            <div id="voucher"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            function closeModal() {
+                document.querySelector("#Modal").classList.add("d-none")
+            }
+            function openModal(id) {
+                document.querySelector("#Modal").classList.remove("d-none")
+
+            }
+        </script>
     </div>
 </body>
 

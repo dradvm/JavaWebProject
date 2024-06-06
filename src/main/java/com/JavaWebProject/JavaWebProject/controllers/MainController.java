@@ -109,6 +109,9 @@ public class MainController {
     
     private Caterer findCaterer(String fullName_Email) {
         System.out.println(fullName_Email);
+        if (fullName_Email.equals(null)) {
+            return new Caterer();
+        }
         String[] data = fullName_Email.split("_");
         data[0] = data[0].replace("-", " ");
         return catererService.findByCatererEmailAndFullName(data[0], data[1]);
@@ -124,17 +127,24 @@ public class MainController {
         
         caterer = findCaterer(fullName_Email);
         catererDish = dishService.findAllDishOfCaterer(caterer, 1);
-        orderList = new HashMap();
+        orderList = new HashMap();  
         for (Dish dish : catererDish) {
             dish.setDishImage(cloudStorageService.getDishImg(dish.getDishImage()));
             orderList.put(dish, 0);
         }
         model.addAttribute("dishList", catererDish);
-        model.addAttribute("voucherList", voucherService.findAllVoucherAvailable(caterer));
         model.addAttribute("districtList", districtService.findAll());
         AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
-        Customer customer = customerService.findById(auth.getUsername());
-        List<DeliveryAddress> addressList = deliveryAddressService.findByCustomerEmail(customer);
+        List<DeliveryAddress> addressList = new ArrayList<>();
+        if (auth != null && auth.getUsername() != null) {
+            model.addAttribute("voucherList", voucherService.findAllVoucherAvailable(caterer, customerService.findById(auth.getUsername())));
+
+            addressList = deliveryAddressService.findByCustomerEmail(customerService.findById(auth.getUsername()));
+        }
+        else {
+            model.addAttribute("voucherList", new ArrayList<>());
+        }
+        
         model.addAttribute("addressList", addressList.isEmpty() ? null : addressList);
         return "CustomerPage/customerdetailscaterer";
     }
@@ -168,7 +178,12 @@ public class MainController {
     public ArrayList getCatererVoucher(@PathVariable("fullName_Email") String fullName_Email) {
         ArrayList data = new ArrayList<>();
         Map<String, Object> temp = new HashMap<>();
-        for (Voucher v : voucherService.findAllVoucherAvailable(findCaterer(fullName_Email))) {
+        AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
+        Customer customer = null;
+        if (auth != null && auth.getUsername() != null) {
+            customer = customerService.findById(auth.getUsername());
+        }
+        for (Voucher v : voucherService.findAllVoucherAvailable(findCaterer(fullName_Email), customer)) {
             temp = new HashMap<>();
             temp.put("ID", v.getVoucherID());
             temp.put("type", v.getTypeID().getTypeID());
@@ -215,31 +230,34 @@ public class MainController {
     @ResponseBody
     public double calcTotal(@RequestParam("voucherID") int voucherID, @RequestParam("usePoint") int usePoint) {
         double result = 0;
-        for (Dish dish : orderList.keySet()) {
-            if (orderList.get(dish) > 0) {
-                result += dish.getDishPrice() * orderList.get(dish);
+        if (orderList != null) {
+            for (Dish dish : orderList.keySet()) {
+                if (orderList.get(dish) > 0) {
+                    result += dish.getDishPrice() * orderList.get(dish);
+                }
+            }
+            Voucher voucher = null;
+            if (voucherID != 0) {
+                voucher = voucherService.findById(voucherID);
+            }
+            if (voucher != null) {
+                if (voucher.getTypeID().getTypeID() == 1) {
+                    result -= voucher.getVoucherValue();
+                }
+                else if (voucher.getTypeID().getTypeID() == 2) {
+                    double discount = result * voucher.getVoucherValue() / 100;
+                    discount = discount > voucher.getMaxValue() ? voucher.getMaxValue() : discount;
+                    result -= discount;
+                }
+                result = result > 0 ? result : 0;
+            }
+            if (usePoint == 1) {
+                AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
+                Customer customer = customerService.findById(auth.getUsername());
+                result = (result - customer.getPoint()) > 0 ? (result - customer.getPoint()) : 0;
             }
         }
-        Voucher voucher = null;
-        if (voucherID != 0) {
-            voucher = voucherService.findById(voucherID);
-        }
-        if (voucher != null) {
-            if (voucher.getTypeID().getTypeID() == 1) {
-                result -= voucher.getVoucherValue();
-            }
-            else if (voucher.getTypeID().getTypeID() == 2) {
-                double discount = result * voucher.getVoucherValue() / 100;
-                discount = discount > voucher.getMaxValue() ? voucher.getMaxValue() : discount;
-                result -= discount;
-            }
-            result = result > 0 ? result : 0;
-        }
-        if (usePoint == 1) {
-            AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
-            Customer customer = customerService.findById(auth.getUsername());
-            result = (result - customer.getPoint()) > 0 ? (result - customer.getPoint()) : 0;
-        }
+        
         return result;
     }
     

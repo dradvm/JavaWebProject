@@ -5,17 +5,26 @@
 package com.JavaWebProject.JavaWebProject.controllers;
 
 import com.JavaWebProject.JavaWebProject.models.Caterer;
+import com.JavaWebProject.JavaWebProject.models.CateringOrder;
+import com.JavaWebProject.JavaWebProject.models.Dish;
+import com.JavaWebProject.JavaWebProject.models.OrderDetails;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
+import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
+import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
+import com.JavaWebProject.JavaWebProject.services.DishService;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -28,9 +37,18 @@ public class OrderController {
     
     @Autowired
     CatererService catererService;
-    
-    
-    
+    @Autowired
+    CateringOrderService cateringOrderService;
+    @Autowired
+    AuthController user;
+    @Autowired
+    CustomerController customerController;
+    @Autowired
+    CatererController catererController;
+    @Autowired
+    DishService dishService;
+    @Autowired
+    CloudStorageService cloudStorageService;
     
     private Caterer findCaterer(String fullName_Email) {
         System.out.println(fullName_Email);
@@ -39,16 +57,40 @@ public class OrderController {
         return catererService.findByCatererEmailAndFullName(data[0], data[1]);
     }
     
-    @PostMapping("/makeNewOrder")
-    public ResponseEntity<Map<String, Object>> makeNewOrder(@RequestBody Map<String, Object> data) {
-        List<Map<String, Object>> listDish = (List<Map<String, Object>>) data.get("data");
-        String fullNameEmail = String.valueOf(data.get("fullNameEmail"));
-        for (Map<String, Object> item : listDish) {
-            System.out.println(item.get("id"));
+    @PostMapping("/changeState")
+    public String makeNewOrder(@RequestParam("id") Integer orderId, @RequestParam("state") String state, ModelMap model) {
+        cateringOrderService.changeStateOrder(orderId, state);
+        if (user.getRole().equals("Customer")) {
+            return customerController.ordersCustomerPage(model);
         }
-        System.out.println(fullNameEmail);
-        Map<String, Object> response = new HashMap<>();
-        response.put("message", "success");
-        return ResponseEntity.ok(response);
+        else if (user.getRole().equals("Caterer")) {
+            return catererController.orderPage(model);
+        }
+        else {
+            model.addAttribute("selectedNav", "home");
+            return "index";
+        }
+    }
+    @GetMapping("/getOrderDetails")
+    @ResponseBody
+    public Map<String, Object> getOrderDetails(@RequestParam("id") int id) {
+        CateringOrder co = cateringOrderService.findByID(id);
+        Map<String, Object> data = new HashMap<>();
+        data.put("address", co.getOrderAddress() + ", " + co.getDistrictID().getDistrictName() + ", " + co.getDistrictID().getCityID().getCityName());
+        data.put("point", co.getPointDiscount());
+        data.put("voucher", co.getVoucherDiscount());
+        Map<String, Object> temp = new HashMap<>();
+        ArrayList orderDetails = new ArrayList<>();
+        for (OrderDetails od :  co.getOrderDetailsCollection()) {
+            temp = new HashMap<>();
+            temp.put("dishName", od.getDish().getDishName());
+            temp.put("dishImage", cloudStorageService.getDishImg(od.getDish().getDishImage()));
+            temp.put("dishPrice", od.getPrice());
+            temp.put("quantity", od.getQuantity());
+            orderDetails.add(temp);
+        }
+        data.put("orderDetails", orderDetails );
+        return data;
     }
 }
+ 

@@ -3,6 +3,7 @@ package com.JavaWebProject.JavaWebProject.repositories;
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.CateringOrder;
 import com.JavaWebProject.JavaWebProject.models.Customer;
+import com.JavaWebProject.JavaWebProject.models.Voucher;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +28,8 @@ public interface CateringOrderRepository extends CrudRepository<CateringOrder, I
     @Query(value = "select count(*) from CateringOrder where year(CreateDate) = ?1", nativeQuery = true)
     int countByCreateDateYear(int year);
     
+    List<CateringOrder> findAllByCatererEmail(Caterer CatererEmail);
+    
     List<CateringOrder> findAllByCustomerEmail(Customer customer);
     
     List<CateringOrder> findAllByCatererEmailAndOrderState(Caterer caterer, String orderState);
@@ -42,4 +45,8 @@ public interface CateringOrderRepository extends CrudRepository<CateringOrder, I
     
     @Query("select max(u.orderID) from CateringOrder u")
     Optional<Integer> maxID();
+    
+    CateringOrder findByOrderID(Integer orderID);
+    
+    List<CateringOrder> findAllByVoucherIDAndCustomerEmail(Voucher voucherID, Customer customerEmail);
 }

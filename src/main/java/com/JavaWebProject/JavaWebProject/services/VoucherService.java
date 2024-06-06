@@ -1,7 +1,9 @@
 package com.JavaWebProject.JavaWebProject.services;
 
 import com.JavaWebProject.JavaWebProject.models.Caterer;
+import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.models.Voucher;
+import com.JavaWebProject.JavaWebProject.repositories.CateringOrderRepository;
 import com.JavaWebProject.JavaWebProject.repositories.VoucherRepository;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 public class VoucherService {
     @Autowired
     private VoucherRepository voucherRepository;
+    @Autowired
+    private CateringOrderRepository cateringOrderRepository;
     
     public int countActiveVoucherByDay(LocalDate date) {
         return voucherRepository.countActiveVoucherByDay(date);
@@ -22,15 +26,20 @@ public class VoucherService {
     public int getActiveVoucherGapByDay(LocalDate date) {
         return countActiveVoucherByDay(date) - countActiveVoucherByDay(date.minusDays(1));
     }
-    public ArrayList<Voucher> findAllVoucherAvailable(Caterer caterer) {
+    public ArrayList<Voucher> findAllVoucherAvailable(Caterer caterer, Customer customer) {
         ArrayList<Voucher> data = new ArrayList<Voucher>();
         LocalDate today = LocalDate.now();
+        if (customer == null) {
+            return data;
+        }
         for (Voucher v : voucherRepository.findAllByCatererEmail(caterer)) {
             if (today.isAfter(v.getEndDate()) || today.isBefore(v.getStartDate())) {
                 
             }
             else {
-                data.add(v);
+                if (cateringOrderRepository.findAllByVoucherIDAndCustomerEmail(v, customer).size() == 0) { 
+                    data.add(v);
+                }
             }
             
         }

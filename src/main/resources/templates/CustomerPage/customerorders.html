@@ -60,30 +60,33 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         <tr th:each="d : ${listOrder}">
                             <td th:text="${d.catererEmail.fullName}"></td>
                             <td th:text="${d.createDate}"></td>
-                            <td th:text="${d.orderDate}"></td>
+                            <td th:text="${d.orderTime}"></td>
                             <td th:text="${d.orderState}"></td>
                             <td><button class="btn btn-primary">Dishes</button></td>
                             <td th:text="${d.value}"></td>
                             <td th:text="${d.note}"></td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-evenly">
-                                    <form th:if="${d.orderState == 'Accepted' }" th:action="@{/orders/changeState}">
+                                    <form th:if="${d.orderState == 'Accepted' }" th:action="@{/orders/changeState}"
+                                        th:onsubmit="confirmSubmit(event, [[${d.catererEmail.paymentInformation}]])"
+                                        method="post">
                                         <input id="id" name="id" th:value="${d.orderID}" type="hidden" />
                                         <input id="state" name="state" th:value="'Waiting confirm'" type="hidden" />
                                         <button class="btn btn-success">Pay</button>
                                     </form>
 
                                     <form th:if="${d.orderState == 'Paid' }" th:action="@{/orders/changeState}"
-                                        onsubmit="return confirmDelete();">
+                                        method="post">
                                         <input id="id" name="id" th:value="${d.orderID}" type="hidden" />
-                                        <input id="state" name="state" th:value="'Paid'" type="hidden" />
+                                        <input id="state" name="state" th:value="'Finished'" type="hidden" />
                                         <button class="btn btn-success">Confirm</button>
                                     </form>
                                     <form
                                         th:if="${d.orderState != 'Paid' && d.orderState != 'Finished' && d.orderState != 'Cancelled' }"
-                                        th:action="@{/orders/changeState}" onsubmit="return confirmDelete();">
+                                        method="post" th:action="@{/orders/changeState}"
+                                        onsubmit="return confirmDelete();">
                                         <input id="id" name="id" th:value="${d.orderID}" type="hidden" />
-                                        <input id="state" name="state" th:value="'Canceled'" type="hidden" />
+                                        <input id="state" name="state" th:value="'Cancelled'" type="hidden" />
                                         <button class="btn btn-danger">Cancel</button>
                                     </form>
                                 </div>
@@ -111,6 +114,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         ]
                     });
                 });
+                function confirmSubmit(event, info) {
+                    event.preventDefault(); // Ngăn chặn form gửi ngay lập tức
+
+                    // Hiển thị popup xác nhận
+                    if (confirm(`Payment Information: ${info} (Press OK if you have paid)`)) {
+                        // Nếu người dùng nhấn OK, submit form
+                        event.target.submit();
+                    } else {
+                        // Nếu người dùng nhấn Cancel, không làm gì
+                        return false;
+                    }
+                }
                 function confirmDelete() {
                     return confirm('Are you sure you want to cancel this order?');
                 }

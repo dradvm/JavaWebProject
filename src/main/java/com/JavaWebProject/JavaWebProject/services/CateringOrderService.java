@@ -123,6 +123,12 @@ public class CateringOrderService {
     public List<CateringOrder> findAllByCustomer(Customer customer) {
         return cateringOrderRepository.findAllByCustomerEmail(customer);
     }
+    public List<CateringOrder> findAllByCaterer(Caterer caterer) {
+        return cateringOrderRepository.findAllByCatererEmail(caterer);
+    }
+    public CateringOrder findByID(Integer id) {
+        return cateringOrderRepository.findByOrderID(id);
+    }
     
     public int countTotalOrderFinished(Caterer caterer) {
         return cateringOrderRepository.findAllByCatererEmailAndOrderState(caterer, "Finished").size();
@@ -190,6 +196,12 @@ public class CateringOrderService {
     }
     public void save(CateringOrder order) {
         cateringOrderRepository.save(order);
+    }
+    
+    public void changeStateOrder(Integer id, String state) {
+        CateringOrder cateringOrder = cateringOrderRepository.findByOrderID(id);
+        cateringOrder.setOrderState(state);
+        save(cateringOrder);
     }
     
     public int maxID() {
