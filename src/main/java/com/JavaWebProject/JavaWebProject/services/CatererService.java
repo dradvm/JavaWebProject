@@ -95,4 +95,4 @@ public class CatererService {
     public boolean existsByCatererEmail (String catererEmail) {
         return catererRepository.existsByCatererEmail (catererEmail);
     }
-}
+    }

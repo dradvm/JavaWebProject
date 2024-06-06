@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Rate Order</title>
+        <link rel="stylesheet" href="/path/to/bootstrap.css">
+        <link rel="stylesheet" th:href="@{/css/style.css}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <style>
+            .star-rating {
+                direction: rtl;
+                display: inline-block;
+            }
+
+            .star-rating input[type="radio"] {
+                display: none;
+            }
+
+            .star-rating label {
+                color: #ccc;
+                font-size: 30px;
+                padding: 0;
+                cursor: pointer;
+            }
+
+            .star-rating input[type="radio"]:checked ~ label {
+                color: #f2b600;
+            }
+
+            .star-rating label:hover,
+            .star-rating label:hover ~ label {
+                color: #f2b600;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <h2>Rate Order</h2>
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                <span th:text="${errorMessage}"></span>
+            </div>
+            <form th:action="@{/customer/rateOrder}" method="post">
+                <input type="hidden" name="orderId" th:value="${order.orderID}"/>
+                <div class="star-rating">
+                    <input id="star5" type="radio" name="rating" value="5" />
+                    <label for="star5" title="5 stars">
+                        <i class="fas fa-star"></i>
+                    </label>
+                    <input id="star4" type="radio" name="rating" value="4" />
+                    <label for="star4" title="4 stars">
+                        <i class="fas fa-star"></i>
+                    </label>
+                    <input id="star3" type="radio" name="rating" value="3" />
+                    <label for="star3" title="3 stars">
+                        <i class="fas fa-star"></i>
+                    </label>
+                    <input id="star2" type="radio" name="rating" value="2" />
+                    <label for="star2" title="2 stars">
+                        <i class="fas fa-star"></i>
+                    </label>
+                    <input id="star1" type="radio" name="rating" value="1" />
+                    <label for="star1" title="1 star">
+                        <i class="fas fa-star"></i>
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <script src="/path/to/bootstrap.js"></script>
+    </body>
+</html>

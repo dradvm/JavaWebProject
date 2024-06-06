@@ -1,15 +1,22 @@
 package com.JavaWebProject.JavaWebProject.controllers;
 
+import com.JavaWebProject.JavaWebProject.models.Caterer;
+import com.JavaWebProject.JavaWebProject.models.CatererRating;
 import com.JavaWebProject.JavaWebProject.models.CateringOrder;
 import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.models.DeliveryAddress;
 import com.JavaWebProject.JavaWebProject.models.District;
+import com.JavaWebProject.JavaWebProject.models.OrderDetails;
+import com.JavaWebProject.JavaWebProject.services.CatererRatingService;
+import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DeliveryAddressService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
+import com.JavaWebProject.JavaWebProject.services.OrderDetailsService;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,19 +25,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping(value = "/customer")
 public class CustomerController {
+
     @Autowired
     private HttpSession session;
     @Autowired
     private CustomerService customerService;
+    @Autowired
+    private CatererRatingService catererRatingService;
+    @Autowired
+    private OrderDetailsService orderDetailsService;
     @Autowired
     private CloudStorageService cloudStorageService;
     @Autowired
@@ -41,7 +55,7 @@ public class CustomerController {
     private CateringOrderService cateringOrderService;
     @Autowired
     private AuthController user;
-    
+
     @RequestMapping(value = "/editProfile", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> editProfile(
@@ -137,7 +151,7 @@ public class CustomerController {
         result.put("target", "/auth/toProfile");
         return result;
     }
-    
+
     @RequestMapping(value = "/toDeliveryaddress", method = RequestMethod.GET)
     public String toDeliveryaddress(ModelMap model) {
         AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
@@ -145,7 +159,7 @@ public class CustomerController {
         model.addAttribute("deliveryAddressList", deliveryAddressService.findByCustomerEmail(customer));
         return "CustomerPage/deliveryaddress";
     }
-    
+
     @RequestMapping(value = "/toEditdeliveryaddress", method = RequestMethod.POST)
     public String toEditdeliveryaddress(ModelMap model, @RequestParam("id") int id) {
         AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
@@ -157,7 +171,7 @@ public class CustomerController {
         model.addAttribute("districtList", districtService.findAll());
         return "CustomerPage/editdeliveryaddress";
     }
-    
+
     @RequestMapping(value = "/editDeliveryaddress", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> editDeliveryaddress(
@@ -187,13 +201,13 @@ public class CustomerController {
         result.put("target", "/customer/toDeliveryaddress");
         return result;
     }
-    
+
     @RequestMapping(value = "/toAdddeliveryaddress", method = RequestMethod.GET)
     public String toAdddeliveryaddress(ModelMap model) {
         model.addAttribute("districtList", districtService.findAll());
         return "CustomerPage/adddeliveryaddress";
     }
-    
+
     @RequestMapping(value = "/addDeliveryaddress", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> addDeliveryaddress(@RequestParam("address") String address, @RequestParam("districtID") int districtID) {
@@ -218,7 +232,7 @@ public class CustomerController {
         result.put("target", "/customer/toDeliveryaddress");
         return result;
     }
-    
+
     @RequestMapping(value = "/deleteDeliveryaddress", method = RequestMethod.POST)
     public String deleteDeliveryaddress(@RequestParam("id") int id) {
         AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
@@ -236,5 +250,30 @@ public class CustomerController {
         model.addAttribute("listOrder", cateringOrderService.findAllByCustomer(customerService.findById(user.getUsername())));
         return "CustomerPage/customerorders";
     }
-        
+
+    @GetMapping("/orderHistory")
+    public String viewOrderHistory(ModelMap model, HttpSession session) {
+        ArrayList<Map<String, Object>> orderData = new ArrayList<>();
+        if (user != null) {
+            for (CateringOrder c : cateringOrderService.findAllByCustomer(customerService.findById(user.getUsername()))) {
+                // Tìm tất cả các OrderDetails cho mỗi CateringOrder
+                for (OrderDetails od : orderDetailsService.findAllByOrderID(c.getOrderID())) {
+                    Map<String, Object> orderDetailsMap = new HashMap<>();
+                    orderDetailsMap.put("orderID", c.getOrderID());
+                    orderDetailsMap.put("orderTime", c.getOrderTime());
+                    orderDetailsMap.put("createDate", c.getCreateDate());
+                    orderDetailsMap.put("orderState", c.getOrderState());
+                    orderDetailsMap.put("dishName", od.getDish().getDishName());
+                    orderDetailsMap.put("price", od.getPrice());
+                    orderDetailsMap.put("quantity", od.getQuantity());
+                    orderDetailsMap.put("totalPrice", od.getPrice() * od.getQuantity());
+                    orderData.add(orderDetailsMap);
+                }
+            }
+        }
+        model.addAttribute("orders", orderData);
+        model.addAttribute("selectedNav", "rating");
+        model.addAttribute("selectedPage", "orderHistory");
+        return "CustomerPage/viewhistoryorder";
+    }
 }

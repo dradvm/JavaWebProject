@@ -29,5 +29,5 @@ public interface CatererRepository extends CrudRepository<Caterer, String> {
 
     public boolean existsByCatererEmail(String catererEmail);
 
-    
+
 }
