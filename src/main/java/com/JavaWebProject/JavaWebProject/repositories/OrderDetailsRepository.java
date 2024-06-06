@@ -4,6 +4,7 @@
  */
 package com.JavaWebProject.JavaWebProject.repositories;
 
+import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.models.OrderDetails;
 import com.JavaWebProject.JavaWebProject.models.OrderDetailsPK;
 import java.util.List;
@@ -17,4 +18,6 @@ public interface OrderDetailsRepository extends CrudRepository<OrderDetails, Ord
     int countByOrderDetailsPKDishID(int dishID);
 
     List<OrderDetails> findByOrderDetailsPKDishID(int dishID);
+    
+    Iterable<OrderDetails> findAllByOrderDetailsPKOrderID(Integer orderID);
 }

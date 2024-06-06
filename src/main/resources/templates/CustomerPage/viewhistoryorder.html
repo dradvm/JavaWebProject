@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Order History</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <style>
+            .star-rating {
+                direction: rtl;
+                display: inline-block;
+            }
+
+            .star-rating input[type="radio"] {
+                display: none;
+            }
+
+            .star-rating label {
+                color: #ccc;
+                font-size: 30px;
+                padding: 0;
+                cursor: pointer;
+            }
+
+            .star-rating input[type="radio"]:checked ~ label {
+                color: #f2b600;
+            }
+
+            .star-rating label:hover,
+            .star-rating label:hover ~ label {
+                color: #f2b600;
+            }
+            .star-rating {
+                margin-bottom: 10px;
+            }
+
+            .form-group {
+                margin-bottom: 10px;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <h2>Order History</h2>
+            <form th:action="@{/customer/rateOrder}" method="post">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Order Time</th>
+                            <th>Create Date</th>
+                            <th>Order State</th>
+                            <th>Dish Name</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total Price</th>
+                            <th>Comment</th>
+                            <th>Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td id="orderID" name="orderID" th:text="${order.orderID}"></td>
+                            <td th:text="${order.orderTime}"></td>
+                            <td th:text="${order.createDate}"></td>
+                            <td th:text="${order.orderState}"></td>
+                            <td th:text="${order.dishName}"></td>
+                            <td th:text="${order.price}"></td>
+                            <td th:text="${order.quantity}"></td>
+                            <td th:text="${order.totalPrice}"></td>
+                            <td>
+                                <div class="form-group">
+                                    <label for="comments">Comments:</label>
+                                    <textarea id="comment" name="comment" class="form-control"></textarea>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="star-rating">
+                                    <input id="star5" type="radio" name="rate" value="5" />
+                                    <label for="star5" title="5 stars">
+                                        <i class="fas fa-star"></i>
+                                    </label>
+                                    <input id="star4" type="radio" name="rate" value="4" />
+                                    <label for="star4" title="4 stars">
+                                        <i class="fas fa-star"></i>
+                                    </label>
+                                    <input id="star3" type="radio" name="rate" value="3" />
+                                    <label for="star3" title="3 stars">
+                                        <i class="fas fa-star"></i>
+                                    </label>
+                                    <input id="star2" type="radio" name="rate" value="2" />
+                                    <label for="star2" title="2 stars">
+                                        <i class="fas fa-star"></i>
+                                    </label>
+                                    <input id="star1" type="radio" name="rate" value="1" />
+                                    <label for="star1" title="1 star">
+                                        <i class="fas fa-star"></i>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+    </body>
+</html>
