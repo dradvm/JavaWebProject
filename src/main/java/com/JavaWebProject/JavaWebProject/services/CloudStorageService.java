@@ -45,7 +45,7 @@ public class CloudStorageService {
         Bucket bucket = StorageClient.getInstance().bucket();
         Blob blob = bucket.get("dish/" + img);
         if (blob != null) {
-            return blob.signUrl(5, TimeUnit.MINUTES).toString();
+            return blob.signUrl(1, TimeUnit.DAYS).toString();
         }
         return null;
     }

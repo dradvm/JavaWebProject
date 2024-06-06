@@ -46,6 +46,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Caterer.findByCreateDate", query = "SELECT c FROM Caterer c WHERE c.createDate = :createDate")})
 public class Caterer implements Serializable {
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
+    private Collection<Dish> dishCollection;
+
     @Column(name = "Point")
     private Integer point;
 
@@ -334,6 +337,15 @@ public class Caterer implements Serializable {
 
     public void setPoint(Integer point) {
         this.point = point;
+    }
+
+    @XmlTransient
+    public Collection<Dish> getDishCollection() {
+        return dishCollection;
+    }
+
+    public void setDishCollection(Collection<Dish> dishCollection) {
+        this.dishCollection = dishCollection;
     }
     
 }

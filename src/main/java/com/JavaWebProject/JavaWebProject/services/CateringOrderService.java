@@ -188,4 +188,12 @@ public class CateringOrderService {
         }
         return value;
     }
+    public void save(CateringOrder order) {
+        cateringOrderRepository.save(order);
+    }
+    
+    public int maxID() {
+        Optional<Integer> result = cateringOrderRepository.maxID();
+        return result.isPresent() ? result.get() : 1;
+    }
 }

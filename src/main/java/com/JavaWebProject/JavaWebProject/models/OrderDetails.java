@@ -32,6 +32,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "OrderDetails.findByPrice", query = "SELECT o FROM OrderDetails o WHERE o.price = :price")})
 public class OrderDetails implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Price")
+    private double price;
+
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected OrderDetailsPK orderDetailsPK;
@@ -39,10 +44,6 @@ public class OrderDetails implements Serializable {
     @NotNull
     @Column(name = "Quantity")
     private int quantity;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Price")
-    private int price;
     @JoinColumn(name = "OrderID", referencedColumnName = "OrderID", insertable = false, updatable = false)
     @ManyToOne(optional = false)
     private CateringOrder cateringOrder;
@@ -57,7 +58,7 @@ public class OrderDetails implements Serializable {
         this.orderDetailsPK = orderDetailsPK;
     }
 
-    public OrderDetails(OrderDetailsPK orderDetailsPK, int quantity, int price) {
+    public OrderDetails(OrderDetailsPK orderDetailsPK, int quantity, double price) {
         this.orderDetailsPK = orderDetailsPK;
         this.quantity = quantity;
         this.price = price;
@@ -83,13 +84,6 @@ public class OrderDetails implements Serializable {
         this.quantity = quantity;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
 
     public CateringOrder getCateringOrder() {
         return cateringOrder;
@@ -130,6 +124,14 @@ public class OrderDetails implements Serializable {
     @Override
     public String toString() {
         return "com.JavaWebProject.JavaWebProject.models.OrderDetails[ orderDetailsPK=" + orderDetailsPK + " ]";
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
     
 }

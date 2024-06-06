@@ -42,6 +42,11 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Dish.findByDishStatus", query = "SELECT d FROM Dish d WHERE d.dishStatus = :dishStatus")})
 public class Dish implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "DishPrice")
+    private double dishPrice;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,10 +68,6 @@ public class Dish implements Serializable {
     private String dishDescription;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "DishPrice")
-    private BigDecimal dishPrice;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "DishStatus")
     private int dishStatus;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "dish")
@@ -82,7 +83,7 @@ public class Dish implements Serializable {
         this.dishID = dishID;
     }
 
-    public Dish(Integer dishID, String dishName, String dishImage, BigDecimal dishPrice, int dishStatus) {
+    public Dish(Integer dishID, String dishName, String dishImage, double dishPrice, int dishStatus) {
         this.dishID = dishID;
         this.dishName = dishName;
         this.dishImage = dishImage;
@@ -122,13 +123,6 @@ public class Dish implements Serializable {
         this.dishDescription = dishDescription;
     }
 
-    public BigDecimal getDishPrice() {
-        return dishPrice;
-    }
-
-    public void setDishPrice(BigDecimal dishPrice) {
-        this.dishPrice = dishPrice;
-    }
 
     public int getDishStatus() {
         return dishStatus;
@@ -178,6 +172,14 @@ public class Dish implements Serializable {
     @Override
     public String toString() {
         return "com.JavaWebProject.JavaWebProject.models.Dish[ dishID=" + dishID + " ]";
+    }
+
+    public double getDishPrice() {
+        return dishPrice;
+    }
+
+    public void setDishPrice(double dishPrice) {
+        this.dishPrice = dishPrice;
     }
     
 }

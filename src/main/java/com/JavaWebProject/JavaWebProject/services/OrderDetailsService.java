@@ -40,4 +40,8 @@ public class OrderDetailsService {
         }
         return quantity;
     }
+    
+    public void save(OrderDetails od) {
+        orderDetailsRepository.save(od);
+    }
 }

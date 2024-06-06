@@ -385,7 +385,6 @@ public class AdminController {
     public Map<String, Object> editinformationCustomer(
             @RequestParam("email") String email,
             @RequestParam("profileImg") MultipartFile profileImg,
-            @RequestParam("password") String password,
             @RequestParam("name") String name,
             @RequestParam("point") int point,
             @RequestParam("rollChance") int rollChance,
@@ -414,10 +413,6 @@ public class AdminController {
                 result.put("status", "Invalid");
                 return result;
             }
-        }
-        if (password != null && password.trim().length() > 0 && password.trim().length() < 8) {
-            result.put("status", "Invalid");
-            return result;
         }
         if (name == null || name.trim().length() == 0) {
             result.put("status", "Invalid");
@@ -483,9 +478,6 @@ public class AdminController {
                 result.put("status", "Fail");
                 return result;
             }
-        }
-        if (password != null && password.trim().length() >= 8) {
-            customer.setPassword(hash(password));
         }
         customer.setFullName(name);
         customer.setPoint(point);

@@ -194,7 +194,7 @@ public class CatererController {
         dish.setCatererEmail(catererService.findById(user.getUsername()));
         dish.setDishDescription(dishDescription);
         dish.setDishName(dishName);
-        dish.setDishPrice(BigDecimal.valueOf(dishPrice));
+        dish.setDishPrice(dishPrice);
         dish.setDishStatus(1);
         if (!dishImage.isEmpty()) {
             String fileName = cloudStorageService.generateFileName(dishImage, user.getUsername());

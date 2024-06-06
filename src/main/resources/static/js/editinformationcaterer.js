@@ -76,7 +76,7 @@ function editCatererInformation() {
             valid = false;
             $('#address-error').text('Please enter address');
         }
-        if (inputPoint < 0) {
+        if (inputPoint === '' || inputPoint < 0) {
             valid = false;
             $('#point-error').text('Point cannot be less than 0');
         }

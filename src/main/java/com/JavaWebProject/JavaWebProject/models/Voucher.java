@@ -42,20 +42,23 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Voucher.findByMaxValue", query = "SELECT v FROM Voucher v WHERE v.maxValue = :maxValue")})
 public class Voucher implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "StartDate")
+    @Temporal(TemporalType.DATE)
+    private LocalDate startDate;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "EndDate")
+    @Temporal(TemporalType.DATE)
+    private LocalDate endDate;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "VoucherID")
     private Integer voucherID;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "StartDate")
-    private LocalDate startDate;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "EndDate")
-    private LocalDate endDate;
     @Basic(optional = false)
     @NotNull
     @Column(name = "VoucherValue")
@@ -94,21 +97,6 @@ public class Voucher implements Serializable {
         this.voucherID = voucherID;
     }
 
-    public LocalDate getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
 
     public double getVoucherValue() {
         return voucherValue;
@@ -174,6 +162,22 @@ public class Voucher implements Serializable {
     @Override
     public String toString() {
         return "com.JavaWebProject.JavaWebProject.models.Voucher[ voucherID=" + voucherID + " ]";
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
     
 }

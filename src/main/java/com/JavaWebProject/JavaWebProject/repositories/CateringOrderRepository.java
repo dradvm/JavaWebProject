@@ -40,4 +40,6 @@ public interface CateringOrderRepository extends CrudRepository<CateringOrder, I
     
     List<CateringOrder> findAllByCatererEmailAndOrderStateAndCreateDateBetween(Caterer caterer, String orderState, LocalDate startDate, LocalDate endDate);
     
+    @Query("select max(u.orderID) from CateringOrder u")
+    Optional<Integer> maxID();
 }

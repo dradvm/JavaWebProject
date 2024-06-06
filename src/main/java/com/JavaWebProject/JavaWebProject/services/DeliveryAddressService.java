@@ -3,6 +3,7 @@ package com.JavaWebProject.JavaWebProject.services;
 import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.models.DeliveryAddress;
 import com.JavaWebProject.JavaWebProject.repositories.DeliveryAddressRepository;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ public class DeliveryAddressService {
     @Autowired
     private DeliveryAddressRepository deliveryAddressRepository;
     
-    public Iterable<DeliveryAddress> findByCustomerEmail(Customer customer) {
+    public List<DeliveryAddress> findByCustomerEmail(Customer customer) {
         return deliveryAddressRepository.findByCustomerEmail(customer);
     }
     
