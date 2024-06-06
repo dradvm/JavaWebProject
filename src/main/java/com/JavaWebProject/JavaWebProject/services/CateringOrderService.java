@@ -1,10 +1,12 @@
 package com.JavaWebProject.JavaWebProject.services;
 
+import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.CateringOrder;
 import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.repositories.CateringOrderRepository;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,5 +122,70 @@ public class CateringOrderService {
     
     public List<CateringOrder> findAllByCustomer(Customer customer) {
         return cateringOrderRepository.findAllByCustomerEmail(customer);
+    }
+    
+    public int countTotalOrderFinished(Caterer caterer) {
+        return cateringOrderRepository.findAllByCatererEmailAndOrderState(caterer, "Finished").size();
+    }
+    public int countTotalOrderCancelled(Caterer caterer) {
+        return cateringOrderRepository.findAllByCatererEmailAndOrderState(caterer, "Cancelled").size();
+    }
+    public double countTotalRevenue(Caterer caterer) {
+        double value = 0;
+        for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderState(caterer, "Finished")) {
+            value+= co.getValue();
+        }
+        return value;
+    }
+    public int getNewOrderByDay(Caterer caterer, LocalDate date) {
+        return cateringOrderRepository.findAllByCatererEmailAndCreateDate(caterer, date).size();
+    }
+
+    public int getNewOrderByMonth(Caterer caterer, Month month) {
+        int year = LocalDate.now().getYear();
+        if (month.getValue() > LocalDate.now().getMonthValue()) {
+            year--;
+        }
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = YearMonth.of(year, month).atEndOfMonth();
+        return cateringOrderRepository.findAllByCatererEmailAndCreateDateBetween(caterer, startDate, endDate).size();
+    }
+
+    public int getNewOrderByYear(Caterer caterer, int year) {
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = LocalDate.of(year, 12, 31);
+        return cateringOrderRepository.findAllByCatererEmailAndCreateDateBetween(caterer, startDate, endDate).size();
+    }
+    
+    public double getRevenueByDay(Caterer caterer, LocalDate date) {
+        double value = 0;
+        for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDate(caterer, "Finished" , date)) {
+            value+=co.getValue();
+        }
+        return value;
+    }
+
+    public double getRevenueByMonth(Caterer caterer, Month month) {
+        int year = LocalDate.now().getYear();
+        if (month.getValue() > LocalDate.now().getMonthValue()) {
+            year--;
+        }
+        LocalDate startDate = LocalDate.of(year, month, 1);
+        LocalDate endDate = YearMonth.of(year, month).atEndOfMonth();
+        double value = 0;
+        for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDateBetween(caterer,"Finished", startDate, endDate)) {
+            value+=co.getValue();
+        }
+        return value;
+    }
+
+    public double getRevenueByYear(Caterer caterer, int year) {
+        LocalDate startDate = LocalDate.of(year, 1, 1);
+        LocalDate endDate = LocalDate.of(year, 12, 31);
+        double value = 0;
+        for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDateBetween(caterer,"Finished", startDate, endDate)) {
+            value+=co.getValue();
+        }
+        return value;
     }
 }

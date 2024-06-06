@@ -354,3 +354,18 @@ input::-webkit-inner-spin-button {
         transform: translateX(0s);
     }
 }
+
+.spinner div {
+    height: 120px;
+    width: 120px;
+    border: 6px solid;
+    border-color: var(--main-bg-color) transparent var(--main-bg-color) transparent;
+    border-radius: 50%;
+    animation: spin 1.4s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

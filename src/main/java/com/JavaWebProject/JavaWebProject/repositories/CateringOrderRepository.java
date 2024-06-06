@@ -1,5 +1,6 @@
 package com.JavaWebProject.JavaWebProject.repositories;
 
+import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.CateringOrder;
 import com.JavaWebProject.JavaWebProject.models.Customer;
 import java.time.LocalDate;
@@ -27,4 +28,16 @@ public interface CateringOrderRepository extends CrudRepository<CateringOrder, I
     int countByCreateDateYear(int year);
     
     List<CateringOrder> findAllByCustomerEmail(Customer customer);
+    
+    List<CateringOrder> findAllByCatererEmailAndOrderState(Caterer caterer, String orderState);
+    
+    List<CateringOrder> findAllByCatererEmailAndCreateDate(Caterer caterer, LocalDate date);
+    
+    List<CateringOrder> findAllByCatererEmailAndCreateDateBetween(Caterer caterer, LocalDate startDate, LocalDate endDate);
+
+    
+    List<CateringOrder> findAllByCatererEmailAndOrderStateAndCreateDate(Caterer caterer,String orderState, LocalDate date);
+    
+    List<CateringOrder> findAllByCatererEmailAndOrderStateAndCreateDateBetween(Caterer caterer, String orderState, LocalDate startDate, LocalDate endDate);
+    
 }

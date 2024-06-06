@@ -12,12 +12,15 @@ import com.JavaWebProject.JavaWebProject.models.District;
 import com.JavaWebProject.JavaWebProject.services.BannerManageService;
 import com.JavaWebProject.JavaWebProject.services.BannerTypeService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
+import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.DishService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.OrderDetailsService;
 import java.math.BigDecimal;
 import jakarta.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +28,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,13 +67,88 @@ public class CatererController {
     private BannerManageService bannerManageService;
     @Autowired
     private BannerTypeService bannerTypeService;
+    @Autowired
+    private CateringOrderService cateringOrderService;
+    private ArrayList<LocalDate> days;
+    private ArrayList<Month> months;
+    private ArrayList<Integer> years;
+    private ArrayList<String> labelsDay;
+    private ArrayList<String> labelsMonth;
+    private ArrayList<String> labelsYear;
+    private LocalDate today;
     
     @GetMapping(value = "/myCaterer/orders")
     public String orderPage(ModelMap model) {
         model.addAttribute("selectedNav", "myCaterer");
         model.addAttribute("selectedPage", "catererorders");
+        days = new ArrayList<>();
+        months = new ArrayList<>();
+        years = new ArrayList<>();
+        today = LocalDate.now();
+        for (int i = 6; i >= 0; i--) {
+            days.add(today.minusDays(i));
+            months.add(today.getMonth().minus(i));
+            years.add(today.getYear() - i);
+        }
+        labelsDay = days.stream().map(day
+                -> String.valueOf(day.getDayOfMonth())
+                + "/"
+                + String.valueOf(day.getMonthValue())
+        ).collect(Collectors.toCollection(ArrayList::new));
+        labelsMonth = months.stream().map(month
+                -> String.valueOf(month.getValue())
+        ).collect(Collectors.toCollection(ArrayList::new));
+        labelsYear = years.stream().map(year
+                -> String.valueOf(year)
+        ).collect(Collectors.toCollection(ArrayList::new));
+        model.addAttribute("totalOrder", cateringOrderService.countTotalOrderFinished(catererService.findById(user.getUsername())));
+        model.addAttribute("totalRevenue", cateringOrderService.countTotalRevenue(catererService.findById(user.getUsername())));
+        model.addAttribute("totalCancelled", cateringOrderService.countTotalOrderCancelled(catererService.findById(user.getUsername())));
         return "CatererPage/OrderPage/catererorders";
     }
+    
+    @GetMapping(value="/myCaterer/orders/getDataLineChart")
+    @ResponseBody
+    public Map<String,Object> getDataLineChart(@RequestParam("selectedValue") String selectedValue) {
+        Map<String, Object> data = new HashMap<>();
+        Map<String, Object> dataChart = new HashMap<>();
+        ArrayList<BigDecimal> dataRevenue = new ArrayList<BigDecimal>();
+        ArrayList<Integer> dataOrder = new ArrayList<Integer>();
+        Caterer caterer = catererService.findById(user.getUsername());
+        switch (selectedValue) {
+            case "Day":
+                data.put("labels", labelsDay);
+                for (LocalDate day : days) {
+                    dataOrder.add(cateringOrderService.getNewOrderByDay(caterer, day));
+                    dataRevenue.add(BigDecimal.valueOf(cateringOrderService.getRevenueByDay(caterer, day)));
+                }
+                break;
+            case "Month":
+                data.put("labels", labelsMonth);
+                for (Month month : months) {
+                    dataOrder.add(cateringOrderService.getNewOrderByMonth(caterer, month));
+                    dataRevenue.add(BigDecimal.valueOf(cateringOrderService.getRevenueByMonth(caterer, month)));
+                }
+                break;
+            case "Year":
+                data.put("labels", labelsYear);
+                for (int year : years) {
+                    dataOrder.add(cateringOrderService.getNewOrderByYear(caterer, year));
+                    dataRevenue.add(BigDecimal.valueOf(cateringOrderService.getRevenueByYear(caterer, year)));
+
+                }
+                break;
+            default:
+                data.put("labels", new String[]{});
+                data.put("data", new ArrayList<>());
+                break;
+        }
+        dataChart.put("order", dataOrder);
+        dataChart.put("revenue", dataRevenue);
+        data.put("data", dataChart);
+        return data;
+    }
+    
     @GetMapping(value = "/myCaterer/dishes")
     public String dishPage(ModelMap model) {
         
