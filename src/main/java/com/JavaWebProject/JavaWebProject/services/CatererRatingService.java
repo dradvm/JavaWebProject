@@ -12,4 +12,8 @@ public class CatererRatingService {
     public void save(CatererRating catererRating) {
         catererRatingRepository.save(catererRating);
     }
+
+//    public CatererRating findByID(Integer id) {
+//        return catererRatingRepository.findByOrderID(id);
+//    }
 }

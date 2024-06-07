@@ -836,7 +836,7 @@ public class AdminController {
         return "redirect:/admin/toManageCatererRanks";
     }
 
-    @GetMapping("/toStatisticalReport")
+    @GetMapping("/toRankStatisticalReport")
     public String toStatisticalReport(Model model) {
 
         double averageRankFee = rankManageService.averageRankFee();

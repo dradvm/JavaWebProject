@@ -42,6 +42,8 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
     @Autowired
+    private CatererService catererService;
+    @Autowired
     private CatererRatingService catererRatingService;
     @Autowired
     private OrderDetailsService orderDetailsService;
@@ -118,8 +120,7 @@ public class CustomerController {
                 result.put("status", "Invalid");
                 return result;
             }
-        } 
-        else {
+        } else {
             parsedBirthday = null;
         }
         if (!profileImg.isEmpty()) {
@@ -132,8 +133,7 @@ public class CustomerController {
             String fileName = cloudStorageService.generateFileName(profileImg);
             if (cloudStorageService.uploadFile("customer/" + fileName, profileImg)) {
                 customer.setProfileImage(fileName);
-            } 
-            else {
+            } else {
                 result.put("status", "Fail");
                 return result;
             }
@@ -243,10 +243,9 @@ public class CustomerController {
         return "redirect:/customer/toDeliveryaddress";
     }
 
-
     @GetMapping("/orders")
     public String ordersCustomerPage(ModelMap model) {
-        model.addAttribute("selectedNav", "orders" );
+        model.addAttribute("selectedNav", "orders");
         model.addAttribute("listOrder", cateringOrderService.findAllByCustomer(customerService.findById(user.getUsername())));
         return "CustomerPage/customerorders";
     }
@@ -260,6 +259,7 @@ public class CustomerController {
                 for (OrderDetails od : orderDetailsService.findAllByOrderID(c.getOrderID())) {
                     Map<String, Object> orderDetailsMap = new HashMap<>();
                     orderDetailsMap.put("orderID", c.getOrderID());
+                    orderDetailsMap.put("catererEmail", c.getCatererEmail());
                     orderDetailsMap.put("orderTime", c.getOrderTime());
                     orderDetailsMap.put("createDate", c.getCreateDate());
                     orderDetailsMap.put("orderState", c.getOrderState());
@@ -275,5 +275,42 @@ public class CustomerController {
         model.addAttribute("selectedNav", "rating");
         model.addAttribute("selectedPage", "orderHistory");
         return "CustomerPage/viewhistoryorder";
+    }
+
+    @GetMapping("/ratingForm")
+    public String showRatingForm(@RequestParam("id") int id, ModelMap model) {
+        CateringOrder cateringOrder = cateringOrderService.findByID(id);
+        if (cateringOrder != null && cateringOrder.getOrderState().equals("Finished")) {
+            String catererEmail = cateringOrder.getCatererEmail().getCatererEmail();
+            Caterer caterer = catererService.findById(catererEmail);
+
+            if (caterer != null) {
+                String catererFullName = caterer.getFullName();
+                model.addAttribute("orderID", id);
+                model.addAttribute("catererEmail", catererEmail);
+                model.addAttribute("catererFullName", catererFullName);
+
+                return "CustomerPage/customerratingcaterer";
+            }
+        }
+        model.addAttribute("errorMessage", "The order is not finished. You can only rate orders that are finished.");
+        return "CustomerPage/customerratingcaterer";
+    }
+
+    @PostMapping("/submitRating")
+    public String submitRating(@RequestParam("catererEmail") Caterer catererEmail,
+            @RequestParam("orderID") CateringOrder orderID,
+            @RequestParam("rate") int rate,
+            @RequestParam("comment") String comment,
+            HttpSession session) {
+
+        CatererRating catererRating = new CatererRating();
+        catererRating.setCatererEmail(catererEmail);
+        catererRating.setOrderID(orderID);
+        catererRating.setRate(rate);
+        catererRating.setComment(comment);
+        catererRatingService.save(catererRating);
+        return "redirect:/customer/orderHistory";
+
     }
 }

@@ -5,6 +5,7 @@
 package com.JavaWebProject.JavaWebProject.repositories;
 
 import com.JavaWebProject.JavaWebProject.models.CatererRating;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -14,5 +15,8 @@ import org.springframework.data.repository.CrudRepository;
 public interface CatererRatingRepository extends CrudRepository<CatererRating, String> {
 
     public void save(int catererRating);
+    
+//    @Query("SELECT cr FROM CatererRating cr WHERE cr.orderID = :orderID")
+//    CatererRating findByOrderID(int orderID);
 
 }
