@@ -217,10 +217,11 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                     </form>
                                     <form
                                         th:if="${d.orderState != 'Paid' && d.orderState != 'Finished' && d.orderState != 'Cancelled' }"
-                                        th:action="@{/orders/changeState}" onsubmit="return confirmDelete();"
-                                        method="post">
+                                        th:action="@{/orders/changeState/reject}"
+                                        th:onsubmit="return confirmSubmit(event);" method="post">
                                         <input id="id" name="id" th:value="${d.orderID}" type="hidden" />
                                         <input id="state" name="state" th:value="'Cancelled'" type="hidden" />
+                                        <input id="reason" name="reason" value="" type="hidden" />
                                         <button class="btn btn-danger">Reject</button>
                                     </form>
                                 </div>
@@ -250,7 +251,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 });
             });
         </script>
-        <div id="Modal" class="position-fixed top-50 start-50 translate-middle">
+        <div id="Modal" class="d-none position-fixed top-50 start-50 translate-middle">
             <div class="rounded overflow-hidden border bg-white position-relative" style="width: 70vw; height: 80vh;">
                 <div class="position-absolute" style="top: 3%; right: 3%">
                     <button type="button" onclick="closeModal()"><i
@@ -259,32 +260,18 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 <div class="d-flex align-items-center justify-content-around bg-main fw-medium fs-5 text-white"
                     style="height: 10%;">
                     Order Details</div>
-                <div class="d-flex" style="height: 90%;">
+                <div id="ModalBody" class="d-flex" style="height: 90%;">
                     <div class="h-100 overflow-auto p-3" style="width: 70%;">
                         <table class="table">
                             <thead>
                                 <tr>
                                     <th scope="col">Image</th>
-                                    <th scope="col">First</th>
-                                    <th scope="col">Last</th>
-                                    <th scope="col">Handle</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Price</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="w-25"><img src="../../../static/images/empty-cart.png" alt=""
-                                            class="w-100"></td>
-                                    <td class="w-25">Mark</td>
-                                    <td class="w-25">Otto</td>
-                                    <td class="w-25">@mdo</td>
-                                </tr>
-                                <tr>
-                                    <td class="w-25"><img src="../../../static/images/empty-cart.png" alt=""
-                                            class="w-100"></td>
-                                    <td class="w-25">Mark</td>
-                                    <td class="w-25">Otto</td>
-                                    <td class="w-25">@mdo</td>
-                                </tr>
+                            <tbody id="orderDetails">
                             </tbody>
                         </table>
                     </div>
@@ -309,6 +296,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         </div>
                     </div>
                 </div>
+                <div id="Spinner" class="d-none spinner h-100 d-flex align-items-center justify-content-around"
+                    style="z-index: 100;">
+                    <div></div>
+                </div>
             </div>
         </div>
         <script>
@@ -316,8 +307,57 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 document.querySelector("#Modal").classList.add("d-none")
             }
             function openModal(id) {
+                document.querySelector("#ModalBody").classList.add("d-none")
+                document.querySelector("#Spinner").classList.remove("d-none")
                 document.querySelector("#Modal").classList.remove("d-none")
+                $(document).ready(function () {
+                    $.ajax({
+                        type: 'GET',
+                        url: '/orders/getOrderDetails',
+                        data: { id: id },
+                        success: function (response) {
+                            console.log(response)
+                            html = ""
+                            data = response.orderDetails
+                            data.forEach((item) => {
+                                html += `
+                                <tr>
+                                    <td class="w-25"><img src="${item.dishImage}" alt=""
+                                            class="w-100"></td>
+                                    <td class="w-25">${item.dishName}</td>
+                                    <td class="w-25">${item.quantity}</td>
+                                    <td class="w-25">${item.dishPrice}</td>
+                                </tr>
+                                `
+                                console.log(item)
+                            })
+                            $("#address").text(response.address)
+                            $("#point").text(response.point)
+                            $("#voucher").text(response.voucher)
 
+                            $("#orderDetails").html(html)
+
+                            document.querySelector("#ModalBody").classList.remove("d-none")
+                            document.querySelector("#Spinner").classList.add("d-none")
+                        }
+                    });
+                })
+
+            }
+            function confirmSubmit(event) {
+                event.preventDefault();
+                let reason = prompt('Please enter the reason for canceling this order (max 200 characters):');
+                if (reason !== null) {
+                    if (reason.trim().length > 200) {
+                        alert('Reason cannot exceed 200 characters');
+                        return false;
+                    }
+                    const reasonInput = event.target.querySelector('#reason');
+                    reasonInput.value = reason.trim();
+                    event.target.submit()
+                    return true;
+                }
+                return false
             }
         </script>
     </div>

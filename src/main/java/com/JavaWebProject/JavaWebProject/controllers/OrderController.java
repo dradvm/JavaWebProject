@@ -7,11 +7,14 @@ package com.JavaWebProject.JavaWebProject.controllers;
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.CateringOrder;
 import com.JavaWebProject.JavaWebProject.models.Dish;
+import com.JavaWebProject.JavaWebProject.models.Notification;
 import com.JavaWebProject.JavaWebProject.models.OrderDetails;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.DishService;
+import com.JavaWebProject.JavaWebProject.services.NotificationService;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -49,6 +52,8 @@ public class OrderController {
     DishService dishService;
     @Autowired
     CloudStorageService cloudStorageService;
+    @Autowired
+    NotificationService notificationService;
     
     private Caterer findCaterer(String fullName_Email) {
         System.out.println(fullName_Email);
@@ -58,8 +63,8 @@ public class OrderController {
     }
     
     @PostMapping("/changeState")
-    public String makeNewOrder(@RequestParam("id") Integer orderId, @RequestParam("state") String state, ModelMap model) {
-        cateringOrderService.changeStateOrder(orderId, state);
+    public String changeState(@RequestParam("id") Integer orderId, @RequestParam("state") String state, ModelMap model) {
+        cateringOrderService.changeStateOrder(orderId, state);  
         if (user.getRole().equals("Customer")) {
             return customerController.ordersCustomerPage(model);
         }
@@ -70,6 +75,18 @@ public class OrderController {
             model.addAttribute("selectedNav", "home");
             return "index";
         }
+    }
+    @PostMapping("/changeState/reject")
+    public String changeStateReject(@RequestParam("id") Integer orderId, @RequestParam("state") String state, @RequestParam("reason") String reason, ModelMap model) {
+        cateringOrderService.changeStateOrder(orderId, state);
+        CateringOrder od = cateringOrderService.findByID(orderId);
+        Notification noti = new Notification();
+        noti.setNotificationContents(reason);
+        noti.setSender(od.getCatererEmail().getCatererEmail());
+        noti.setReceiver(od.getCustomerEmail().getCustomerEmail());
+        noti.setNotificationTime(LocalDateTime.now());
+        notificationService.save(noti);
+        return catererController.orderPage(model);
     }
     @GetMapping("/getOrderDetails")
     @ResponseBody

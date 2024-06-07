@@ -68,6 +68,7 @@ com\JavaWebProject\JavaWebProject\filters\LoginedFilter.class
 com\JavaWebProject\JavaWebProject\JavaWebProjectApplication.class
 com\JavaWebProject\JavaWebProject\models\Report.class
 com\JavaWebProject\JavaWebProject\models\City.class
+com\JavaWebProject\JavaWebProject\services\NotificationService.class
 com\JavaWebProject\JavaWebProject\services\CateringOrderService.class
 com\JavaWebProject\JavaWebProject\models\Admin.class
 com\JavaWebProject\JavaWebProject\models\CatererRating.class
@@ -77,6 +78,7 @@ com\JavaWebProject\JavaWebProject\services\CatererRankService.class
 com\JavaWebProject\JavaWebProject\models\PaymentType.class
 com\JavaWebProject\JavaWebProject\services\ReportService.class
 com\JavaWebProject\JavaWebProject\controllers\AuthController.class
+com\JavaWebProject\JavaWebProject\repositories\NotificationRepository.class
 com\JavaWebProject\JavaWebProject\repositories\MinigameRewardRepository.class
 com\JavaWebProject\JavaWebProject\repositories\DistrictRepository.class
 com\JavaWebProject\JavaWebProject\repositories\BannerTypeRepository.class

@@ -16,6 +16,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -62,7 +63,7 @@ public class Notification implements Serializable {
     @NotNull
     @Column(name = "NotificationTime")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date notificationTime;
+    private LocalDateTime notificationTime;
 
     public Notification() {
     }
@@ -71,7 +72,7 @@ public class Notification implements Serializable {
         this.notificationID = notificationID;
     }
 
-    public Notification(Integer notificationID, String sender, String receiver, String notificationContents, Date notificationTime) {
+    public Notification(Integer notificationID, String sender, String receiver, String notificationContents, LocalDateTime notificationTime) {
         this.notificationID = notificationID;
         this.sender = sender;
         this.receiver = receiver;
@@ -111,11 +112,11 @@ public class Notification implements Serializable {
         this.notificationContents = notificationContents;
     }
 
-    public Date getNotificationTime() {
+    public LocalDateTime getNotificationTime() {
         return notificationTime;
     }
 
-    public void setNotificationTime(Date notificationTime) {
+    public void setNotificationTime(LocalDateTime notificationTime) {
         this.notificationTime = notificationTime;
     }
 
