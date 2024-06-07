@@ -344,7 +344,8 @@ public class MainController {
         order.setValue(value);
         if (voucher != null) {
             if (voucher.getTypeID().getTypeID() == 1) {
-                order.setVoucherDiscount(voucher.getVoucherValue());
+                double discount = value > voucher.getVoucherValue() ? voucher.getVoucherValue() : value;
+                order.setVoucherDiscount(discount);
             }
             else if (voucher.getTypeID().getTypeID() == 2) {
                 double discount = value * voucher.getVoucherValue() / 100;
