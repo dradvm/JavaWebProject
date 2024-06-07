@@ -361,12 +361,10 @@ public class MainController {
             if (point > currentValue) {
                 order.setPointDiscount((int) Math.ceil(currentValue));
                 customer.setPoint(customer.getPoint() - ((int) Math.ceil(currentValue)));
-                caterer.setPoint(caterer.getPoint() + (int) Math.ceil(currentValue));
             }
             else {
                 order.setPointDiscount(point);
                 customer.setPoint(0);
-                caterer.setPoint(caterer.getPoint() + point);
             }
         }
         else {
