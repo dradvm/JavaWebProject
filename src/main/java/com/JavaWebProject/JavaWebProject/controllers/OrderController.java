@@ -81,15 +81,20 @@ public class OrderController {
         Customer customer = order.getCustomerEmail();
         if (state.equals("Cancelled")) {
             cateringOrderService.changeStateOrder(orderId, state);
+            sendNoti(customer.getCustomerEmail(), caterer.getCatererEmail(), "Customer " + customer.getFullName() + " has cancelled order");
             customer.setPoint(customer.getPoint() + order.getPointDiscount());
             customerService.save(customer);
         }
         if (user.getRole().equals("Customer")) {
             if (state.equals("Waiting confirm")) {
                 cateringOrderService.changeStateOrder(orderId, state);
+                sendNoti(customer.getCustomerEmail(), caterer.getCatererEmail(), "Customer " + customer.getFullName() +" conducted payment for order");
+                
             }
             else if (state.equals("Finished")) {
                 cateringOrderService.changeStateOrder(orderId, state);
+                sendNoti(customer.getCustomerEmail(), caterer.getCatererEmail(), "Customer " + customer.getFullName() +" has received the order");
+                customer.setRollChance(customer.getRollChance() + 1);
                 caterer.setPoint(caterer.getPoint() + order.getPointDiscount());
                 catererService.save(caterer);
             }
@@ -99,6 +104,8 @@ public class OrderController {
             if (state.equals("Accepted")) {
                 if (caterer.getRankID().getRankCPO() == 0) {
                     cateringOrderService.changeStateOrder(orderId, state);
+                    sendNoti(caterer.getCatererEmail(), customer.getCustomerEmail(), "We've received your order, please conduct payment for the order via NCB 0123456798 with transaction details Plate Portal order");
+
                     return "redirect:/caterer/myCaterer/orders";
                 }
                 else {
@@ -115,6 +122,8 @@ public class OrderController {
             }
             else if (state.equals("Paid")) {
                 cateringOrderService.changeStateOrder(orderId, state);
+                sendNoti(caterer.getCatererEmail(), customer.getCustomerEmail(),  "The order is on its way, please confirm upon receipt");
+
                 return "redirect:/caterer/myCaterer/orders";
             }
         }
@@ -124,15 +133,17 @@ public class OrderController {
     public String changeStateReject(@RequestParam("id") Integer orderId, @RequestParam("state") String state, @RequestParam("reason") String reason, ModelMap model) {
         cateringOrderService.changeStateOrder(orderId, state);
         CateringOrder od = cateringOrderService.findByID(orderId);
-        Notification noti = new Notification();
-        noti.setNotificationContents(reason);
-        noti.setSender(od.getCatererEmail().getCatererEmail());
-        noti.setReceiver(od.getCustomerEmail().getCustomerEmail());
-        noti.setNotificationTime(LocalDateTime.now());
-        notificationService.save(noti);
+        sendNoti(od.getCatererEmail().getCatererEmail(), od.getCustomerEmail().getCustomerEmail(), reason);
         return catererController.orderPage(model);
     }
-    
+    private void sendNoti(String sender, String receiver, String reason) {
+        Notification noti = new Notification();
+        noti.setNotificationContents(reason);
+        noti.setSender(sender);
+        noti.setReceiver(receiver);
+        noti.setNotificationTime(LocalDateTime.now());
+        notificationService.save(noti);
+    }
     @GetMapping("/accept/{order_id}")
     public String accept(@PathVariable("order_id") String order_id) {
         if (paymentService.check(request)) {
@@ -141,6 +152,8 @@ public class OrderController {
             CateringOrder order = cateringOrderService.findByID(id);
             order.setOrderState("Accepted");
             cateringOrderService.save(order);
+            sendNoti(order.getCatererEmail().getCatererEmail(), order.getCustomerEmail().getCustomerEmail(), "We've received your order, please conduct payment for the order via NCB 0123456798 with transaction details Plate Portal order");
+
             payment.setCatererEmail(order.getCatererEmail());
             payment.setDescription("Order accept " + id);
             payment.setValue(order.getCatererEmail().getRankID().getRankCPO());

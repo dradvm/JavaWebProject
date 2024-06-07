@@ -1,6 +1,7 @@
 package com.JavaWebProject.JavaWebProject.services;
 
 import com.JavaWebProject.JavaWebProject.models.Caterer;
+import com.JavaWebProject.JavaWebProject.models.CateringOrder;
 import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.models.Voucher;
 import com.JavaWebProject.JavaWebProject.repositories.CateringOrderRepository;
@@ -39,6 +40,19 @@ public class VoucherService {
             else {
                 if (cateringOrderRepository.findAllByVoucherIDAndCustomerEmail(v, customer).size() == 0) { 
                     data.add(v);
+                }
+                else {
+                    int total = 0;
+                    int count = 0;
+                    for (CateringOrder co : cateringOrderRepository.findAllByVoucherIDAndCustomerEmail(v, customer)) {
+                        count++;
+                        if (co.getOrderState().equals("Cancelled")) {
+                            total++;
+                        }
+                    }
+                    if (total == count) {
+                        data.add(v);
+                    }
                 }
             }
             
