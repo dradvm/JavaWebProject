@@ -52,12 +52,15 @@ function editCatererInformation() {
         $('#phone-error').text('');
         $('#address-error').text('');
         $('#point-error').text('');
+        $('#rank-end-date-error').text('');
         inputProfileImg = $('#profile-img').prop('files')[0] ? $('#profile-img').prop('files')[0] : null;
         inputRankID = $('#rank-id').val();
         inputName = $('#name').val();
         inputPhone = $('#phone').val();
         inputAddress = $('#address').val();
         inputPoint = $('#point').val();
+        endDate = new Date($('#rank-end-date').val());
+        startDate = new Date($('#rank-start-date').text());
         valid = true;
         if (inputProfileImg !== null && inputProfileImg.size > 10000000) {
             valid = false;
@@ -79,6 +82,10 @@ function editCatererInformation() {
         if (inputPoint === '' || inputPoint < 0) {
             valid = false;
             $('#point-error').text('Point cannot be less than 0');
+        }
+        if (endDate <= startDate) {
+            valid = false;
+            $('#rank-end-date-error').text('Rank ending date must be after rank starting date');
         }
         if (!valid) {
             return;

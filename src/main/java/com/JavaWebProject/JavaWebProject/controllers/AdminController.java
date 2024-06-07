@@ -206,6 +206,10 @@ public class AdminController {
             int month = Integer.parseInt(endArr[1]);
             int day = Integer.parseInt(endArr[2]);
             endDate = new Date(year - 1900, month - 1, day);
+            if (!endDate.after(caterer.getRankStartDate())) {
+                result.put("status", "Invalid");
+                return result;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             result.put("status", "Invalid");

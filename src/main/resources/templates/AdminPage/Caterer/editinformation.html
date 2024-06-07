@@ -96,12 +96,12 @@
                                 </select>
                             </div>
                             <div class="d-flex align-items-center justify-content-between w-75">
-                                <div class="fw-bold" th:each="rank : ${rankList}" th:rank="${rank.rankID}"
-                                    th:text="${'Rank fee: $' + rank.rankFee}" class="rank-fee"></div>
-                                <div class="fw-bold" th:each="rank : ${rankList}" th:rank="${rank.rankID}"
-                                    th:text="${'Rank CPO: $' + rank.rankCPO}" class="rank-cpo"></div>
-                                <div class="fw-bold" th:each="rank : ${rankList}" th:rank="${rank.rankID}"
-                                    th:text="${'Rank max dish: ' + rank.rankMaxDish}" class="rank-max-dish">
+                                <div class="fw-bold rank-fee" th:each="rank : ${rankList}" th:rank="${rank.rankID}"
+                                    th:text="${'Rank fee: $' + rank.rankFee}"></div>
+                                <div class="fw-bold rank-cpo" th:each="rank : ${rankList}" th:rank="${rank.rankID}"
+                                    th:text="${'Rank CPO: $' + rank.rankCPO}"></div>
+                                <div class="fw-bold rank-max-dish" th:each="rank : ${rankList}" th:rank="${rank.rankID}"
+                                    th:text="${'Rank max dish: ' + rank.rankMaxDish}">
                                 </div>
                             </div>
                         </div>
