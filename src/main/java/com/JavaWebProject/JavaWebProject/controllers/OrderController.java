@@ -6,16 +6,22 @@ package com.JavaWebProject.JavaWebProject.controllers;
 
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.CateringOrder;
+import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.models.Dish;
 import com.JavaWebProject.JavaWebProject.models.Notification;
 import com.JavaWebProject.JavaWebProject.models.OrderDetails;
+import com.JavaWebProject.JavaWebProject.models.PaymentHistory;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
+import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DishService;
 import com.JavaWebProject.JavaWebProject.services.NotificationService;
 import java.time.LocalDateTime;
+import com.JavaWebProject.JavaWebProject.services.PaymentService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -54,6 +61,11 @@ public class OrderController {
     CloudStorageService cloudStorageService;
     @Autowired
     NotificationService notificationService;
+    private PaymentService paymentService;
+    @Autowired
+    private CustomerService customerService;
+    @Autowired
+    private HttpServletRequest request;
     
     private Caterer findCaterer(String fullName_Email) {
         System.out.println(fullName_Email);
@@ -63,18 +75,50 @@ public class OrderController {
     }
     
     @PostMapping("/changeState")
-    public String changeState(@RequestParam("id") Integer orderId, @RequestParam("state") String state, ModelMap model) {
-        cateringOrderService.changeStateOrder(orderId, state);  
+    public String changeState(@RequestParam("id") Integer orderId, @RequestParam("state") String state) {
+        CateringOrder order = cateringOrderService.findByID(orderId);
+        Caterer caterer = order.getCatererEmail();
+        Customer customer = order.getCustomerEmail();
+        if (state.equals("Cancelled")) {
+            cateringOrderService.changeStateOrder(orderId, state);
+            customer.setPoint(customer.getPoint() + order.getPointDiscount());
+            customerService.save(customer);
+        }
         if (user.getRole().equals("Customer")) {
-            return customerController.ordersCustomerPage(model);
+            if (state.equals("Waiting confirm")) {
+                cateringOrderService.changeStateOrder(orderId, state);
+            }
+            else if (state.equals("Finished")) {
+                cateringOrderService.changeStateOrder(orderId, state);
+                caterer.setPoint(caterer.getPoint() + order.getPointDiscount());
+                catererService.save(caterer);
+            }
+            return "redirect:/customer/orders";
         }
         else if (user.getRole().equals("Caterer")) {
-            return catererController.orderPage(model);
+            if (state.equals("Accepted")) {
+                if (caterer.getRankID().getRankCPO() == 0) {
+                    cateringOrderService.changeStateOrder(orderId, state);
+                    return "redirect:/caterer/myCaterer/orders";
+                }
+                else {
+                    long fee = (long) (caterer.getRankID().getRankCPO() * 25000);
+                    try {
+                        String returnUrl = "http://localhost:8080/orders/accept/order_" + orderId;
+                        String url = paymentService.getPaymentUrl(fee, returnUrl, request);
+                        return "redirect:" + url;
+                    }
+                    catch (Exception e) {
+                        return "redirect:/caterer/myCaterer/orders";
+                    }
+                }
+            }
+            else if (state.equals("Paid")) {
+                cateringOrderService.changeStateOrder(orderId, state);
+                return "redirect:/caterer/myCaterer/orders";
+            }
         }
-        else {
-            model.addAttribute("selectedNav", "home");
-            return "index";
-        }
+        return "redirect:/";
     }
     @PostMapping("/changeState/reject")
     public String changeStateReject(@RequestParam("id") Integer orderId, @RequestParam("state") String state, @RequestParam("reason") String reason, ModelMap model) {
@@ -88,6 +132,25 @@ public class OrderController {
         notificationService.save(noti);
         return catererController.orderPage(model);
     }
+    
+    @GetMapping("/accept/{order_id}")
+    public String accept(@PathVariable("order_id") String order_id) {
+        if (paymentService.check(request)) {
+            PaymentHistory payment = new PaymentHistory();
+            int id = Integer.parseInt(order_id.split("_")[1]);
+            CateringOrder order = cateringOrderService.findByID(id);
+            order.setOrderState("Accepted");
+            cateringOrderService.save(order);
+            payment.setCatererEmail(order.getCatererEmail());
+            payment.setDescription("Order accept " + id);
+            payment.setValue(order.getCatererEmail().getRankID().getRankCPO());
+            payment.setPaymentTime(new Date());
+            payment.setTypeID(paymentService.findPaymentTypeById(2));
+            paymentService.savePaymentHistory(payment);
+        }
+        return "redirect:/caterer/myCaterer/orders";
+    }
+    
     @GetMapping("/getOrderDetails")
     @ResponseBody
     public Map<String, Object> getOrderDetails(@RequestParam("id") int id) {

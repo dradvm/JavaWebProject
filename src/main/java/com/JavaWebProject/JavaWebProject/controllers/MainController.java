@@ -344,7 +344,8 @@ public class MainController {
         order.setValue(value);
         if (voucher != null) {
             if (voucher.getTypeID().getTypeID() == 1) {
-                order.setVoucherDiscount(voucher.getVoucherValue());
+                double discount = value > voucher.getVoucherValue() ? voucher.getVoucherValue() : value;
+                order.setVoucherDiscount(discount);
             }
             else if (voucher.getTypeID().getTypeID() == 2) {
                 double discount = value * voucher.getVoucherValue() / 100;
@@ -361,12 +362,10 @@ public class MainController {
             if (point > currentValue) {
                 order.setPointDiscount((int) Math.ceil(currentValue));
                 customer.setPoint(customer.getPoint() - ((int) Math.ceil(currentValue)));
-                caterer.setPoint(caterer.getPoint() + (int) Math.ceil(currentValue));
             }
             else {
                 order.setPointDiscount(point);
                 customer.setPoint(0);
-                caterer.setPoint(caterer.getPoint() + point);
             }
         }
         else {
