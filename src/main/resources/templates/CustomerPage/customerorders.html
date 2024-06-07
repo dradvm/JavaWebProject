@@ -62,7 +62,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <td th:text="${d.createDate}"></td>
                             <td th:text="${d.orderTime}"></td>
                             <td th:text="${d.orderState}"></td>
-                            <td><button class="btn btn-primary">Dishes</button></td>
+                            <td><button class="btn btn-primary" th:onclick="openModal([[${d.orderID}]])">Dishes</button>
+                            </td>
                             <td th:text="${d.value}"></td>
                             <td th:text="${d.note}"></td>
                             <td>
@@ -94,6 +95,58 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                         </tr>
                     </tbody>
                 </table>
+            </div>
+            <div id="Modal" class="d-none position-fixed top-50 start-50 translate-middle">
+                <div class="rounded overflow-hidden border bg-white position-relative"
+                    style="width: 70vw; height: 80vh;">
+                    <div class="position-absolute" style="top: 3%; right: 3%">
+                        <button type="button" onclick="closeModal()"><i
+                                class="fa-solid fa-xmark fs-3 text-white"></i></button>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-around bg-main fw-medium fs-5 text-white"
+                        style="height: 10%;">
+                        Order Details</div>
+                    <div id="ModalBody" class="d-flex" style="height: 90%;">
+                        <div class="h-100 overflow-auto p-3" style="width: 70%;">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Image</th>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Quantity</th>
+                                        <th scope="col">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orderDetails">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="h-100 v-stack bg-sub p-3" style="width: 30%;">
+                            <div class="d-flex">
+                                <div class="fw-medium">
+                                    Address Delivery:
+                                </div>
+                                <div id="address"></div>
+                            </div>
+                            <div class="d-flex">
+                                <div class="fw-medium">
+                                    Point discount:
+                                </div>
+                                <div id="point"></div>
+                            </div>
+                            <div class="d-flex">
+                                <div class="fw-medium">
+                                    Voucher discount:
+                                </div>
+                                <div id="voucher"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="Spinner" class="d-none spinner h-100 d-flex align-items-center justify-content-around"
+                        style="z-index: 100;">
+                        <div></div>
+                    </div>
+                </div>
             </div>
             <script>
                 $(document).ready(function () {
@@ -128,6 +181,47 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                 }
                 function confirmDelete() {
                     return confirm('Are you sure you want to cancel this order?');
+                }
+                function closeModal() {
+                    document.querySelector("#Modal").classList.add("d-none")
+                }
+                function openModal(id) {
+                    document.querySelector("#ModalBody").classList.add("d-none")
+                    document.querySelector("#Spinner").classList.remove("d-none")
+                    document.querySelector("#Modal").classList.remove("d-none")
+                    $(document).ready(function () {
+                        $.ajax({
+                            type: 'GET',
+                            url: '/orders/getOrderDetails',
+                            data: { id: id },
+                            success: function (response) {
+                                console.log(response)
+                                html = ""
+                                data = response.orderDetails
+                                data.forEach((item) => {
+                                    html += `
+                                <tr>
+                                    <td class="w-25"><img src="${item.dishImage}" alt=""
+                                            class="w-100"></td>
+                                    <td class="w-25">${item.dishName}</td>
+                                    <td class="w-25">${item.quantity}</td>
+                                    <td class="w-25">${item.dishPrice}</td>
+                                </tr>
+                                `
+                                    console.log(item)
+                                })
+                                $("#address").text(response.address)
+                                $("#point").text(response.point)
+                                $("#voucher").text(response.voucher)
+
+                                $("#orderDetails").html(html)
+
+                                document.querySelector("#ModalBody").classList.remove("d-none")
+                                document.querySelector("#Spinner").classList.add("d-none")
+                            }
+                        });
+                    })
+
                 }
             </script>
 
