@@ -1,46 +1,50 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="@{../templates/AdminPage/admin}">
-    <head>
-    </head>
-    <body>
-        <div layout:fragment="contentAdminPage">
-            <link rel="stylesheet" th:href="@{/lib/datatable/datatables.min.css}"/>
-            <a href="/admin/toManageinformationCustomer">Manage information</a>
-            <a href="/admin/toHandlereportsCustomer">Handle reports</a>
-            <a href="/admin/toStatisticalreportCustomer">Statistical reports</a>
-            <table id="report-list" class="table table-striped">
-                <thead>
-                    <th>ID</th>
-                    <th>Reporter</th>
-                    <th>Reportee</th>
-                    <th>Description</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </thead>
-                <tbody>
-                    <tr th:each="report : ${reportList}">
-                        <td th:text="${report.reportID}"></td>
-                        <td th:text="${report.reporter}"></td>
-                        <td th:text="${report.reportee}"></td>
-                        <td th:text="${report.reportDescription}"></td>
-                        <td th:text="${#dates.format(report.reportDate, 'dd-MM-yyyy')}"></td>
-                        <td th:text="${report.reportStatus == 0 ? 'Unhandled' : 'Handled'}"></td>
-                        <td>
-                            <a th:href="@{/admin/reportSuspendCustomer(id=${report.reportID})}" th:if="${report.reportStatus == 0}">
-                                <button>Suspend</button>
-                            </a>
-                            <a th:href="@{/admin/reportSkipCustomer(id=${report.reportID})}" th:if="${report.reportStatus == 0}">
-                                <button>Skip</button>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <script th:src="@{/lib/datatable/datatables.min.js}"></script>
-            <script th:src="@{/js/handlereportscustomer.js}"></script>
-        </div>
-    </body>
+<html xmlns:th="https://www.thymeleaf.org/" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="@{../templates/AdminPage/admin}">
+
+<head>
+</head>
+
+<body>
+    <div layout:fragment="contentAdminPage">
+        <link rel="stylesheet" th:href="@{/lib/datatable/datatables.min.css}" />
+        <a href="/admin/toManageinformationCustomer" class="btn btn-success">Manage information</a>
+        <a href="/admin/toHandlereportsCustomer" class="btn btn-success">Handle reports</a>
+        <a href="/admin/toStatisticalreportCustomer" class="btn btn-success">Statistical reports</a>
+        <table id="report-list" class="table table-striped">
+            <thead>
+                <th>ID</th>
+                <th>Reporter</th>
+                <th>Reportee</th>
+                <th>Description</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Action</th>
+            </thead>
+            <tbody>
+                <tr th:each="report : ${reportList}">
+                    <td th:text="${report.reportID}"></td>
+                    <td th:text="${report.reporter}"></td>
+                    <td th:text="${report.reportee}"></td>
+                    <td th:text="${report.reportDescription}"></td>
+                    <td th:text="${#dates.format(report.reportDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${report.reportStatus == 0 ? 'Unhandled' : 'Handled'}"></td>
+                    <td>
+                        <a th:href="@{/admin/reportSuspendCustomer(id=${report.reportID})}"
+                            th:if="${report.reportStatus == 0}">
+                            <button>Suspend</button>
+                        </a>
+                        <a th:href="@{/admin/reportSkipCustomer(id=${report.reportID})}"
+                            th:if="${report.reportStatus == 0}">
+                            <button>Skip</button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <script th:src="@{/lib/datatable/datatables.min.js}"></script>
+        <script th:src="@{/js/handlereportscustomer.js}"></script>
+    </div>
+</body>
+
 </html>

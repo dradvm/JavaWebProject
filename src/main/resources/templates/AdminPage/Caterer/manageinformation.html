@@ -1,52 +1,58 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/" 
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="@{../templates/AdminPage/admin}">
-    <head>
-    </head>
-    <body>
-        <div layout:fragment="contentAdminPage">
-            <link rel="stylesheet" th:href="@{/lib/datatable/datatables.min.css}"/>
-            <a href="/admin/toManageinformationCaterer" class="btn btn-success">Manage information</a>
-            <a href="/admin/toHandlereportsCaterer" class="btn btn-success">Handle reports</a>
-            <a href="/admin/toStatisticalreportCaterer" class="btn btn-success">Statistical reports</a>
-            <table id="caterer-list" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Email</th>
-                        <th>Rank</th>
-                        <th>Rank ending date</th>
-                        <th>Rating</th>
-                        <th>Full name</th>
-                        <th>Phone</th>
-                        <th>Address</th>
-                        <th>Create date</th>
-                        <th>Active</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="caterer : ${catererList}">
-                        <td th:text="${caterer.catererEmail}"></td>
-                        <td th:text="${'$' + caterer.rankID.rankFee}"></td>
-                        <td th:text="${#dates.format(caterer.rankEndDate, 'dd-MM-yyyy')}"></td>
-                        <td th:text="${caterer.catererRating}"></td>
-                        <td th:text="${caterer.fullName}"></td>
-                        <td th:text="${caterer.phone}"></td>
-                        <td th:text="${caterer.address + ', ' + caterer.districtID.districtName + ', ' + caterer.districtID.cityID.cityName}"></td>
-                        <td th:text="${#dates.format(caterer.createDate, 'dd-MM-yyyy')}"></td>
-                        <td th:text="${caterer.active == 1 ? 'Active' : 'Suspended'}"></td>
-                        <td>
-                            <a th:href="@{/admin/toEditinformationCaterer(email=${caterer.catererEmail})}" class="btn btn-primary">Edit</a>
-                            <a th:href="@{/admin/changeCatererActive(email=${caterer.catererEmail})}" class="btn btn-danger">
-                                <button th:text="${caterer.active == 1 ? 'Suspend' : 'Unsuspend'}"></button>
-                            </a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <script th:src="@{/lib/datatable/datatables.min.js}"></script>
-            <script th:src="@{/js/manageinformationcaterer.js}"></script>
-        </div>
-    </body>
+<html xmlns:th="https://www.thymeleaf.org/" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="@{../templates/AdminPage/admin}">
+
+<head>
+</head>
+
+<body>
+    <div layout:fragment="contentAdminPage">
+        <link rel="stylesheet" th:href="@{/lib/datatable/datatables.min.css}" />
+        <a href="/admin/toManageinformationCaterer" class="btn btn-success">Manage information</a>
+        <a href="/admin/toHandlereportsCaterer" class="btn btn-success">Handle reports</a>
+        <a href="/admin/toStatisticalreportCaterer" class="btn btn-success">Statistical reports</a>
+        <table id="caterer-list" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>Rank</th>
+                    <th>Rank ending date</th>
+                    <th>Rating</th>
+                    <th>Full name</th>
+                    <th>Phone</th>
+                    <th>Address</th>
+                    <th>Create date</th>
+                    <th>Active</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="caterer : ${catererList}">
+                    <td th:text="${caterer.catererEmail}"></td>
+                    <td th:text="${'$' + caterer.rankID.rankFee}"></td>
+                    <td th:text="${#dates.format(caterer.rankEndDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${caterer.catererRating}"></td>
+                    <td th:text="${caterer.fullName}"></td>
+                    <td th:text="${caterer.phone}"></td>
+                    <td
+                        th:text="${caterer.address + ', ' + caterer.districtID.districtName + ', ' + caterer.districtID.cityID.cityName}">
+                    </td>
+                    <td th:text="${#dates.format(caterer.createDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${caterer.active == 1 ? 'Active' : 'Suspended'}"></td>
+                    <td>
+                        <a th:href="@{/admin/toEditinformationCaterer(email=${caterer.catererEmail})}"
+                            class="btn btn-primary">Edit</a>
+                        <a th:href="@{/admin/changeCatererActive(email=${caterer.catererEmail})}">
+                            <button th:text="${caterer.active == 1 ? 'Suspend' : 'Unsuspend'}"
+                                class="btn btn-danger text-white"></button>
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <script th:src="@{/lib/datatable/datatables.min.js}"></script>
+        <script th:src="@{/js/manageinformationcaterer.js}"></script>
+    </div>
+</body>
+
 </html>

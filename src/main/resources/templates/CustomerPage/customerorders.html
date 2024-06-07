@@ -14,28 +14,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
 <body>
 
     <div layout:fragment="contentMainPage">
-        <!-- <div class="w-100" style="background-color: #eee;">
-            <div class="w-100 px-5 pt-3">
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex">
-                        <div class="d-flex align-items-center order-nav-item order-nav-item-selected fw-medium me-5 ">
-                            <span>All</span>
-                        </div>
-                                               <div class="d-flex align-items-center order-nav-item fw-medium me-5 ">
-                            <span>In progress</span>
-                            <div class="ms-3 rounded-pill fs-7 bg-main text-white px-2">10</div>
-                        </div>
-
-                    </div>
-                    
-                </div>
-
-            </div>
-
-        </div> -->
         <div class="container mt-3">
             <div class="d-flex align-items-center justify-content-end">
-                <a href="">
+                <a href="/listCaterer">
                     <button class="my-btn text-white bg-main fw-bold d-flex align-items-center px-3 py-2 shadow-sm">
                         <i class="fa-solid fa-plus me-3"></i>
                         <div>New Order</div>
@@ -148,83 +129,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     </div>
                 </div>
             </div>
-            <script>
-                $(document).ready(function () {
-                    var table = $('#orderList').DataTable({
-                        pageLength: 10,
-                        lengthMenu: [5, 10],
-                        "scrollX": true, // Thêm thanh cuộn ngang
-                        "autoWidth": false,
-                        columns: [
-                            { width: "10%" },
-                            { width: "10%" },
-                            { width: "15%" },
-                            { width: "10%" },
-                            { width: "10%" },
-                            { width: "10%" },
-                            { width: "20%" },
-                            { width: "15%" },
-                        ]
-                    });
-                });
-                function confirmSubmit(event, info) {
-                    event.preventDefault(); // Ngăn chặn form gửi ngay lập tức
-
-                    // Hiển thị popup xác nhận
-                    if (confirm(`Payment Information: ${info} (Press OK if you have paid)`)) {
-                        // Nếu người dùng nhấn OK, submit form
-                        event.target.submit();
-                    } else {
-                        // Nếu người dùng nhấn Cancel, không làm gì
-                        return false;
-                    }
-                }
-                function confirmDelete() {
-                    return confirm('Are you sure you want to cancel this order?');
-                }
-                function closeModal() {
-                    document.querySelector("#Modal").classList.add("d-none")
-                }
-                function openModal(id) {
-                    document.querySelector("#ModalBody").classList.add("d-none")
-                    document.querySelector("#Spinner").classList.remove("d-none")
-                    document.querySelector("#Modal").classList.remove("d-none")
-                    $(document).ready(function () {
-                        $.ajax({
-                            type: 'GET',
-                            url: '/orders/getOrderDetails',
-                            data: { id: id },
-                            success: function (response) {
-                                console.log(response)
-                                html = ""
-                                data = response.orderDetails
-                                data.forEach((item) => {
-                                    html += `
-                                <tr>
-                                    <td class="w-25"><img src="${item.dishImage}" alt=""
-                                            class="w-100"></td>
-                                    <td class="w-25">${item.dishName}</td>
-                                    <td class="w-25">${item.quantity}</td>
-                                    <td class="w-25">${item.dishPrice}</td>
-                                </tr>
-                                `
-                                    console.log(item)
-                                })
-                                $("#address").text(response.address)
-                                $("#point").text(response.point)
-                                $("#voucher").text(response.voucher)
-
-                                $("#orderDetails").html(html)
-
-                                document.querySelector("#ModalBody").classList.remove("d-none")
-                                document.querySelector("#Spinner").classList.add("d-none")
-                            }
-                        });
-                    })
-
-                }
-            </script>
-
+            <script th:src="@{/js/customerorders.js}"></script>
         </div>
     </div>
 

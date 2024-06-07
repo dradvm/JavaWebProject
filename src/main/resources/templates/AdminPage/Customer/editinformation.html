@@ -1,87 +1,154 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/" 
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="@{../templates/AdminPage/admin}">
-    <head>
-    </head>
-    <body>
-        <div layout:fragment="contentAdminPage">
-            <a href="/admin/toManageinformationCustomer">
-                <button>Back</button>
+<html xmlns:th="https://www.thymeleaf.org/" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="@{../templates/AdminPage/admin}">
+
+<head>
+
+</head>
+
+<body>
+
+    <div layout:fragment="contentAdminPage">
+        <div class="m-2 p-4 bg-white rounded">
+            <a href="/admin/toManageinformationCustomer" class="">
+                <button class="my-btn bg-main text-white rounded px-3 py-1 fw-medium"><i
+                        class="fa-solid fa-chevron-left me-2"></i> Back</button>
             </a>
-            <img th:src="@{${img == null ? '/images/default-avatar.png' : img}}" style="height: 200px; width: 200px">
-            <div>
-                Email: <span th:text="${customer.customerEmail}"></span>
+            <div class="d-flex justify-content-between mt-3">
+                <form id="customer-info" method="POST" style="width: 60%;">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="fw-bold">
+                            Email: <span th:text="${customer.customerEmail}" class="fw-medium"></span>
+                        </div>
+
+                        <div class="fw-bold">
+                            Create date: <span th:text="${#dates.format(customer.createDate, 'yyyy-MM-dd')}"
+                                class="fw-medium"></span>
+                        </div>
+                    </div>
+                    <!--Email-->
+                    <input name="email" type="hidden" th:value="${customer.customerEmail}" />
+
+                    <!--Name-->
+                    <div class="d-flex justify-content-between">
+                        <div style="width: 60%;">
+                            <label for="name" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Full
+                                name<span style="color: red;"> *</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                <input type="text" class="form-control" placeholder="Type your name" id="name"
+                                    name="name" th:value="${customer.fullName}">
+                            </div>
+                            <div class="form-text text-danger" id="name-error"></div>
+                        </div>
+                        <!--Phone-->
+                        <div style="width: 35%;">
+                            <label for="phone" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Phone
+                                <span style="color: red;"> *</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                                <input type="tel" class="form-control" placeholder="Your phone number" id="phone"
+                                    name="phone" th:value="${customer.phone}">
+                            </div>
+                            <div class="form-text text-danger" id="phone-error"></div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <!--Point-->
+                        <div style="width: 45%;">
+                            <label for="point" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">
+                                Point</label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-regular fa-circle-check"></i></span>
+                                <input type="number" class="form-control" placeholder="Type your point" id="point"
+                                    name="point" th:value="${customer.point}">
+                            </div>
+                            <div class="form-text text-danger" id="point-error"></div>
+                        </div>
+                        <!--Roll chance-->
+                        <div style="width: 45%;">
+                            <label for="roll-chance" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Roll
+                                chance</label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-dice"></i></span>
+                                <input type="number" class="form-control" placeholder="Type your roll chance"
+                                    id="roll-chance" name="rollChance" th:value="${customer.rollChance}">
+                            </div>
+                            <div class="form-text text-danger" id="roll-chance-error"></div>
+                        </div>
+
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <!--Profile image-->
+                        <div style="width: 40%;">
+                            <label for="profile-img" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">New
+                                Profile Image</label>
+                            <div class="input-group my-input-form">
+                                <input type="file" class="form-control" placeholder="Type your profile-img"
+                                    id="profile-img" name="profileImg" accept=".jpg, .jpeg, .png">
+                            </div>
+                            <div class="form-text text-danger" id="profile-img-error"></div>
+                        </div>
+                        <!--Birthday-->
+                        <div style="width: 30%;">
+                            <label for="birthday" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Birthday
+                            </label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                                <input type="date" class="form-control" placeholder="Your birthday" id="birthday"
+                                    name="birthday" th:value="${#dates.format(customer.birthday, 'yyyy-MM-dd')}">
+                            </div>
+                        </div>
+                        <div style="width: 20%;">
+                            <label for="gender" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">
+                                Gender<span style="color: red;"> *</span></label>
+                            <select class="form-select" id="gender" name="gender">
+                                <option value="0" th:selected="${customer.gender == 0}">Male</option>
+                                <option value="1" th:selected="${customer.gender == 1}">Female</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div>
+                        <!--Address-->
+                        <div>
+                            <label for="address" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Address<span
+                                    style="color: red;"> *</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-house"></i></span>
+                                <input type="text" class="form-control" placeholder="Your address" id="address"
+                                    th:value="${customer.address}" name="address">
+                            </div>
+                            <div class="form-text text-danger" id="address-error"></div>
+                        </div>
+                        <!--District-->
+
+                        <select class="form-select" id="district-id" name="districtID">
+                            <option th:each="district : ${districtList}" th:value="${district.districtID}"
+                                th:text="${district.districtName + ', ' + district.cityID.cityName}"
+                                th:selected="${customer.districtID.districtID == district.districtID}">
+                            </option>
+                        </select>
+                    </div>
+                    <!--Active-->
+                    <label for="active" class="fw-bold fs-7 mt-2">
+                        Active<span style="color: red;"> *</span>
+                    </label>
+                    <select class="form-select" id="active" name="active">
+                        <option value="0" th:selected="${customer.active == 0}">Suspended</option>
+                        <option value="1" th:selected="${customer.active == 1}">Active</option>
+                    </select>
+                    <!--Submit-->
+                    <div id="error"></div>
+                    <button type="button" onclick="editCustomerInformation()"
+                        class="my-btn bg-main w-100 text-white fw-medium py-2 rounded mt-4">Submit</button>
+                </form>
+                <img th:src="@{${img == null ? '/images/default-avatar.png' : img}}" style="height: 300px; width: 30%">
             </div>
-            <form id="customer-info" method="POST">
-                <!--Email-->
-                <input name="email" type="hidden" th:value="${customer.customerEmail}"/>
-                <!--Profile image-->
-                <label for="profile-img">New profile image: </label>
-                <input id="profile-img" name="profileImg" type="file" accept=".jpg, .jpeg, .png"/>
-                <div id="profile-img-error"></div>
-                <!--Name-->
-                <label for="name">
-                    Full name<span style="color: red;">*</span>:
-                </label>
-                <input id="name" name="name" th:value="${customer.fullName}"/>
-                <div id="name-error"></div>
-                <!--Point-->
-                <label for="point">Point: </label>
-                <input id="point" name="point" type="number" th:value="${customer.point}"/>
-                <div id="point-error"></div>
-                <!--Roll chance-->
-                <label for="point">Roll chance: </label>
-                <input id="roll-chance" name="rollChance" type="number" th:value="${customer.rollChance}"/>
-                <div id="roll-chance-error"></div>
-                <!--Phone-->
-                <label for="phone">
-                    Phone<span style="color: red;">*</span>: 
-                </label>
-                <input id="phone" name="phone" th:value="${customer.phone}"/>
-                <div id="phone-error"></div>
-                <!--Gender-->
-                <label for="gender">
-                    Gender<span style="color: red;">*</span>: 
-                </label>
-                <select id="gender" name="gender">
-                    <option value="0" th:selected="${customer.gender == 0}">Male</option>
-                    <option value="1" th:selected="${customer.gender == 1}">Female</option>
-                </select>
-                <!--Address-->
-                <label for="address">
-                    Address<span style="color: red;">*</span>: 
-                </label>
-                <input id="address" name="address" th:value="${customer.address}"/>
-                <div id="address-error"></div>
-                <!--District-->
-                <select id="district-id" name="districtID">
-                    <option th:each="district : ${districtList}"
-                            th:value="${district.districtID}"
-                            th:text="${district.districtName + ', ' + district.cityID.cityName}"
-                            th:selected="${customer.districtID.districtID == district.districtID}">
-                    </option>
-                </select>
-                <!--Birthday-->
-                <label for="birthday">Birthday: </label>
-                <input id="birthday" name="birthday" type="date" th:value="${#dates.format(customer.birthday, 'yyyy-MM-dd')}"/>
-                <!--Create date-->
-                <div>
-                    Create date: <span th:text="${#dates.format(customer.createDate, 'yyyy-MM-dd')}"></span>
-                </div>
-                <!--Active-->
-                <label for="active">
-                    Active<span style="color: red;">*</span>: 
-                </label>
-                <select id="active" name="active">
-                    <option value="0" th:selected="${customer.active == 0}">Suspended</option>
-                    <option value="1" th:selected="${customer.active == 1}">Active</option>
-                </select>
-                <!--Submit-->
-                <div id="error"></div>
-                <button type="button" onclick="editCustomerInformation()">Submit</button>
-            </form>
-            <script th:src="@{/js/editinformationcustomer.js}"></script>
+
         </div>
-    </body>
+        <script th:src="@{/js/editinformationcustomer.js}"></script>
+    </div>
+</body>
+
 </html>

@@ -125,6 +125,7 @@ public class MainController {
     public String detailsCatererPage(@PathVariable("fullName_Email") String fullName_Email, ModelMap model) {
         
         Caterer c = findCaterer(fullName_Email);
+        setTabNavBar(model, "listCaterer");
         model.addAttribute("profileImg", cloudStorageService.getProfileImg("Caterer", c.getProfileImage()));
         model.addAttribute("caterer", c);
         model.addAttribute("listDish", getDetailsCaterer(fullName_Email));

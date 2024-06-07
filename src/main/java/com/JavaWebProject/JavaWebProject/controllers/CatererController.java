@@ -387,6 +387,8 @@ public class CatererController {
     @GetMapping("/myCaterer/banners")
     public String bannerPage(ModelMap model, HttpSession session) {
 
+        model.addAttribute("selectedNav", "myCaterer");
+        model.addAttribute("selectedPage", "catererbanner");
         ArrayList<Map<String, Object>> data = new ArrayList<>();
         Map<String, Object> temp;
         if (user != null) {

@@ -33,6 +33,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -815,6 +816,8 @@ public class AdminController {
     @GetMapping("/addCatererRank")
     public String showAddCatererRankForm(ModelMap model) {
         model.addAttribute("catererRank", new CatererRank());
+        setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
+        
         return "AdminPage/CatererRank/addCatererRank";
     }
 
@@ -837,8 +840,9 @@ public class AdminController {
     }
 
     @GetMapping("/toRankStatisticalReport")
-    public String toStatisticalReport(Model model) {
+    public String toStatisticalReport(ModelMap model) {
 
+        setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
         double averageRankFee = rankManageService.averageRankFee();
         double maxRankFee = rankManageService.maxRankFee();
         double minRankFee = rankManageService.minRankFee();
@@ -868,6 +872,7 @@ public class AdminController {
     @GetMapping("/toManageFeedbacks")
     public String toManageFeedbacks(ModelMap model) {
         List<Feedback> feedbackList = feedbackService.findAll();
+        setTabAdminPage(model, "adminfeedback", "Manage Feedback");
         model.addAttribute("feedbackList", feedbackList);
         return "AdminPage/adminfeedback";
     }
@@ -890,7 +895,8 @@ public class AdminController {
     }
 
     @GetMapping("/toStatisticalreportFeedback")
-    public String statisticalReportFeedback(Model model) {
+    public String statisticalReportFeedback(ModelMap model) {
+        setTabAdminPage(model, "adminfeedback", "Manage Feedback");
         days = new ArrayList<>();
         months = new ArrayList<>();
         years = new ArrayList<>();
