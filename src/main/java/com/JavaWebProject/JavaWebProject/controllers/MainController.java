@@ -6,6 +6,7 @@ import com.JavaWebProject.JavaWebProject.models.Customer;
 import com.JavaWebProject.JavaWebProject.models.DeliveryAddress;
 import com.JavaWebProject.JavaWebProject.models.Dish;
 import com.JavaWebProject.JavaWebProject.models.District;
+import com.JavaWebProject.JavaWebProject.models.Notification;
 import com.JavaWebProject.JavaWebProject.models.OrderDetails;
 import com.JavaWebProject.JavaWebProject.models.OrderDetailsPK;
 import com.JavaWebProject.JavaWebProject.models.Voucher;
@@ -16,6 +17,7 @@ import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DeliveryAddressService;
 import com.JavaWebProject.JavaWebProject.services.DishService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
+import com.JavaWebProject.JavaWebProject.services.NotificationService;
 import com.JavaWebProject.JavaWebProject.services.OrderDetailsService;
 import com.JavaWebProject.JavaWebProject.services.VoucherService;
 import jakarta.servlet.http.HttpSession;
@@ -63,6 +65,8 @@ public class MainController {
     private CateringOrderService cateringOrderService;
     @Autowired
     private OrderDetailsService orderDetailsService;
+    @Autowired
+    private NotificationService notificationService; 
     private Caterer caterer;
     private List<Dish> catererDish;
     private Map<Dish, Integer> orderList;
@@ -260,7 +264,14 @@ public class MainController {
         
         return result;
     }
-    
+    private void sendNoti(String sender, String receiver, String reason) {
+        Notification noti = new Notification();
+        noti.setNotificationContents(reason);
+        noti.setSender(sender);
+        noti.setReceiver(receiver);
+        noti.setNotificationTime(LocalDateTime.now());
+        notificationService.save(noti);
+    }
     @PostMapping("/createOrder")
     @ResponseBody
     public Map<String, Object> createOrder(
@@ -374,6 +385,7 @@ public class MainController {
         cateringOrderService.save(order);
         customerService.save(customer);
         catererService.save(caterer);
+        sendNoti(customer.getCustomerEmail(), caterer.getCatererEmail(), "Customer "+ customer.getFullName() + " has ordered a catering service");
         int orderID = cateringOrderService.maxID();
         for (Dish dish : orderList.keySet()) {
             if (orderList.get(dish) > 0) {
