@@ -33,7 +33,7 @@
                         href="/minigame">Minigame</a>
                     <a th:if="${session.get('scopedTarget.authController') != null && session.get('scopedTarget.authController').role == 'Customer'}"
                         th:class="'mx-3 menu-item-nav fs-7 ' + ${selectedNav == 'rating' ? 'menu-item-nav-selected' : 'menu-item-nav-hover'}"
-                        href="/customer/orderHistory">Rating Caterer</a>
+                        href="/customer/orderHistory">Order History</a>
                 </div>
             </div>
             <div th:if="${session.get('scopedTarget.authController') == null || session.get('scopedTarget.authController').role == null}"
