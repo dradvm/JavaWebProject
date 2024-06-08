@@ -44,7 +44,7 @@ public class MinigameController {
     public String minigamePage(Model model) {
         data = minigameRewardService.getAllMinigameReward();
         model.addAttribute("selectedNav", "minigame");
-        return "/MinigamePage/minigame";
+        return "MinigamePage/minigame";
     }
     @Autowired
     private NotificationService notificationService;
