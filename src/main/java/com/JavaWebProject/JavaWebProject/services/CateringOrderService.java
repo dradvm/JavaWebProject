@@ -139,7 +139,7 @@ public class CateringOrderService {
     public double countTotalRevenue(Caterer caterer) {
         double value = 0;
         for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderState(caterer, "Finished")) {
-            value+= co.getValue();
+            value = value + (co.getValue() - co.getPointDiscount() - co.getVoucherDiscount());
         }
         return value;
     }
@@ -166,7 +166,7 @@ public class CateringOrderService {
     public double getRevenueByDay(Caterer caterer, LocalDate date) {
         double value = 0;
         for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDate(caterer, "Finished" , date)) {
-            value+=co.getValue();
+            value = value + (co.getValue() - co.getPointDiscount() - co.getVoucherDiscount());
         }
         return value;
     }
@@ -180,7 +180,7 @@ public class CateringOrderService {
         LocalDate endDate = YearMonth.of(year, month).atEndOfMonth();
         double value = 0;
         for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDateBetween(caterer,"Finished", startDate, endDate)) {
-            value+=co.getValue();
+            value = value + (co.getValue() - co.getPointDiscount() - co.getVoucherDiscount());
         }
         return value;
     }
@@ -190,7 +190,7 @@ public class CateringOrderService {
         LocalDate endDate = LocalDate.of(year, 12, 31);
         double value = 0;
         for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDateBetween(caterer,"Finished", startDate, endDate)) {
-            value+=co.getValue();
+            value = value + (co.getValue() - co.getPointDiscount() - co.getVoucherDiscount());
         }
         return value;
     }

@@ -73,7 +73,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
             <header class="bg-white d-flex px-4 py-2 justify-content-between align-items-center">
                 <div class="fs-4 fw-bold" th:text="${title}"></div>
                 <div class=" d-flex align-items-center">
-                    <i class="fa-regular fa-bell me-3"></i>
                     <div class="d-flex align-items-center justify-content-end">
                         <div class="dropdown no-focus-visible">
                             <button class="btn p-1 border-0" type="button" data-bs-toggle="dropdown"
@@ -81,12 +80,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                 <i class="fa-solid fa-circle-user fs-4"></i>
                             </button>
                             <ul class="dropdown-menu">
-                                <li>
-                                    <a class="dropdown-item dropdown-item-custom d-flex align-items-center" href="#">
-                                        <i style="width: 20px;" class="me-3 fa-solid fa-house-user"></i>
-                                        <span>My Profile</span>
-                                    </a>
-                                </li>
                                 <li>
                                     <a class="dropdown-item dropdown-item-custom d-flex align-items-center"
                                         href="/auth/logout">

@@ -45,10 +45,10 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                             <td th:text="${d.orderState}"></td>
                             <td><button class="btn btn-primary" th:onclick="openModal([[${d.orderID}]])">Dishes</button>
                             </td>
-                            <td th:text="${d.value}"></td>
+                            <td th:text="${d.value - d.pointDiscount -d.voucherDiscount}"></td>
                             <td th:text="${d.note}"></td>
                             <td>
-                                <div class="d-flex align-items-center justify-content-evenly">
+                                <div class="d-flex align-items-center">
                                     <form th:if="${d.orderState == 'Accepted' }" th:action="@{/orders/changeState}"
                                         th:onsubmit="confirmSubmit(event, [[${d.catererEmail.paymentInformation}]])"
                                         method="post">
@@ -61,7 +61,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                         method="post">
                                         <input id="id" name="id" th:value="${d.orderID}" type="hidden" />
                                         <input id="state" name="state" th:value="'Finished'" type="hidden" />
-                                        <button class="btn btn-success">Confirm</button>
+                                        <button class="btn btn-success ms-1">Confirm</button>
                                     </form>
                                     <form
                                         th:if="${d.orderState != 'Paid' && d.orderState != 'Finished' && d.orderState != 'Cancelled' }"
@@ -69,7 +69,16 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                                         onsubmit="return confirmDelete();">
                                         <input id="id" name="id" th:value="${d.orderID}" type="hidden" />
                                         <input id="state" name="state" th:value="'Cancelled'" type="hidden" />
-                                        <button class="btn btn-danger">Cancel</button>
+                                        <button class="btn btn-danger ms-1">Cancel</button>
+                                    </form>
+                                    <form th:action="@{/orders/changeState/report}"
+                                        th:onsubmit="return confirmSubmitReport(event);" method="post">
+                                        <input id="reported" name="reported" th:value="${d.catererEmail.catererEmail}"
+                                            type="hidden" />
+                                        <input id="reporter" name="reporter" th:value="${d.customerEmail.customerEmail}"
+                                            type="hidden" />
+                                        <input id="reasonReport" name="reasonReport" value="" type="hidden" />
+                                        <button class="btn btn-danger ms-1"><i class="fa-solid fa-flag"></i></button>
                                     </form>
                                 </div>
                             </td>
@@ -77,7 +86,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this temp
                     </tbody>
                 </table>
             </div>
-            <div id="Modal" class="d-none position-fixed top-50 start-50 translate-middle">
+            <div id="Modal" class="d-none position-fixed top-50 start-50 translate-middle" style="z-index: 999;">
                 <div class="rounded overflow-hidden border bg-white position-relative"
                     style="width: 70vw; height: 80vh;">
                     <div class="position-absolute" style="top: 3%; right: 3%">

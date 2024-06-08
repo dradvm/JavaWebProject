@@ -11,6 +11,7 @@ import com.JavaWebProject.JavaWebProject.models.Dish;
 import com.JavaWebProject.JavaWebProject.models.Notification;
 import com.JavaWebProject.JavaWebProject.models.OrderDetails;
 import com.JavaWebProject.JavaWebProject.models.PaymentHistory;
+import com.JavaWebProject.JavaWebProject.models.Report;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
@@ -19,7 +20,9 @@ import com.JavaWebProject.JavaWebProject.services.DishService;
 import com.JavaWebProject.JavaWebProject.services.NotificationService;
 import java.time.LocalDateTime;
 import com.JavaWebProject.JavaWebProject.services.PaymentService;
+import com.JavaWebProject.JavaWebProject.services.ReportService;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -67,6 +70,8 @@ public class OrderController {
     private CustomerService customerService;
     @Autowired
     private HttpServletRequest request;
+    @Autowired
+    private ReportService reportService;
     
     private Caterer findCaterer(String fullName_Email) {
         System.out.println(fullName_Email);
@@ -135,6 +140,17 @@ public class OrderController {
         cateringOrderService.changeStateOrder(orderId, state);
         CateringOrder od = cateringOrderService.findByID(orderId);
         sendNoti(od.getCatererEmail().getCatererEmail(), od.getCustomerEmail().getCustomerEmail(), reason);
+        return catererController.orderPage(model);
+    }
+    @PostMapping("/changeState/report")
+    public String changeStateReport(@RequestParam("reporter") String reporter, @RequestParam("reported") String reported, @RequestParam("reasonReport") String reason, ModelMap model) {
+        Report report = new Report();
+        report.setReportDate(new Date(LocalDate.now().getYear() - 1900, LocalDate.now().getMonthValue() - 1, LocalDate.now().getDayOfMonth()));
+        report.setReporter(reporter);
+        report.setReportee(reported);
+        report.setReportDescription(reason);
+        report.setReportStatus(0);
+        reportService.save(report);
         return catererController.orderPage(model);
     }
     private void sendNoti(String sender, String receiver, String reason) {

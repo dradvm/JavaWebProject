@@ -162,6 +162,7 @@ function animate() {
                 success: function (response) {
                     getPoint()
                     showModal(document.querySelector("#modal-point"), response)
+                    document.querySelector("#pointGet").innerHTML = response
                     winItem = 0
                 }
             });

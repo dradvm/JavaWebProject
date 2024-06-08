@@ -12,8 +12,8 @@ $(document).ready(function () {
             { width: "10%" },
             { width: "10%" },
             { width: "10%" },
-            { width: "20%" },
             { width: "15%" },
+            { width: "20%" },
         ]
     });
 });
@@ -29,6 +29,27 @@ function confirmSubmit(event, info) {
         return false;
     }
 }
+
+function confirmSubmitReport(event) {
+    event.preventDefault();
+    let reason = prompt('Please enter the reason for your report (max 200 characters):');
+    if (reason !== null) {
+        if (reason.trim().length == 0) {
+            alert('Reason cannot empty');
+            return false;
+        }
+        if (reason.trim().length > 200) {
+            alert('Reason cannot exceed 200 characters');
+            return false;
+        }
+        const reasonInput = event.target.querySelector('#reasonReport');
+        reasonInput.value = reason.trim();
+        event.target.submit()
+        return true;
+    }
+    return false
+}
+
 function confirmDelete() {
     return confirm('Are you sure you want to cancel this order?');
 }

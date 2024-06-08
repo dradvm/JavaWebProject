@@ -137,6 +137,8 @@ public class MainController {
             dish.setDishImage(cloudStorageService.getDishImg(dish.getDishImage()));
             orderList.put(dish, 0);
         }
+        model.addAttribute("numOrder", cateringOrderService.countTotalOrderFinished(caterer));
+        model.addAttribute("numDish", catererDish.size());
         model.addAttribute("dishList", catererDish);
         model.addAttribute("districtList", districtService.findAll());
         AuthController auth = (AuthController) session.getAttribute("scopedTarget.authController");
