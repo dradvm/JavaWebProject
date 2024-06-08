@@ -39,14 +39,14 @@
             <h2>Rating Form</h2>
             <form th:action="@{/customer/submitRating}" method="post">
                 <div class="form-group">
-                    <label for="catererEmail">Caterer Email:</label>
-                    <input readonly="true" id="catererEmail" name="catererEmail" th:value="${catererEmail}" class="form-control" />
-                </div>
-                <div class="form-group">
                     <label for="orderID">Order ID:</label>
                     <input readonly="true" id="orderID" name="orderID" th:value="${orderID}" class="form-control" />
                 </div>
                 <div class="form-group">
+                    <label for="catererEmail">Caterer Email:</label>
+                    <input readonly="true" id="catererEmail" name="catererEmail" th:value="${catererEmail}" class="form-control" />
+                </div>
+                    <div class="form-group">
                     <label for="catererFullName">Caterer Full Name:</label>
                     <input readonly="true" id="catererFullName" name="catererFullName" th:value="${catererFullName}" class="form-control" />
                 </div>

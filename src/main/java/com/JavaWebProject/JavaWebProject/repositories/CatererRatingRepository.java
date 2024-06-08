@@ -12,11 +12,10 @@ import org.springframework.data.repository.CrudRepository;
  *
  * @author DELL
  */
-public interface CatererRatingRepository extends CrudRepository<CatererRating, String> {
+public interface CatererRatingRepository extends CrudRepository<CatererRating, Integer> {
 
     public void save(int catererRating);
     
-//    @Query("SELECT cr FROM CatererRating cr WHERE cr.orderID = :orderID")
-//    CatererRating findByOrderID(int orderID);
-
+    @Query("SELECT cr FROM CatererRating cr WHERE cr.orderID.orderID = :orderID")
+    CatererRating findByOrderID(int orderID);
 }

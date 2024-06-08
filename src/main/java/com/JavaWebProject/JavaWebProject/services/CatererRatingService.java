@@ -7,13 +7,15 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CatererRatingService {
+
     @Autowired
     public CatererRatingRepository catererRatingRepository;
+
     public void save(CatererRating catererRating) {
         catererRatingRepository.save(catererRating);
     }
+     public CatererRating findByOrderId(int orderID) {
+        return catererRatingRepository.findByOrderID(orderID);
+    }
 
-//    public CatererRating findByID(Integer id) {
-//        return catererRatingRepository.findByOrderID(id);
-//    }
 }
