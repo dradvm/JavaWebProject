@@ -10,6 +10,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -47,6 +48,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Customer.findByBirthday", query = "SELECT c FROM Customer c WHERE c.birthday = :birthday"),
     @NamedQuery(name = "Customer.findByCreateDate", query = "SELECT c FROM Customer c WHERE c.createDate = :createDate")})
 public class Customer implements Serializable {
+
+    @ManyToMany(mappedBy = "customerCollection")
+    private Collection<Caterer> catererCollection;
 
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "Point")
@@ -273,6 +277,15 @@ public class Customer implements Serializable {
 
     public void setPoint(Integer point) {
         this.point = point;
+    }
+
+    @XmlTransient
+    public Collection<Caterer> getCatererCollection() {
+        return catererCollection;
+    }
+
+    public void setCatererCollection(Collection<Caterer> catererCollection) {
+        this.catererCollection = catererCollection;
     }
     
 }
