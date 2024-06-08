@@ -32,11 +32,11 @@
                     <td>
                         <a th:href="@{/admin/reportSuspendCustomer(id=${report.reportID})}"
                             th:if="${report.reportStatus == 0}">
-                            <button>Suspend</button>
+                            <button class="btn btn-primary text-white">Suspend</button>
                         </a>
                         <a th:href="@{/admin/reportSkipCustomer(id=${report.reportID})}"
                             th:if="${report.reportStatus == 0}">
-                            <button>Skip</button>
+                            <button class="btn btn-danger text-white">Skip</button>
                         </a>
                     </td>
                 </tr>

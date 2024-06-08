@@ -110,11 +110,16 @@ public class MainController {
             temp.put("fullName", c.getFullName().replace(" ", "-"));
             temp.put("catererEmail", authController.hash_public(c.getCatererEmail()));
             temp.put("catererRating", c.getCatererRating());
-            if (c.getDescription().length() > 50) {
-                temp.put("description", c.getDescription().substring(0, 50)+"...");
+            if (c.getDescription() != null) {
+                if (c.getDescription().length() > 50) {
+                    temp.put("description", c.getDescription().substring(0, 50)+"...");
+                }
+                else {
+                    temp.put("description", c.getDescription());
+                }
             }
             else {
-                temp.put("description", c.getDescription());
+                temp.put("description", "");
             }
             
             temp.put("image", cloudStorageService.getProfileImg("Caterer", c.getProfileImage()));
@@ -149,6 +154,7 @@ public class MainController {
             dish.setDishImage(cloudStorageService.getDishImg(dish.getDishImage()));
             orderList.put(dish, 0);
         }
+        model.addAttribute("numFavorite", caterer.getCustomerCollection().size());
         model.addAttribute("numOrder", cateringOrderService.countTotalOrderFinished(caterer));
         model.addAttribute("numDish", catererDish.size());
         model.addAttribute("dishList", catererDish);

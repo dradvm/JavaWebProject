@@ -131,30 +131,34 @@
                     </div>
                 </form>
                 <form id="caterer-form">
-                    <!--Email-->
-                    <div>
-                        <label for="caterer-email" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Email<span
-                                style="color: red;">*</span></label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
-                            <input type="email" class="form-control" placeholder="Your email" id="caterer-email">
+                    <div class="d-flex justify-content-between">
+                        <!--Email-->
+                        <div style="width: 40%;">
+                            <label for="caterer-email" class="form-label fs-7 fw-bold"
+                                style="margin-bottom: 0;">Email<span style="color: red;">*</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
+                                <input type="email" class="form-control" placeholder="Your email" id="caterer-email">
+                            </div>
+                            <div class="form-text text-danger" id="caterer-email-error"></div>
                         </div>
-                        <div class="form-text text-danger" id="caterer-email-error"></div>
-                    </div>
-                    <!--Password-->
-                    <div>
-                        <label for="caterer-password" class="form-label fs-7 fw-bold"
-                            style="margin-bottom: 0;">Password<span style="color: red;">*</span></label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-                            <input type="password" class="form-control" placeholder="Your password"
-                                id="caterer-password">
+                        <!--Password-->
+                        <div style="width: 55%;">
+                            <label for="caterer-password" class="form-label fs-7 fw-bold"
+                                style="margin-bottom: 0;">Password<span style="color: red;">*</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                <input type="password" class="form-control" placeholder="Your password"
+                                    id="caterer-password">
+                            </div>
+                            <div class="form-text text-danger" id="caterer-password-error"></div>
                         </div>
-                        <div class="form-text text-danger" id="caterer-password-error"></div>
+
                     </div>
-                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex justify-content-between">
+
                         <!--Full name-->
-                        <div>
+                        <div style="width: 26%;">
                             <label for="caterer-name" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Full
                                 name<span style="color: red;">*</span></label>
                             <div class="input-group my-input-form">
@@ -164,7 +168,7 @@
                             <div class="form-text text-danger" id="caterer-name-error"></div>
                         </div>
                         <!--Phone-->
-                        <div>
+                        <div style="width: 26%;">
                             <label for="caterer-phone" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Phone
                                 <span style="color: red;">*</span></label>
                             <div class="input-group my-input-form">
@@ -174,19 +178,8 @@
                             </div>
                             <div class="form-text text-danger" id="caterer-phone-error"></div>
                         </div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <!--Gender-->
-                        <div>
-                            <label for="caterer-gender" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">
-                                Gender<span style="color: red;">*</span></label>
-                            <select class="form-select" id="caterer-gender">
-                                <option th:value="0">Male</option>
-                                <option th:value="1">Female</option>
-                            </select>
-                        </div>
                         <!--Birthday-->
-                        <div>
+                        <div style="width: 26%;">
                             <label for="caterer-birthday" class="form-label fs-7 fw-bold"
                                 style="margin-bottom: 0;">Birthday
                             </label>
@@ -196,31 +189,42 @@
                                     id="caterer-birthday">
                             </div>
                         </div>
+                        <!--Gender-->
+                        <div style="width: 15%;">
+                            <label for="caterer-gender" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">
+                                Gender<span style="color: red;">*</span></label>
+                            <select class="form-select" id="caterer-gender">
+                                <option th:value="0">Male</option>
+                                <option th:value="1">Female</option>
+                            </select>
+                        </div>
                     </div>
                     <!--Address-->
-                    <div>
-                        <label for="caterer-address" class="form-label fs-7 fw-bold"
-                            style="margin-bottom: 0;">Address<span style="color: red;">*</span></label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-house"></i></span>
-                            <input type="text" class="form-control" placeholder="Your address" id="caterer-address">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div style="width: 50%;">
+                            <label for="caterer-address" class="form-label fs-7 fw-bold"
+                                style="margin-bottom: 0;">Address<span style="color: red;">*</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-house"></i></span>
+                                <input type="text" class="form-control" placeholder="Your address" id="caterer-address">
+                            </div>
+                            <div class="form-text text-danger" id="caterer-address-error"></div>
                         </div>
-                        <div class="form-text text-danger" id="caterer-address-error"></div>
-                    </div>
-                    <div class="d-flex align-items-center justify-content-between">
-                        <!--City-->
-                        <select class="form-select" id="caterer-city" onchange="getDistrictList('caterer')">
-                            <option th:each="city : ${cityList}" th:value="${city.cityID}">
-                                <span th:text="${city.cityName}"></span>
-                            </option>
-                        </select>
-                        <!--District-->
-                        <select class="form-select" id="caterer-district">
-                            <option th:each="district : ${districtList}" class="caterer-district"
-                                th:city="${district.cityID.cityID}" th:value="${district.districtID}">
-                                <span th:text="${district.districtName}"></span>
-                            </option>
-                        </select>
+                        <div class="d-flex align-items-center justify-content-between" style="width: 45%;">
+                            <!--City-->
+                            <select class="form-select" id="caterer-city" onchange="getDistrictList('caterer')">
+                                <option th:each="city : ${cityList}" th:value="${city.cityID}">
+                                    <span th:text="${city.cityName}"></span>
+                                </option>
+                            </select>
+                            <!--District-->
+                            <select class="form-select" id="caterer-district">
+                                <option th:each="district : ${districtList}" class="caterer-district"
+                                    th:city="${district.cityID.cityID}" th:value="${district.districtID}">
+                                    <span th:text="${district.districtName}"></span>
+                                </option>
+                            </select>
+                        </div>
                     </div>
                     <!--Payment information-->
                     <div>

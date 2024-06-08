@@ -54,10 +54,7 @@ public class OrderController {
     CateringOrderService cateringOrderService;
     @Autowired
     AuthController user;
-    @Autowired
-    CustomerController customerController;
-    @Autowired
-    CatererController catererController;
+    
     @Autowired
     DishService dishService;
     @Autowired
@@ -139,8 +136,8 @@ public class OrderController {
     public String changeStateReject(@RequestParam("id") Integer orderId, @RequestParam("state") String state, @RequestParam("reason") String reason, ModelMap model) {
         cateringOrderService.changeStateOrder(orderId, state);
         CateringOrder od = cateringOrderService.findByID(orderId);
-        sendNoti(od.getCatererEmail().getCatererEmail(), od.getCustomerEmail().getCustomerEmail(), reason);
-        return catererController.orderPage(model);
+        sendNoti(od.getCatererEmail().getCatererEmail(), od.getCustomerEmail().getCustomerEmail(), od.getCatererEmail().getFullName() + " has reject your order with reason: " + reason);
+        return "redirect:/caterer/myCaterer/orders";
     }
     @PostMapping("/changeState/report")
     public String changeStateReport(@RequestParam("reporter") String reporter, @RequestParam("reported") String reported, @RequestParam("reasonReport") String reason, ModelMap model) {
@@ -152,10 +149,10 @@ public class OrderController {
         report.setReportStatus(0);
         reportService.save(report);
         if (user.getRole().equals("Customer")) {
-            return customerController.ordersCustomerPage(model);
+            return "redirect:/customer/orders";
         }
         else if (user.getRole().equals("Caterer"))  {
-            return catererController.orderPage(model);
+            return "redirect:/caterer/myCaterer/orders";
         }
         return "redirect:/";
     }
