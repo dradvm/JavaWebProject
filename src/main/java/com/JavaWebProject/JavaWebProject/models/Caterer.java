@@ -6,6 +6,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -45,6 +47,12 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Caterer.findByBirthday", query = "SELECT c FROM Caterer c WHERE c.birthday = :birthday"),
     @NamedQuery(name = "Caterer.findByCreateDate", query = "SELECT c FROM Caterer c WHERE c.createDate = :createDate")})
 public class Caterer implements Serializable {
+
+    @JoinTable(name = "FavoriteCaterer", joinColumns = {
+        @JoinColumn(name = "CatererEmail", referencedColumnName = "CatererEmail")}, inverseJoinColumns = {
+        @JoinColumn(name = "CustomerEmail", referencedColumnName = "CustomerEmail")})
+    @ManyToMany
+    private Collection<Customer> customerCollection;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "catererEmail")
     private Collection<Dish> dishCollection;
@@ -346,6 +354,15 @@ public class Caterer implements Serializable {
 
     public void setDishCollection(Collection<Dish> dishCollection) {
         this.dishCollection = dishCollection;
+    }
+
+    @XmlTransient
+    public Collection<Customer> getCustomerCollection() {
+        return customerCollection;
+    }
+
+    public void setCustomerCollection(Collection<Customer> customerCollection) {
+        this.customerCollection = customerCollection;
     }
     
 }
