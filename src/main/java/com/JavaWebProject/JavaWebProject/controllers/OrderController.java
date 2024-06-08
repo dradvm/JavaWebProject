@@ -61,6 +61,7 @@ public class OrderController {
     CloudStorageService cloudStorageService;
     @Autowired
     NotificationService notificationService;
+    @Autowired
     private PaymentService paymentService;
     @Autowired
     private CustomerService customerService;

@@ -9,14 +9,10 @@ function choose(id) {
     $(document).ready(function () {
         $('.rank').each(function () {
             if (parseInt($(this).attr('rank')) === id) {
-                $(this).css({
-                    border: 'thin solid red'
-                });
+                $(this).addClass("rank-selected")
             }
             else {
-                $(this).css({
-                    border: 'thin solid black'
-                });
+                $(this).removeClass("rank-selected")
             }
         });
     });
@@ -24,7 +20,7 @@ function choose(id) {
 
 function buy() {
     $(document).ready(function () {
-       $.ajax({
+        $.ajax({
             url: '/rank/verifyBuyOptionBuy',
             type: 'POST',
             data: {
@@ -37,7 +33,7 @@ function buy() {
                 else {
                     location.href = response;
                 }
-            } 
-       }); 
+            }
+        });
     });
 }

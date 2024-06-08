@@ -1,59 +1,55 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org/">
-    <head>
-        <title>Delivery address</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" th:href="@{/lib/bootstrap/css/bootstrap.min.css}"/>
-        <link rel="stylesheet" th:href="@{/lib/datatable/datatables.min.css}"/>
-        <link rel="stylesheet" th:href="@{/css/mycss.css}"/>
-    </head>
-    <body>
-        <a href="/">
-            <button>Main Page</button>
-        </a>
-        <a href="/auth/toProfile">
-            <button>Manage profile</button>
-        </a>
-        <a href="/auth/toChangepassword">
-            <button>Change password</button>
-        </a>
-        <a href="/customer/toDeliveryaddress">
-            <button>Manage delivery address</button>
-        </a>
-        <a href="/customer/toAdddeliveryaddress">
-            <button>Add new delivery address</button>
-        </a>
-        <table id="delivery-addresses" class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Address</th>
-                    <th>District</th>
-                    <th>City</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="deliveryAddress : ${deliveryAddressList}">
-                    <td th:text="${deliveryAddress.address}"></td>
-                    <td th:text="${deliveryAddress.districtID.districtName}"></td>
-                    <td th:text="${deliveryAddress.districtID.cityID.cityName}"></td>
-                    <td>
-                        <form action="/customer/toEditdeliveryaddress" method="POST">
-                            <input name="id" type="hidden" th:value="${deliveryAddress.addressID}">
-                            <button type="submit">Edit</button>
-                        </form>
-                        <form action="/customer/deleteDeliveryaddress" method="POST">
-                            <input name="id" type="hidden" th:value="${deliveryAddress.addressID}">
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <script th:src="@{/lib/bootstrap/js/bootstrap.bundle.min.js}"></script>
-        <script th:src="@{/js/jquery.min.js}"></script>
-        <script th:src="@{/lib/datatable/datatables.min.js}"></script>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{Layout/layout}">
+
+<head>
+    <title>Delivery address</title>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+
+    <div layout:fragment="contentMainPage">
+        <div class="container mt-5">
+            <div class="d-flex justify-content-end mb-4">
+                <a href="/customer/toAdddeliveryaddress">
+                    <button class="my-btn text-white bg-main fw-bold d-flex align-items-center px-3 py-2 shadow-sm">
+                        <i class="fa-solid fa-plus"></i>
+                        <div>Add new delivery address</div>
+                    </button>
+                </a>
+            </div>
+            <table id="delivery-addresses" class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Address</th>
+                        <th>District</th>
+                        <th>City</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="deliveryAddress : ${deliveryAddressList}">
+                        <td th:text="${deliveryAddress.address}"></td>
+                        <td th:text="${deliveryAddress.districtID.districtName}"></td>
+                        <td th:text="${deliveryAddress.districtID.cityID.cityName}"></td>
+                        <td class="d-flex">
+                            <form action="/customer/toEditdeliveryaddress" method="POST">
+                                <input name="id" type="hidden" th:value="${deliveryAddress.addressID}">
+                                <button type="submit" class="btn btn-primary text-white">Edit</button>
+                            </form>
+                            <form action="/customer/deleteDeliveryaddress" method="POST">
+                                <input name="id" type="hidden" th:value="${deliveryAddress.addressID}">
+                                <button type="submit" class="btn btn-danger ms-2">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
         <script th:src="@{/js/deliveryaddress.js}"></script>
-    </body>
+    </div>
+</body>
+
 </html>

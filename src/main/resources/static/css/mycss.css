@@ -369,3 +369,18 @@ input::-webkit-inner-spin-button {
         transform: rotate(360deg);
     }
 }
+
+.rank:hover {
+    background-color: var(--main-bg-hover-color);
+    color: white;
+    cursor: pointer;
+}
+
+.rank-selected {
+    background-color: var(--main-bg-active-color);
+    color: white;
+}
+
+.rank-selected:hover {
+    background-color: var(--main-bg-active-color);
+}
