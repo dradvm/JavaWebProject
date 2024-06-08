@@ -10,6 +10,8 @@ import com.JavaWebProject.JavaWebProject.repositories.CatererRepository;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,15 @@ public class CatererService {
     }
 
     public List<Caterer> findAllCatererActive() {
-        return catererRepository.findByActive(1);
+        ArrayList<Caterer> data = new ArrayList<Caterer>();
+        LocalDate today = LocalDate.now();
+        Date t = new Date(today.getYear() - 1900, today.getMonthValue() - 1, today.getDayOfMonth());
+        for (Caterer c : catererRepository.findByActive(1)) {
+            if (!t.before(c.getRankStartDate()) && !t.after(c.getRankEndDate())) {
+                data.add(c);
+            }
+        }
+        return data;
     }
 
     public Caterer findByCatererEmailAndFullName(String fullName, String catererEmail) {
