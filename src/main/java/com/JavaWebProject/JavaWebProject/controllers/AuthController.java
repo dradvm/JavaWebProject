@@ -12,6 +12,7 @@ import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.MailService;
+import com.JavaWebProject.JavaWebProject.services.NotificationService;
 import com.JavaWebProject.JavaWebProject.services.PaymentService;
 import jakarta.servlet.http.HttpSession;
 import java.math.BigInteger;
@@ -27,7 +28,9 @@ import java.util.Random;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -61,7 +64,20 @@ public class AuthController {
     private String retrieveEmail;
     private Instant expireTime;
     private int code;
+    @Autowired
+    private NotificationService notificationService;
+    @Autowired
+    private AuthController user;
 
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        if (user != null && user.getRole() != null) {
+            if (user.getRole().equals("Customer") || (user.getRole().equals("Caterer"))) {
+                model.addAttribute("notification", notificationService.getNotification(user.getUsername()));
+
+            }
+        }
+    }
     @RequestMapping(value = "/toLogin", method = RequestMethod.GET)
     public String toLogin() {
         role = null;

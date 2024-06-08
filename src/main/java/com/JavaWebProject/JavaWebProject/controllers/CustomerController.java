@@ -14,6 +14,7 @@ import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.DeliveryAddressService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
+import com.JavaWebProject.JavaWebProject.services.NotificationService;
 import com.JavaWebProject.JavaWebProject.services.OrderDetailsService;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -23,8 +24,10 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -57,7 +60,18 @@ public class CustomerController {
     private CateringOrderService cateringOrderService;
     @Autowired
     private AuthController user;
+    @Autowired
+    private NotificationService notificationService;
 
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        if (user != null && user.getRole() != null) {
+            if (user.getRole().equals("Customer") || (user.getRole().equals("Caterer"))) {
+                model.addAttribute("notification", notificationService.getNotification(user.getUsername()));
+
+            }
+        }
+    }
     @RequestMapping(value = "/editProfile", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> editProfile(

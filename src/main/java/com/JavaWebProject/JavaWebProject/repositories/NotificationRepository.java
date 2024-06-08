@@ -5,6 +5,7 @@
 package com.JavaWebProject.JavaWebProject.repositories;
 
 import com.JavaWebProject.JavaWebProject.models.Notification;
+import java.util.List;
 import org.springframework.data.repository.CrudRepository;
 
 /**
@@ -12,5 +13,5 @@ import org.springframework.data.repository.CrudRepository;
  * @author DELL
  */
 public interface NotificationRepository extends CrudRepository<Notification, Integer>{
-    
+    List<Notification> findTop10ByReceiverOrderByNotificationTimeDesc(String receiver);
 }

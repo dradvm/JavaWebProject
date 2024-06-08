@@ -16,6 +16,7 @@ import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
 import com.JavaWebProject.JavaWebProject.services.DishService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
+import com.JavaWebProject.JavaWebProject.services.NotificationService;
 import com.JavaWebProject.JavaWebProject.services.OrderDetailsService;
 import java.math.BigDecimal;
 import jakarta.servlet.http.HttpSession;
@@ -34,6 +35,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,6 +71,8 @@ public class CatererController {
     private BannerTypeService bannerTypeService;
     @Autowired
     private CateringOrderService cateringOrderService;
+    @Autowired
+    private NotificationService notificationService;
     private ArrayList<LocalDate> days;
     private ArrayList<Month> months;
     private ArrayList<Integer> years;
@@ -76,7 +80,15 @@ public class CatererController {
     private ArrayList<String> labelsMonth;
     private ArrayList<String> labelsYear;
     private LocalDate today;
-    
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        if (user != null && user.getRole() != null) {
+            if (user.getRole().equals("Customer") || (user.getRole().equals("Caterer"))) {
+                model.addAttribute("notification", notificationService.getNotification(user.getUsername()));
+
+            }
+        }
+    }
     @GetMapping(value = "/myCaterer/orders")
     public String orderPage(ModelMap model) {
         model.addAttribute("selectedNav", "myCaterer");
