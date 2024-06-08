@@ -7,6 +7,7 @@ package com.JavaWebProject.JavaWebProject.controllers;
 import com.JavaWebProject.JavaWebProject.models.MinigameReward;
 import com.JavaWebProject.JavaWebProject.services.CustomerService;
 import com.JavaWebProject.JavaWebProject.services.MinigameRewardService;
+import com.JavaWebProject.JavaWebProject.services.NotificationService;
 import jakarta.servlet.http.HttpSession;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -44,7 +46,18 @@ public class MinigameController {
         model.addAttribute("selectedNav", "minigame");
         return "/MinigamePage/minigame";
     }
-    
+    @Autowired
+    private NotificationService notificationService;
+
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        if (user != null && user.getRole() != null) {
+            if (user.getRole().equals("Customer") || (user.getRole().equals("Caterer"))) {
+                model.addAttribute("notification", notificationService.getNotification(user.getUsername()));
+
+            }
+        }
+    }
     @GetMapping("/getDataOfWheel")
     @ResponseBody
     public Object getDataOfWheel() {

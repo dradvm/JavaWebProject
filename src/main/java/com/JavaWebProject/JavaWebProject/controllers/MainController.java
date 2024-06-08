@@ -32,8 +32,10 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -74,6 +76,16 @@ public class MainController {
     
     public void setTabNavBar(ModelMap model, String page) {
         model.addAttribute("selectedNav", page);
+    }
+    
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        if (authController != null && authController.getRole() != null) {
+            if (authController.getRole().equals("Customer") || (authController.getRole().equals("Caterer"))) {
+                model.addAttribute("notification", notificationService.getNotification(authController.getUsername()));
+
+            }
+        }
     }
     
     @GetMapping(value = "/")

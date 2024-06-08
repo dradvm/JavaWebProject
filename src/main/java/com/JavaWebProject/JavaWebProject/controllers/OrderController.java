@@ -151,7 +151,13 @@ public class OrderController {
         report.setReportDescription(reason);
         report.setReportStatus(0);
         reportService.save(report);
-        return catererController.orderPage(model);
+        if (user.getRole().equals("Customer")) {
+            return customerController.ordersCustomerPage(model);
+        }
+        else if (user.getRole().equals("Caterer"))  {
+            return catererController.orderPage(model);
+        }
+        return "redirect:/";
     }
     private void sendNoti(String sender, String receiver, String reason) {
         Notification noti = new Notification();
