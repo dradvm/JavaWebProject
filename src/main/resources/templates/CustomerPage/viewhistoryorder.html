@@ -22,35 +22,28 @@
                         <th>Order Time</th>
                         <th>Create Date</th>
                         <th>Order State</th>
-                        <th>Dish Name</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total Price</th>
-                        <th>Action</th>
+                        <th>Dish Details</th>
+                        <th>Rate</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="order : ${orders}">
-                        <td th:text="${order.orderID}"></td>
-                        <td th:text="${order.orderTime}"></td>
-                        <td th:text="${order.createDate}"></td>
-                        <td th:text="${order.orderState}"></td>
-                        <td th:text="${order.dishName}"></td>
-                        <td th:text="${order.price}"></td>
-                        <td th:text="${order.quantity}"></td>
-                        <td th:text="${order.totalPrice}"></td>
+                        <td th:text="${order['orderID']}"></td>
+                        <td th:text="${order['orderTime']}"></td>
+                        <td th:text="${order['createDate']}"></td>
+                        <td th:text="${order['orderState']}"></td>
+                        <td th:text="${order['dishDetails']}"></td>
                         <td>
                             <!-- Rating Button -->
-                            <a th:if="${order.orderState eq 'Finished'}" th:href="@{/customer/ratingForm(id=${order.orderID})}"
-                               class="btn btn-primary">Rate</a>
-                            <!-- Disabled Rating Button -->
+                            <a th:if="${order.orderState eq 'Finished' && !order.rated}" th:href="@{/customer/ratingForm(id=${order.orderID})}" class="btn btn-primary">Rate</a>
+                            <button th:if="${order.orderState eq 'Finished' && order.rated}" class="btn btn-secondary" disabled>Already Rated</button>
                             <button th:if="${order.orderState ne 'Finished'}" class="btn btn-secondary" disabled>Rate</button>
                         </td>
+
                     </tr>
                 </tbody>
             </table>
         </div>
-
 
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

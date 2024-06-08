@@ -20,7 +20,7 @@
                         <th>Email</th>
                         <th>Feedback Details</th>
                         <th>Feedback Date</th>
-                        <th>Action</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -30,11 +30,7 @@
                         <td th:text="${feedback.email}"></td>
                         <td th:text="${feedback.feedbackDetails}"></td>
                         <td th:text="${feedback.feedbackDate}"></td>
-                        <td>
-                            <form th:action="@{/admin/deleteFeedback}" method="post" style="display:inline-block;" onsubmit="return confirmDelete();">
-                                <input type="hidden" name="id" th:value="${feedback.feedbackID}" />
-                                <button type="submit" class="btn btn-danger">Delete</button>                            </form>
-                        </td>
+                        
                     </tr>
                 </tbody>
             </table>

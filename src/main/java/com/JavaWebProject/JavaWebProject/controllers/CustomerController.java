@@ -20,6 +20,7 @@ import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +73,7 @@ public class CustomerController {
             }
         }
     }
+
     @RequestMapping(value = "/editProfile", method = RequestMethod.POST)
     @ResponseBody
     public Map<String, Object> editProfile(
@@ -265,27 +267,43 @@ public class CustomerController {
     }
 
     @GetMapping("/orderHistory")
-    public String viewOrderHistory(ModelMap model, HttpSession session) {
-        ArrayList<Map<String, Object>> orderData = new ArrayList<>();
+    public String viewOrderHistory(ModelMap model) {
+        Map<Integer, Map<String, Object>> orderDataMap = new LinkedHashMap<>();
         if (user != null) {
             for (CateringOrder c : cateringOrderService.findAllByCustomer(customerService.findById(user.getUsername()))) {
-                // Tìm tất cả các OrderDetails cho mỗi CateringOrder
-                for (OrderDetails od : orderDetailsService.findAllByOrderID(c.getOrderID())) {
-                    Map<String, Object> orderDetailsMap = new HashMap<>();
-                    orderDetailsMap.put("orderID", c.getOrderID());
-                    orderDetailsMap.put("catererEmail", c.getCatererEmail());
-                    orderDetailsMap.put("orderTime", c.getOrderTime());
-                    orderDetailsMap.put("createDate", c.getCreateDate());
-                    orderDetailsMap.put("orderState", c.getOrderState());
-                    orderDetailsMap.put("dishName", od.getDish().getDishName());
-                    orderDetailsMap.put("price", od.getPrice());
-                    orderDetailsMap.put("quantity", od.getQuantity());
-                    orderDetailsMap.put("totalPrice", od.getPrice() * od.getQuantity());
-                    orderData.add(orderDetailsMap);
+                Integer orderId = c.getOrderID();
+                Map<String, Object> orderDetailsMap = orderDataMap.getOrDefault(orderId, new HashMap<>());
+
+                orderDetailsMap.put("orderID", c.getOrderID());
+                orderDetailsMap.put("catererEmail", c.getCatererEmail());
+                orderDetailsMap.put("orderTime", c.getOrderTime());
+                orderDetailsMap.put("createDate", c.getCreateDate());
+                orderDetailsMap.put("orderState", c.getOrderState());
+
+                String dishDetails = (String) orderDetailsMap.getOrDefault("dishDetails", "");
+                for (OrderDetails od : orderDetailsService.findAllByOrderID(orderId)) {
+                    dishDetails += od.getDish().getDishName() + " (x" + od.getQuantity() + "), ";
                 }
+                // Remove the last comma and space
+                if (dishDetails.length() > 2) {
+                    dishDetails = dishDetails.substring(0, dishDetails.length() - 2);
+                }
+
+                orderDetailsMap.put("dishDetails", dishDetails);
+
+                // Check if the order has been rated
+                CatererRating catererRating = catererRatingService.findByOrderId(orderId);
+                if (catererRating != null && catererRating.getRate() >= 1) {
+                    orderDetailsMap.put("rated", true);
+                } else {
+                    orderDetailsMap.put("rated", false);
+                }
+
+                orderDataMap.put(orderId, orderDetailsMap);
             }
         }
-        model.addAttribute("orders", orderData);
+
+        model.addAttribute("orders", new ArrayList<>(orderDataMap.values()));
         model.addAttribute("selectedNav", "rating");
         model.addAttribute("selectedPage", "orderHistory");
         return "CustomerPage/viewhistoryorder";
@@ -297,7 +315,6 @@ public class CustomerController {
         if (cateringOrder != null && cateringOrder.getOrderState().equals("Finished")) {
             String catererEmail = cateringOrder.getCatererEmail().getCatererEmail();
             Caterer caterer = catererService.findById(catererEmail);
-
             if (caterer != null) {
                 String catererFullName = caterer.getFullName();
                 model.addAttribute("orderID", id);
