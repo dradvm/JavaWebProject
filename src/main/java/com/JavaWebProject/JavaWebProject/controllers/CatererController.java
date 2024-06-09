@@ -410,8 +410,6 @@ public class CatererController {
     @GetMapping("/myCaterer/banners")
     public String bannerPage(ModelMap model, HttpSession session) {
 
-        model.addAttribute("selectedNav", "myCaterer");
-        model.addAttribute("selectedPage", "catererbanner");
         ArrayList<Map<String, Object>> data = new ArrayList<>();
         Map<String, Object> temp;
         if (user != null) {
@@ -428,14 +426,15 @@ public class CatererController {
 
         model.addAttribute("banners", data);
         model.addAttribute("selectedNav", "myCaterer");
-        model.addAttribute("selectedPage", "catererbanners");
+        model.addAttribute("selectedPage", "catererbanner");
         return "CatererPage/Banners/catererbanners";
     }
 
     @GetMapping("/myCaterer/buyBannerPage")
     public String buyBannerPage(Model model) {
         model.addAttribute("bannerTypeList", bannerTypeService.findAll());
-        model.addAttribute("selectedPage", "viewratings");
+        model.addAttribute("selectedNav", "myCaterer");
+        model.addAttribute("selectedPage", "catererbanner");
         return "CatererPage/Banners/buybanner";
     }
 

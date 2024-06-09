@@ -116,16 +116,13 @@
             <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
                 <div class="carousel-inner" style="height: 80vh;">
                     <div class="carousel-item active">
-                        <img src="https://images.pexels.com/photos/135620/pexels-photo-135620.jpeg?cs=srgb&dl=pexels-shattha-pilabut-38930-135620.jpg&fm=jpg"
-                            class="d-block w-100" alt="...">
+                        <img th:src="${image1}" class="d-block w-100" alt="...">
                     </div>
                     <div class="carousel-item">
-                        <img src="https://sdg-migration-id.s3.amazonaws.com/nick-leith-smith-manolo-blahnik-japanese-architecture-wooden-canopies-tokyo-0418.jpg"
-                            class="d-block w-100" alt="...">
+                        <img th:src="${image2}" class="d-block w-100" alt="...">
                     </div>
                     <div class="carousel-item">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVvsAJBvDGEPvTnPLLI1HsMD_7Hr-H5yHMj3U4i17qAkqtS3TNswm0OJe9QRbSychTaXI&usqp=CAU"
-                            class="d-block w-100" alt="...">
+                        <img th:src="${image3}" class="d-block w-100" alt="...">
                     </div>
                 </div>
                 <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
@@ -176,9 +173,8 @@
         </div>
         <div class="container-fluid mb-5" style="height: 400px;">
             <div class="d-flex h-100">
-                <img src="https://i.ytimg.com/vi/vz2zGfaq1ec/maxresdefault.jpg" class="w-50 h-100" />
-                <img src="https://marketplace.canva.com/EAFloAOrGBY/1/0/1600w/canva-orange-and-black-minimalist-food-banner-landscape-hvZzaUttSLk.jpg"
-                    class="w-50 h-100" />
+                <img th:src="${image4}" class="w-50 h-100" />
+                <img th:src="${image5}" class="w-50 h-100" />
             </div>
         </div>
         <div class="row my-5 justify-content-center">
@@ -203,7 +199,7 @@
             </div>
         </div>
         <div class="container-fluid my-5">
-            <img src="https://tpc.googlesyndication.com/simgad/9160717345927680832" class="w-100" />
+            <img th:src="${image6}" class="w-100" style="height: 200px;" />
         </div>
     </div>
 </body>

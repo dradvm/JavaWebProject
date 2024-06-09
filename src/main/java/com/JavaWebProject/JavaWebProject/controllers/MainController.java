@@ -1,5 +1,6 @@
 package com.JavaWebProject.JavaWebProject.controllers;
 
+import com.JavaWebProject.JavaWebProject.models.Banner;
 import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.CateringOrder;
 import com.JavaWebProject.JavaWebProject.models.Customer;
@@ -10,6 +11,7 @@ import com.JavaWebProject.JavaWebProject.models.Notification;
 import com.JavaWebProject.JavaWebProject.models.OrderDetails;
 import com.JavaWebProject.JavaWebProject.models.OrderDetailsPK;
 import com.JavaWebProject.JavaWebProject.models.Voucher;
+import com.JavaWebProject.JavaWebProject.services.BannerService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
@@ -69,6 +71,8 @@ public class MainController {
     private OrderDetailsService orderDetailsService;
     @Autowired
     private NotificationService notificationService; 
+    @Autowired
+    private BannerService bannerService;
     private Caterer caterer;
     private List<Dish> catererDish;
     private Map<Dish, Integer> orderList;
@@ -91,6 +95,13 @@ public class MainController {
     @GetMapping(value = "/")
     public String mainPage(ModelMap model) {
         setTabNavBar(model, "home");
+        List<Banner> banners = bannerService.getAllBanners();
+        model.addAttribute("image1", cloudStorageService.getBannerImg(banners.get(0).getBannerImage()));
+        model.addAttribute("image2", cloudStorageService.getBannerImg(banners.get(1).getBannerImage()));
+        model.addAttribute("image3", cloudStorageService.getBannerImg(banners.get(2).getBannerImage()));
+        model.addAttribute("image4", cloudStorageService.getBannerImg(banners.get(3).getBannerImage()));
+        model.addAttribute("image5", cloudStorageService.getBannerImg(banners.get(4).getBannerImage()));
+        model.addAttribute("image6", cloudStorageService.getBannerImg(banners.get(5).getBannerImage()));
         return "index";
     }
     

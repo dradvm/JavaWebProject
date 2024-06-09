@@ -37,5 +37,7 @@ public class BannerService {
         });
         return result;
     }
-
+    public List<Banner> getAllBanners() {
+        return bannerRepository.findAll();
+    }
 }
