@@ -18,157 +18,162 @@
 
 <body>
     <div layout:fragment="contentMainPage">
-        <div class="d-flex container justify-content-between mx-5 mt-5">
-            <form id="profile" style="width: 55%;">
-                <!--Email-->
-                <div class="d-flex align-items-center justify-content-between">
-                    <div class="v-stack">
-                        <div class="fw-bold">
-                            Email: <span class="fw-medium" th:text="${caterer.catererEmail}"></span>
+        <div class="d-flex justify-content-around">
+            <div class="d-flex container justify-content-between mx-5 mt-5">
+                <form id="profile" style="width: 55%;">
+                    <!--Email-->
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div class="v-stack">
+                            <div class="fw-bold">
+                                Email: <span class="fw-medium" th:text="${caterer.catererEmail}"></span>
+                            </div>
+                            <div class="fw-bold">
+                                Create date: <span class="fw-medium"
+                                    th:text="${#dates.format(caterer.createDate, 'yyyy-MM-dd')}"></span>
+                            </div>
                         </div>
-                        <div class="fw-bold">
-                            Create date: <span class="fw-medium"
-                                th:text="${#dates.format(caterer.createDate, 'yyyy-MM-dd')}"></span>
+                        <div class="v-stack text-end">
+                            <div class="fw-bold">
+                                Rating: <span class="fw-medium" th:text="${caterer.catererRating}"></span>
+                            </div>
+                            <div class="fw-bold">
+                                Point: <span class="fw-medium" th:text="${caterer.point}"></span>
+                            </div>
                         </div>
                     </div>
-                    <div class="v-stack text-end">
-                        <div class="fw-bold">
-                            Rating: <span class="fw-medium" th:text="${caterer.catererRating}"></span>
+                    <!--Name-->
+                    <div class="d-flex justify-content-between">
+                        <div style="width: 60%;">
+                            <label for="name" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Full
+                                name<span style="color: red;"> *</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
+                                <input type="text" class="form-control" placeholder="Type your name" id="name"
+                                    name="name" th:value="${caterer.fullName}">
+                            </div>
+                            <div class="form-text text-danger" id="name-error"></div>
                         </div>
-                        <div class="fw-bold">
-                            Point: <span class="fw-medium" th:text="${caterer.point}"></span>
+                        <div style="width: 35%;">
+                            <label for="phone" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Phone
+                                <span style="color: red;"> *</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
+                                <input type="tel" class="form-control" placeholder="Your phone number" id="phone"
+                                    name="phone" th:value="${caterer.phone}">
+                            </div>
+                            <div class="form-text text-danger" id="phone-error"></div>
                         </div>
                     </div>
-                </div>
-                <!--Name-->
-                <div class="d-flex justify-content-between">
-                    <div style="width: 60%;">
-                        <label for="name" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Full
-                            name<span style="color: red;"> *</span></label>
+                    <div class="d-flex justify-content-between">
+                        <!--Birthday-->
+                        <div style="width: 50%;">
+                            <label for="birthday" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Birthday
+                            </label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
+                                <input type="date" class="form-control" placeholder="Your birthday" id="birthday"
+                                    name="birthday" th:value="${#dates.format(caterer.birthday, 'yyyy-MM-dd')}">
+                            </div>
+                        </div>
+                        <!--Gender-->
+                        <div style="width: 45%;">
+                            <label for="gender" class="fw-bold fs-7">
+                                Gender<span style="color: red;"> *</span>
+                            </label>
+                            <select class="form-select" id="gender" name="gender">
+                                <option value="0" th:selected="${caterer.gender == 0}">Male</option>
+                                <option value="1" th:selected="${caterer.gender == 1}">Female</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!--Profile image-->
+                    <div>
+                        <label for="profile-img" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">New
+                            Profile Image</label>
+                        <div class="input-group my-input-form">
+                            <input type="file" class="form-control" placeholder="Type your profile-img" id="profile-img"
+                                name="profileImg" accept=".jpg, .jpeg, .png">
+                        </div>
+                        <div class="form-text text-danger" id="profile-img-error"></div>
+                    </div>
+                    <!--Rank-->
+
+                    <!--Rating-->
+                    <!--Payment information-->
+                    <div>
+                        <label for="payment-information" class="form-label fs-7 fw-bold"
+                            style="margin-bottom: 0;">Payment
+                            information<span style="color: red;"> *</span></label>
                         <div class="input-group my-input-form">
                             <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                            <input type="text" class="form-control" placeholder="Type your name" id="name" name="name"
-                                th:value="${caterer.fullName}">
+                            <input type="text" class="form-control" placeholder="Type your payment"
+                                id="payment-information" name="paymentInformation"
+                                th:value="${caterer.paymentInformation}">
                         </div>
-                        <div class="form-text text-danger" id="name-error"></div>
+                        <div class="form-text text-danger" id="payment-information-error"></div>
                     </div>
-                    <div style="width: 35%;">
-                        <label for="phone" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Phone
-                            <span style="color: red;"> *</span></label>
+                    <!--Point-->
+                    <!--Description-->
+                    <div>
+                        <label for="description" class="form-label fs-7 fw-bold"
+                            style="margin-bottom: 0;">Description</label>
                         <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-phone"></i></span>
-                            <input type="tel" class="form-control" placeholder="Your phone number" id="phone"
-                                name="phone" th:value="${caterer.phone}">
-                        </div>
-                        <div class="form-text text-danger" id="phone-error"></div>
-                    </div>
-                </div>
-                <div class="d-flex justify-content-between">
-                    <!--Birthday-->
-                    <div style="width: 50%;">
-                        <label for="birthday" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Birthday
-                        </label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-calendar-days"></i></span>
-                            <input type="date" class="form-control" placeholder="Your birthday" id="birthday"
-                                name="birthday" th:value="${#dates.format(caterer.birthday, 'yyyy-MM-dd')}">
+                            <textarea type="text" class="form-control" placeholder="Your description" id="description"
+                                name="description" th:text="${caterer.description}"></textarea>
                         </div>
                     </div>
-                    <!--Gender-->
-                    <div style="width: 45%;">
-                        <label for="gender" class="fw-bold fs-7">
-                            Gender<span style="color: red;"> *</span>
-                        </label>
-                        <select class="form-select" id="gender" name="gender">
-                            <option value="0" th:selected="${caterer.gender == 0}">Male</option>
-                            <option value="1" th:selected="${caterer.gender == 1}">Female</option>
+                    <div>
+                        <!--Address-->
+                        <div>
+                            <label for="address" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Address<span
+                                    style="color: red;"> *</span></label>
+                            <div class="input-group my-input-form">
+                                <span class="input-group-text"><i class="fa-solid fa-house"></i></span>
+                                <input type="text" class="form-control" placeholder="Your address" id="address"
+                                    th:value="${caterer.address}" name="address">
+                            </div>
+                            <div class="form-text text-danger" id="address-error"></div>
+                        </div>
+                        <!--District-->
+
+                        <select class="form-select" id="district-id" name="districtID">
+                            <option th:each="district : ${districtList}" th:value="${district.districtID}"
+                                th:text="${district.districtName + ', ' + district.cityID.cityName}"
+                                th:selected="${caterer.districtID.districtID == district.districtID}">
+                            </option>
                         </select>
                     </div>
-                </div>
-                <!--Profile image-->
-                <div>
-                    <label for="profile-img" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">New
-                        Profile Image</label>
-                    <div class="input-group my-input-form">
-                        <input type="file" class="form-control" placeholder="Type your profile-img" id="profile-img"
-                            name="profileImg" accept=".jpg, .jpeg, .png">
-                    </div>
-                    <div class="form-text text-danger" id="profile-img-error"></div>
-                </div>
-                <!--Rank-->
+                    <!--Create date-->
+                    <!--Submit-->
+                    <div id="error"></div>
+                    <button type="button" onclick="editProfile()"
+                        class="my-btn bg-main w-100 text-white fw-medium py-2 rounded mt-4">Submit</button>
+                </form>
+                <div style="width: 40%;">
+                    <img th:src="@{${img == null ? '/images/default-avatar.png' : img}}"
+                        style="height: 250px; width: 100%">
+                    <div class="d-flex justify-content-between">
+                        <div class="v-stack ">
 
-                <!--Rating-->
-                <!--Payment information-->
-                <div>
-                    <label for="payment-information" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Payment
-                        information<span style="color: red;"> *</span></label>
-                    <div class="input-group my-input-form">
-                        <span class="input-group-text"><i class="fa-solid fa-user"></i></span>
-                        <input type="text" class="form-control" placeholder="Type your payment" id="payment-information"
-                            name="paymentInformation" th:value="${caterer.paymentInformation}">
-                    </div>
-                    <div class="form-text text-danger" id="payment-information-error"></div>
-                </div>
-                <!--Point-->
-                <!--Description-->
-                <div>
-                    <label for="description" class="form-label fs-7 fw-bold"
-                        style="margin-bottom: 0;">Description</label>
-                    <div class="input-group my-input-form">
-                        <textarea type="text" class="form-control" placeholder="Your description" id="description"
-                            name="description" th:text="${caterer.description}"></textarea>
-                    </div>
-                </div>
-                <div>
-                    <!--Address-->
-                    <div>
-                        <label for="address" class="form-label fs-7 fw-bold" style="margin-bottom: 0;">Address<span
-                                style="color: red;"> *</span></label>
-                        <div class="input-group my-input-form">
-                            <span class="input-group-text"><i class="fa-solid fa-house"></i></span>
-                            <input type="text" class="form-control" placeholder="Your address" id="address"
-                                th:value="${caterer.address}" name="address">
+                            <div class="fw-bold">
+                                Rank starting date: <span class="fw-medium"
+                                    th:text="${#dates.format(caterer.rankStartDate, 'yyyy-MM-dd')}"></span>
+                            </div>
+                            <div class="fw-bold">
+                                Rank ending date: <span class="fw-medium"
+                                    th:text="${#dates.format(caterer.rankEndDate, 'yyyy-MM-dd')}"></span>
+                            </div>
                         </div>
-                        <div class="form-text text-danger" id="address-error"></div>
-                    </div>
-                    <!--District-->
-
-                    <select class="form-select" id="district-id" name="districtID">
-                        <option th:each="district : ${districtList}" th:value="${district.districtID}"
-                            th:text="${district.districtName + ', ' + district.cityID.cityName}"
-                            th:selected="${caterer.districtID.districtID == district.districtID}">
-                        </option>
-                    </select>
-                </div>
-                <!--Create date-->
-                <!--Submit-->
-                <div id="error"></div>
-                <button type="button" onclick="editProfile()"
-                    class="my-btn bg-main w-100 text-white fw-medium py-2 rounded mt-4">Submit</button>
-            </form>
-            <div style="width: 40%;">
-                <img th:src="@{${img == null ? '/images/default-avatar.png' : img}}" style="height: 250px; width: 100%">
-                <div class="d-flex justify-content-between">
-                    <div class="v-stack ">
-
-                        <div class="fw-bold">
-                            Rank starting date: <span class="fw-medium"
-                                th:text="${#dates.format(caterer.rankStartDate, 'yyyy-MM-dd')}"></span>
-                        </div>
-                        <div class="fw-bold">
-                            Rank ending date: <span class="fw-medium"
-                                th:text="${#dates.format(caterer.rankEndDate, 'yyyy-MM-dd')}"></span>
-                        </div>
-                    </div>
-                    <div class="v-stack text-end">
-                        <div class="fw-bold">
-                            Rank fee: $<span class="fw-medium" th:text="${caterer.rankID.rankFee}"></span>
-                        </div>
-                        <div class="fw-bold">
-                            Rank CPO: <span class="fw-medium" th:text="${caterer.rankID.rankCPO}"></span>
-                        </div>
-                        <div class="fw-bold">
-                            Rank max dish: <span class="fw-medium" th:text="${caterer.rankID.rankMaxDish}"></span>
+                        <div class="v-stack text-end">
+                            <div class="fw-bold">
+                                Rank fee: $<span class="fw-medium" th:text="${caterer.rankID.rankFee}"></span>
+                            </div>
+                            <div class="fw-bold">
+                                Rank CPO: <span class="fw-medium" th:text="${caterer.rankID.rankCPO}"></span>
+                            </div>
+                            <div class="fw-bold">
+                                Rank max dish: <span class="fw-medium" th:text="${caterer.rankID.rankMaxDish}"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
