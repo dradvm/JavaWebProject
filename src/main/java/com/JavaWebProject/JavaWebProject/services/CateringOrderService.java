@@ -17,38 +17,39 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CateringOrderService {
+
     @Autowired
     private CateringOrderRepository cateringOrderRepository;
-    
+
     public int countDistinctCatererEmailByCreateDate(LocalDate date) {
         return cateringOrderRepository.countDistinctCatererEmailByCreateDate(date);
     }
-    
+
     public int countDistinctCustomerEmailByCreateDate(LocalDate date) {
         return cateringOrderRepository.countDistinctCustomerEmailByCreateDate(date);
     }
-    
+
     public int sumPointDiscountByCreateDate(LocalDate date) {
         Optional<Integer> result = cateringOrderRepository.sumPointDiscountByCreateDate(date);
         return result.isPresent() ? result.get() : 0;
     }
-    
+
     public int getNumCatererGotOrderedGapByDay(LocalDate date) {
         return countDistinctCatererEmailByCreateDate(date) - countDistinctCatererEmailByCreateDate(date.minusDays(1));
     }
-    
+
     public int getNumCustomerOrderedGapByDay(LocalDate date) {
         return countDistinctCustomerEmailByCreateDate(date) - countDistinctCustomerEmailByCreateDate(date.minusDays(1));
     }
-    
+
     public int getPointUsedGapByDay(LocalDate date) {
         return sumPointDiscountByCreateDate(date) - sumPointDiscountByCreateDate(date.minusDays(1));
     }
-    
+
     public int countByCreateDate(LocalDate date) {
         return cateringOrderRepository.countByCreateDate(date);
     }
-    
+
     public int countByCreateDateMonth(Month month) {
         int year = LocalDate.now().getYear();
         if (month.getValue() > LocalDate.now().getMonthValue()) {
@@ -58,17 +59,17 @@ public class CateringOrderService {
         LocalDate end = LocalDate.of(year, month, month.maxLength());
         return cateringOrderRepository.countByCreateDateBetween(start, end);
     }
-    
+
     public int countByCreateDateYear(int year) {
         LocalDate start = LocalDate.of(year, 1, 1);
         LocalDate end = LocalDate.of(year, 12, 31);
         return cateringOrderRepository.countByCreateDateBetween(start, end);
     }
-    
+
     public int getNewOrderGapByDay(LocalDate date) {
         return countByCreateDate(date) - countByCreateDate(date.minusDays(1));
     }
-    
+
     public List<Map<String, Object>> getValueBarChartCustomer(ArrayList dates) {
         List<Map<String, Object>> datasets = new ArrayList();
         ArrayList<String> labels = new ArrayList();
@@ -81,8 +82,7 @@ public class CateringOrderService {
                 if (valueDate instanceof LocalDate) {
                     if (label.equals("New orders")) {
                         data.add(countByCreateDate((LocalDate) valueDate));
-                    }
-                    else {
+                    } else {
                         data.add(countDistinctCustomerEmailByCreateDate((LocalDate) valueDate));
                     }
                 }
@@ -90,8 +90,7 @@ public class CateringOrderService {
                     Month month = (Month) valueDate;
                     if (label.equals("New orders")) {
                         data.add(countByCreateDateMonth(month));
-                    }
-                    else {
+                    } else {
                         int year = LocalDate.now().getYear();
                         if (month.getValue() > LocalDate.now().getMonthValue()) {
                             year--;
@@ -100,13 +99,11 @@ public class CateringOrderService {
                         LocalDate end = LocalDate.of(year, month, month.maxLength());
                         data.add(cateringOrderRepository.countDistinctCustomerEmailByCreateDateBetween(start, end));
                     }
-                }
-                else {
+                } else {
                     int year = (int) valueDate;
                     if (label.equals("New orders")) {
                         data.add(countByCreateDateYear(year));
-                    }
-                    else {
+                    } else {
                         LocalDate start = LocalDate.of(year, 1, 1);
                         LocalDate end = LocalDate.of(year, 12, 31);
                         data.add(cateringOrderRepository.countDistinctCustomerEmailByCreateDateBetween(start, end));
@@ -119,23 +116,27 @@ public class CateringOrderService {
         }
         return datasets;
     }
-    
+
     public List<CateringOrder> findAllByCustomer(Customer customer) {
         return cateringOrderRepository.findAllByCustomerEmail(customer);
     }
+
     public List<CateringOrder> findAllByCaterer(Caterer caterer) {
         return cateringOrderRepository.findAllByCatererEmail(caterer);
     }
+
     public CateringOrder findByID(Integer id) {
         return cateringOrderRepository.findByOrderID(id);
     }
-    
+
     public int countTotalOrderFinished(Caterer caterer) {
         return cateringOrderRepository.findAllByCatererEmailAndOrderState(caterer, "Finished").size();
     }
+
     public int countTotalOrderCancelled(Caterer caterer) {
         return cateringOrderRepository.findAllByCatererEmailAndOrderState(caterer, "Cancelled").size();
     }
+
     public double countTotalRevenue(Caterer caterer) {
         double value = 0;
         for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderState(caterer, "Finished")) {
@@ -143,6 +144,7 @@ public class CateringOrderService {
         }
         return value;
     }
+
     public int getNewOrderByDay(Caterer caterer, LocalDate date) {
         return cateringOrderRepository.findAllByCatererEmailAndCreateDate(caterer, date).size();
     }
@@ -162,10 +164,10 @@ public class CateringOrderService {
         LocalDate endDate = LocalDate.of(year, 12, 31);
         return cateringOrderRepository.findAllByCatererEmailAndCreateDateBetween(caterer, startDate, endDate).size();
     }
-    
+
     public double getRevenueByDay(Caterer caterer, LocalDate date) {
         double value = 0;
-        for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDate(caterer, "Finished" , date)) {
+        for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDate(caterer, "Finished", date)) {
             value = value + (co.getValue() - co.getPointDiscount() - co.getVoucherDiscount());
         }
         return value;
@@ -179,7 +181,7 @@ public class CateringOrderService {
         LocalDate startDate = LocalDate.of(year, month, 1);
         LocalDate endDate = YearMonth.of(year, month).atEndOfMonth();
         double value = 0;
-        for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDateBetween(caterer,"Finished", startDate, endDate)) {
+        for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDateBetween(caterer, "Finished", startDate, endDate)) {
             value = value + (co.getValue() - co.getPointDiscount() - co.getVoucherDiscount());
         }
         return value;
@@ -189,23 +191,42 @@ public class CateringOrderService {
         LocalDate startDate = LocalDate.of(year, 1, 1);
         LocalDate endDate = LocalDate.of(year, 12, 31);
         double value = 0;
-        for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDateBetween(caterer,"Finished", startDate, endDate)) {
+        for (CateringOrder co : cateringOrderRepository.findAllByCatererEmailAndOrderStateAndCreateDateBetween(caterer, "Finished", startDate, endDate)) {
             value = value + (co.getValue() - co.getPointDiscount() - co.getVoucherDiscount());
         }
         return value;
     }
+
     public void save(CateringOrder order) {
         cateringOrderRepository.save(order);
     }
-    
+
     public void changeStateOrder(Integer id, String state) {
         CateringOrder cateringOrder = cateringOrderRepository.findByOrderID(id);
         cateringOrder.setOrderState(state);
         save(cateringOrder);
     }
-    
+
     public int maxID() {
         Optional<Integer> result = cateringOrderRepository.maxID();
         return result.isPresent() ? result.get() : 1;
     }
+
+    public int countOrderByCustomerEmailAndOrderState(String customerEmail, String orderState) {
+        return cateringOrderRepository.countByCustomerEmail_CustomerEmailAndOrderState(customerEmail, orderState);
     }
+    public double getTotalPaymentByYear(String customerEmail, int year) {
+    LocalDate startDate = LocalDate.of(year, 1, 1);
+    LocalDate endDate = LocalDate.of(year, 12, 31);
+    double totalPayment = 0;
+
+    List<CateringOrder> cateringOrders = cateringOrderRepository.findAllByCustomerEmail_CustomerEmailAndOrderStateAndCreateDateBetween(customerEmail, "Finished", startDate, endDate);
+
+    for (CateringOrder cateringOrder : cateringOrders) {
+        totalPayment += (cateringOrder.getValue() - cateringOrder.getPointDiscount() - cateringOrder.getVoucherDiscount());
+    }
+
+    return totalPayment;
+}
+
+}

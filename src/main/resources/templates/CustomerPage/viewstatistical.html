@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Order Status Count</title>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="/js/statisticalorderhistory.js"></script> <!-- Thay đổi đường dẫn này cho phù hợp -->
+    </head>
+    <body>
+        <h1>Order Status Count</h1>
+        <p>Total amount paid in the current year: <span id="totalFinishedPrice" th:text="'$'+${totalFinishedPrice}"></span></p>
+        <p>Finished Orders: <span id="finishedOrders" th:text="${finishedOrders}"></span></p>
+        <p>Paid Orders: <span id="paidOrders" th:text="${paidOrders}"></span></p>
+        <p>Waiting Orders: <span id="waitingOrders" th:text="${waitingOrders}"></span></p>
+
+        <div class="d-flex justify-content-between">
+            <div class="bg-white rounded" style="width: 96%;">
+                <div>
+                    <canvas id="orderStatusChart" style="width: 300px; height: 300px;"></canvas>                            </div>
+            </div>
+        </div>
+
+    </body>
+</html>

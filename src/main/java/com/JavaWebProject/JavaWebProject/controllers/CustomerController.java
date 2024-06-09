@@ -17,12 +17,17 @@ import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.NotificationService;
 import com.JavaWebProject.JavaWebProject.services.OrderDetailsService;
 import jakarta.servlet.http.HttpSession;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -351,5 +356,22 @@ public class CustomerController {
         catererService.save(caterer);
         return "redirect:/customer/orderHistory";
 
+    }
+
+    @GetMapping("/orderStatusCount")
+    public String getOrderStatusCount( Model model) {
+        String customerEmail = user.getUsername();
+         LocalDate currentDate = LocalDate.now(); // Lấy ngày hiện tại
+        int currentYear = currentDate.getYear();
+        int finishedOrders = cateringOrderService.countOrderByCustomerEmailAndOrderState(customerEmail, "Finished");
+        int paidOrders = cateringOrderService.countOrderByCustomerEmailAndOrderState(customerEmail, "Paid");
+        int waitingOrders = cateringOrderService.countOrderByCustomerEmailAndOrderState(customerEmail, "Waiting");
+        Double totalFinishedPrice = cateringOrderService.getTotalPaymentByYear(customerEmail, currentYear);
+        model.addAttribute("finishedOrders", finishedOrders);
+        model.addAttribute("paidOrders", paidOrders);
+        model.addAttribute("waitingOrders", waitingOrders);
+        model.addAttribute("totalFinishedPrice", totalFinishedPrice);
+
+        return "CustomerPage/viewstatistical";
     }
 }
