@@ -9,4 +9,5 @@ public interface BannerTypeRepository extends CrudRepository<BannerType, Integer
     
     @Query("select u.typeDescription from BannerType u")
     List<String> getAllTypeDescription();
+    
 }
