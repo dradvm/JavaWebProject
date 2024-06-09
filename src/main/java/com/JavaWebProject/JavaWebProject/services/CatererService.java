@@ -44,7 +44,9 @@ public class CatererService {
         Date t = new Date(today.getYear() - 1900, today.getMonthValue() - 1, today.getDayOfMonth());
         for (Caterer c : catererRepository.findByActive(1)) {
             if (!t.before(c.getRankStartDate()) && !t.after(c.getRankEndDate())) {
-                data.add(c);
+                if (c.getDishCollection().size() > 0) {
+                    data.add(c);
+                }
             }
         }
         return data;

@@ -96,7 +96,7 @@ function writeOrderedDishTag(dish) {
                         <div style="width: 20%;" class="rounded overflow-hidden">
                             <img src="${img}" class="w-100"/>
                         </div>
-                        <div style="width: 65%;">
+                        <div style="width: 60%;">
                             <div class="d-flex align-items-center justify-content-between">
                                 <div class="fw-medium">${name}</div>
                                 <div class="fw-medium">$${price}</div>
