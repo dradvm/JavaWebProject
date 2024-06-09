@@ -334,7 +334,7 @@ public class CustomerController {
             @RequestParam("rate") int rate,
             @RequestParam("comment") String comment,
             HttpSession session) {
-        System.out.println("Rate:" +rate);
+        System.out.println("Rate:" + rate);
 
         CatererRating catererRating = new CatererRating();
         catererRating.setCatererEmail(catererEmail);
@@ -342,6 +342,13 @@ public class CustomerController {
         catererRating.setRate(rate);
         catererRating.setComment(comment);
         catererRatingService.save(catererRating);
+
+        double averageRating = catererRatingService.calculateAverageRatingByCatererEmail(catererService.findById(catererEmail.getCatererEmail()));
+
+        // Cập nhật lại Caterer
+        Caterer caterer = catererService.findById(catererEmail.getCatererEmail());
+        caterer.setCatererRating(averageRating);
+        catererService.save(caterer);
         return "redirect:/customer/orderHistory";
 
     }
