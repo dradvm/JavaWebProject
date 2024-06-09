@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{CatererPage/caterer}">
+
+<head>
+    <title>Buy Banner</title>
+</head>
+
+<body>
+<div layout:fragment="contentCatererPage">
+    <div class="container mt-5">
+        <!-- Form to buy a new banner -->
+        <form th:action="@{/caterer/myCaterer/banners/verifyBuyBanner}" method="post">
+            <div class="form-group">
+                <label for="typeID">Choose Banner Type:</label>
+                <select required="true" class="form-control" id="typeID" name="typeID">
+                    <option value="">Select Banner Type</option>
+                    <option th:each="bannerType : ${bannerTypeList}" th:value="${bannerType.typeID}"
+                            th:text="${bannerType.typeDescription + '   Price: ' + bannerType.typePrice}"></option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Proceed to Payment</button>
+            <a th:href="@{/caterer/myCaterer/banners}" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+</body>
+
+</html>

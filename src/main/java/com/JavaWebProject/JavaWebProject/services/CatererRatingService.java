@@ -1,7 +1,9 @@
 package com.JavaWebProject.JavaWebProject.services;
 
+import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.CatererRating;
 import com.JavaWebProject.JavaWebProject.repositories.CatererRatingRepository;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,11 @@ public class CatererRatingService {
     }
      public CatererRating findByOrderId(int orderID) {
         return catererRatingRepository.findByOrderID(orderID);
+    }
+
+     public List<CatererRating> findAllBannersByCaterer(Caterer catererEmail) {
+        return catererRatingRepository.findByCatererEmail(catererEmail);
+    
     }
 
 }

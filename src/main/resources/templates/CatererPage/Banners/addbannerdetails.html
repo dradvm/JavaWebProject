@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{CatererPage/caterer}">
+
+    <head>
+        <title>Add Image Banner</title>
+    </head>
+
+    <body>
+        <div layout:fragment="contentCatererPage">
+            <div class="container mt-5">
+                <form th:action="@{/caterer/myCaterer/banners/addBannerDetails}" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="bannerImage">Banner Image</label>
+                        <input type="file" id="bannerImage" name="bannerImage" accept="image/*" required>
+                    </div>
+                    <input type="hidden" id="bannerType" name="bannerType" value="${bannerType}">
+                    <button type="submit">Save</button>
+                </form>
+            </div>
+        </div>
+    </body>
+
+</html>

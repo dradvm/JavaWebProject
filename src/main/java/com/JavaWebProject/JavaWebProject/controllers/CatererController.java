@@ -7,10 +7,13 @@ package com.JavaWebProject.JavaWebProject.controllers;
 import com.JavaWebProject.JavaWebProject.models.Banner;
 import com.JavaWebProject.JavaWebProject.models.BannerType;
 import com.JavaWebProject.JavaWebProject.models.Caterer;
+import com.JavaWebProject.JavaWebProject.models.CatererRating;
 import com.JavaWebProject.JavaWebProject.models.Dish;
 import com.JavaWebProject.JavaWebProject.models.District;
+import com.JavaWebProject.JavaWebProject.models.PaymentHistory;
 import com.JavaWebProject.JavaWebProject.services.BannerManageService;
 import com.JavaWebProject.JavaWebProject.services.BannerTypeService;
+import com.JavaWebProject.JavaWebProject.services.CatererRatingService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
@@ -18,6 +21,8 @@ import com.JavaWebProject.JavaWebProject.services.DishService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.NotificationService;
 import com.JavaWebProject.JavaWebProject.services.OrderDetailsService;
+import com.JavaWebProject.JavaWebProject.services.PaymentService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
@@ -39,6 +44,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,7 +61,13 @@ public class CatererController {
     @Autowired
     private AuthController user;
     @Autowired
+    private HttpServletRequest request;
+    @Autowired
+    private PaymentService paymentService;
+    @Autowired
     private CatererService catererService;
+    @Autowired
+    private CatererRatingService catererRatingService;
     @Autowired
     private DishService dishService;
     @Autowired
@@ -420,41 +432,90 @@ public class CatererController {
         return "CatererPage/Banners/catererbanners";
     }
 
-    @GetMapping("/myCaterer/banners/addPage")
-    public String addBannerPage(ModelMap model) {
-        model.addAttribute("selectedNav", "myCaterer");
-        model.addAttribute("selectedPage", "catererbanners");
-        return "CatererPage/Banners/addbanner";
+    @GetMapping("/myCaterer/buyBannerPage")
+    public String buyBannerPage(Model model) {
+        model.addAttribute("bannerTypeList", bannerTypeService.findAll());
+        model.addAttribute("selectedPage", "viewratings");
+        return "CatererPage/Banners/buybanner";
     }
 
-    @PostMapping("/add")
-    public String addBanner(
-            @RequestParam("bannerImage") MultipartFile bannerImage,
-            @RequestParam("enddate") int endDays,
-            @RequestParam("typeID") Integer typeID,
-            HttpSession session,
-            RedirectAttributes redirectAttributes
-    ) {
-        Banner banner = new Banner();
-        Date currentDate = new Date(); // Ngày hiện tại
-        banner.setBannerStartDate(currentDate);
-
-        // Tính toán ngày kết thúc
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        calendar.add(Calendar.DAY_OF_YEAR, endDays);
-        Date bannerEndDate = calendar.getTime();
-        banner.setBannerEndDate(bannerEndDate);
-
-        // Lấy đối tượng BannerType từ cơ sở dữ liệu
+    @RequestMapping(value = "/myCaterer/banners/verifyBuyBanner", method = RequestMethod.POST)
+    public String verifyBuyBanner(@RequestParam("typeID") Integer typeID, HttpSession session) {
         BannerType bannerType = bannerTypeService.findById(typeID);
-        if (bannerType != null) {
-            banner.setTypeID(bannerType);
-        } else {
-            throw new IllegalArgumentException("Invalid Banner Type ID");
+        System.out.println(bannerType);
+        if (bannerType == null) {
+            return "error";
         }
 
+        try {
+            session.setAttribute("bannerType", bannerType);
+
+            String returnURL = "http://localhost:8080/caterer/myCaterer/banners/payment/response";
+            String paymentUrl = paymentService.getPaymentUrl((long) bannerType.getTypePrice() * 25000, returnURL, request);
+
+            return "redirect:" + paymentUrl;
+        } catch (Exception e) {
+            return "error";
+        }
+    }
+
+    @RequestMapping(value = "/myCaterer/banners/payment/response", method = RequestMethod.GET)
+    public String handlePaymentResponse(HttpSession session, Model model) {
+        if (paymentService.check(request)) {
+            BannerType bannerType = (BannerType) session.getAttribute("bannerType");
+            System.out.println(bannerType + "1");
+            // Save payment history
+            PaymentHistory payment = new PaymentHistory();
+            payment.setCatererEmail(catererService.findById(user.getUsername()));
+            payment.setDescription("Buy banner " + bannerType.getTypeID());
+            payment.setValue((long) bannerType.getTypePrice());
+            payment.setPaymentTime(new Date());
+            payment.setTypeID(paymentService.findPaymentTypeById(3));
+            paymentService.savePaymentHistory(payment);
+
+            session.setAttribute("bannerType", bannerType);
+            model.addAttribute("bannerType", bannerType);
+
+            return "redirect:/caterer/myCaterer/banners/addDetails";
+        } else {
+            return "CatererPage/Banners/paymentbannerfail";
+        }
+    }
+    @GetMapping("/myCaterer/banners/addDetails")
+    public String addBannerDetailsPage(HttpSession session, ModelMap model) {
+        BannerType bannerType = (BannerType) session.getAttribute("bannerType");
+        System.out.println(bannerType + ("2"));
+        if (bannerType == null) {
+            return "error";
+        }
+        model.addAttribute("bannerType", bannerType);
+        return "CatererPage/Banners/addbannerdetails";
+    }
+
+    @PostMapping("/myCaterer/banners/addBannerDetails")
+    public String addBannerDetails(@RequestParam("bannerImage") MultipartFile bannerImage,
+            HttpSession session) {
+        BannerType bannerType = (BannerType) session.getAttribute("bannerType");
+        System.out.println(bannerType + ("3"));
+        if (bannerType == null) {
+            return "error";
+        }
+
+        Banner banner = new Banner();
+        banner.setTypeID(bannerType);
+
+        // Set banner start date as current date
+        Date startDate = new Date();
+        banner.setBannerStartDate(startDate);
+
+        // Calculate end date (15 days)
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.DAY_OF_YEAR, 15);
+        Date endDate = calendar.getTime();
+        banner.setBannerEndDate(endDate);
         banner.setCatererEmail(catererService.findById(user.getUsername()));
+        // Handle banner image upload
         if (bannerImage != null && !bannerImage.isEmpty()) {
             String fileName = cloudStorageService.generateFileName(bannerImage, user.getUsername());
             banner.setBannerImage(fileName);
@@ -505,7 +566,6 @@ public class CatererController {
             bannerManageService.save(banner);
         }
 
-        
         return "redirect:/caterer/myCaterer/banners";
     }
 
@@ -525,5 +585,14 @@ public class CatererController {
         cloudStorageService.deleteFile("banner/" + banner.getBannerImage());
         bannerManageService.delete(banner);
         return "redirect:/caterer/myCaterer/banners";
+    }
+
+    @GetMapping("/myCaterer/viewRatings")
+    public String viewRatings(String catererEmail, Model model) {
+        List<CatererRating> ratings = catererRatingService.findAllBannersByCaterer(catererService.findById(user.getUsername()));
+        model.addAttribute("ratings", ratings);
+        model.addAttribute("selectedNav", "myCaterer");
+        model.addAttribute("selectedPage", "viewratings");
+        return "CatererPage/ViewRating/viewratings";
     }
 }

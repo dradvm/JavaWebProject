@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{CatererPage/caterer}">
+
+    <head>
+        <title>Buy Banner</title>
+        <script th:inline="javascript">
+            function proceedToPayment() {
+                var select = document.getElementById("typeID");
+                var selectedOption = select.options[select.selectedIndex];
+                var typeID = selectedOption.value;
+                window.location.href = '/myCaterer/banners/verifyBuyBanner?typeID=' + typeID;
+            }
+        </script>
+    </head>
+
+    <body>
+        <div layout:fragment="contentCatererPage">
+            <div class="container mt-5">
+                <!-- Display the list of banner types -->
+                <div class="form-group">
+                    <label for="typeID">Choose Banner Type:</label>
+                    <select required="true" class="form-control" id="typeID" name="typeID">
+                        <option value="">Select Banner Type</option>
+                        <option th:each="bannerType : ${bannerTypeList}" th:value="${bannerType.typeID}"
+                                th:text="${bannerType.typeDescription + ' - Price: ' + bannerType.typePrice}"></option>
+                    </select>
+                </div>
+                <!-- Button to confirm and proceed to payment -->
+                <button class="btn btn-primary" onclick="proceedToPayment()">Proceed to Payment</button>
+            </div>
+        </div>
+    </body>
+
+</html>
