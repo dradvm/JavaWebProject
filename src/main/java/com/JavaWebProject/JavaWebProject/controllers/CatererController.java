@@ -289,7 +289,7 @@ public class CatererController {
         
         model.addAttribute("selectedNav", "myCaterer");
         model.addAttribute("selectedPage", "catererdishes");
-        return "/CatererPage/DishesPage/catererdishesreport";
+        return "CatererPage/DishesPage/catererdishesreport";
     }
     
     @PostMapping(value = "/editProfile")
