@@ -4,7 +4,9 @@
  */
 package com.JavaWebProject.JavaWebProject.repositories;
 
+import com.JavaWebProject.JavaWebProject.models.Caterer;
 import com.JavaWebProject.JavaWebProject.models.CatererRating;
+import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
@@ -18,4 +20,10 @@ public interface CatererRatingRepository extends CrudRepository<CatererRating, I
     
     @Query("SELECT cr FROM CatererRating cr WHERE cr.orderID.orderID = :orderID")
     CatererRating findByOrderID(int orderID);
+
+//    @Query("SELECT cr FROM CatererRating cr WHERE cr.catererEmail.catereEmail = :catererEmail")
+    List<CatererRating> findByCatererEmail(Caterer catererEmail);
+    
+    
+    
 }

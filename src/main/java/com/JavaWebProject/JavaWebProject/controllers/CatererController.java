@@ -7,10 +7,12 @@ package com.JavaWebProject.JavaWebProject.controllers;
 import com.JavaWebProject.JavaWebProject.models.Banner;
 import com.JavaWebProject.JavaWebProject.models.BannerType;
 import com.JavaWebProject.JavaWebProject.models.Caterer;
+import com.JavaWebProject.JavaWebProject.models.CatererRating;
 import com.JavaWebProject.JavaWebProject.models.Dish;
 import com.JavaWebProject.JavaWebProject.models.District;
 import com.JavaWebProject.JavaWebProject.services.BannerManageService;
 import com.JavaWebProject.JavaWebProject.services.BannerTypeService;
+import com.JavaWebProject.JavaWebProject.services.CatererRatingService;
 import com.JavaWebProject.JavaWebProject.services.CatererService;
 import com.JavaWebProject.JavaWebProject.services.CateringOrderService;
 import com.JavaWebProject.JavaWebProject.services.CloudStorageService;
@@ -18,6 +20,8 @@ import com.JavaWebProject.JavaWebProject.services.DishService;
 import com.JavaWebProject.JavaWebProject.services.DistrictService;
 import com.JavaWebProject.JavaWebProject.services.NotificationService;
 import com.JavaWebProject.JavaWebProject.services.OrderDetailsService;
+import com.JavaWebProject.JavaWebProject.services.PaymentService;
+import jakarta.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import jakarta.servlet.http.HttpSession;
 import java.time.LocalDate;
@@ -39,6 +43,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,7 +60,13 @@ public class CatererController {
     @Autowired
     private AuthController user;
     @Autowired
+    private HttpServletRequest request;
+    @Autowired
+    private PaymentService paymentService;
+    @Autowired
     private CatererService catererService;
+    @Autowired
+    private CatererRatingService catererRatingService;
     @Autowired
     private DishService dishService;
     @Autowired
@@ -427,6 +438,37 @@ public class CatererController {
         return "CatererPage/Banners/addbanner";
     }
 
+    @GetMapping("/myCaterer/banners/buyBannerPage")
+    public String buyBanner(ModelMap model) {
+        if (user != null) {
+            model.addAttribute("bannerTypeList", bannerTypeService.findAll());
+            return "BannerPage/buybanner";
+        }
+        model.addAttribute("errorMessage", "Please Login first");
+        return "/auth/toLogin";
+    }
+
+    @RequestMapping(value = "/myCaterer/banners/verifyBuyBanner", method = RequestMethod.POST)
+    public String verifyBuyBanner(@RequestParam("typeID") int typeID, HttpSession session) {
+        BannerType bannerType = bannerTypeService.findById(typeID);
+        if (bannerType != null) {
+            try {
+                // Xử lý logic mua banner ở đây
+
+                // Lưu thông tin loại banner vào session để sử dụng sau khi thanh toán thành công
+                session.setAttribute("bannerType", bannerType);
+
+                // Tạo URL thanh toán
+                String returnURL = "http://localhost:8080/myCaterer/banners/payment/response";
+                return paymentService.getPaymentUrl((long) bannerType.getTypePrice(), returnURL, request);
+            } catch (Exception e) {
+                return "error";
+            }
+        } else {
+            return "error";
+        }
+    }
+
     @PostMapping("/add")
     public String addBanner(
             @RequestParam("bannerImage") MultipartFile bannerImage,
@@ -505,7 +547,6 @@ public class CatererController {
             bannerManageService.save(banner);
         }
 
-        
         return "redirect:/caterer/myCaterer/banners";
     }
 
@@ -525,5 +566,13 @@ public class CatererController {
         cloudStorageService.deleteFile("banner/" + banner.getBannerImage());
         bannerManageService.delete(banner);
         return "redirect:/caterer/myCaterer/banners";
+    }
+    @GetMapping("/myCaterer/viewRatings")
+    public String viewRatings(String catererEmail, Model model) {
+        List<CatererRating> ratings = catererRatingService.findAllBannersByCaterer(catererService.findById(user.getUsername()));
+        model.addAttribute("ratings", ratings);
+        model.addAttribute("selectedNav", "myCaterer");
+        model.addAttribute("selectedPage", "viewratings");
+        return "CatererPage/ViewRating/viewratings";
     }
 }

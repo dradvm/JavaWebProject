@@ -334,6 +334,7 @@ public class CustomerController {
             @RequestParam("rate") int rate,
             @RequestParam("comment") String comment,
             HttpSession session) {
+        System.out.println("Rate:" +rate);
 
         CatererRating catererRating = new CatererRating();
         catererRating.setCatererEmail(catererEmail);

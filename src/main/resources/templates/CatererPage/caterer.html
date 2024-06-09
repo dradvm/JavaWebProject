@@ -5,57 +5,66 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to c
 Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
 -->
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{Layout/layout}">
+      layout:decorate="~{Layout/layout}">
 
-<head>
+    <head>
 
 
-</head>
+    </head>
 
-<body>
-    <div layout:fragment="contentMainPage">
-        <div class="row gx-0">
-            <nav class="vh-100 col-2 p-3">
-                <div class="vstack gap-2">
-                    <a href="/caterer/myCaterer/orders"
-                        th:class="'item-nav ' + ${selectedPage == 'catererorders' ? 'item-nav-selected' : '' }">
-                        <div class="">
-                            <i class="fa-solid fa-chart-pie"></i>
-                        </div>
-                        <div class="fw-bold d-flex">
-                            Order
-                        </div>
-                    </a>
-                    <a href="/caterer/myCaterer/dishes"
-                        th:class="'item-nav ' + ${selectedPage == 'catererdishes' ? 'item-nav-selected' : '' }">
-                        <div class="">
-                            <i class="fa-solid fa-shop"></i>
-                        </div>
-                        <div class="fw-bold d-flex">
-                            Dish
-                        </div>
-                    </a>
-                    <a href="/caterer/myCaterer/banners"
-                        th:class="'item-nav ' + ${selectedPage == 'catererbanner' ? 'item-nav-selected' : '' }">
-                        <div class="">
-                            <i class="fa-solid fa-ad"></i>
-                        </div>
-                        <div class="fw-bold d-flex">
-                            Banner Advertise
-                        </div>
-                    </a>
+    <body>
+        <div layout:fragment="contentMainPage">
+            <div class="row gx-0">
+                <nav class="vh-100 col-2 p-3">
+                    <div class="vstack gap-2">
+                        <a href="/caterer/myCaterer/orders"
+                           th:class="'item-nav ' + ${selectedPage == 'catererorders' ? 'item-nav-selected' : '' }">
+                            <div class="">
+                                <i class="fa-solid fa-chart-pie"></i>
+                            </div>
+                            <div class="fw-bold d-flex">
+                                Order
+                            </div>
+                        </a>
+                        <a href="/caterer/myCaterer/dishes"
+                           th:class="'item-nav ' + ${selectedPage == 'catererdishes' ? 'item-nav-selected' : '' }">
+                            <div class="">
+                                <i class="fa-solid fa-shop"></i>
+                            </div>
+                            <div class="fw-bold d-flex">
+                                Dish
+                            </div>
+                        </a>
+                        <a href="/caterer/myCaterer/banners"
+                           th:class="'item-nav ' + ${selectedPage == 'catererbanner' ? 'item-nav-selected' : '' }">
+                            <div class="">
+                                <i class="fa-solid fa-ad"></i>
+                            </div>
+                            <div class="fw-bold d-flex">
+                                Banner Advertise
+                            </div>
+                        </a>
+                        <a href="/caterer/myCaterer/viewRatings"
+                           th:class="'item-nav ' + ${selectedPage == 'viewratings' ? 'item-nav-selected' : '' }">
+                            <div class="">
+                                <i class="fa-solid fa-star"></i>
+                            </div>
+                            <div class="fw-bold d-flex">
+                                View My Rating
+                            </div>
+                        </a>
+                    </div>
+                </nav>
+
+                <div class="vh-100 bg-light col-10">
+                    <div layout:fragment="contentCatererPage">
+
+                    </div>
                 </div>
-            </nav>
 
-            <div class="vh-100 bg-light col-10">
-                <div layout:fragment="contentCatererPage">
 
-                </div>
             </div>
-
-
         </div>
-    </div>
-</body>
+    </body>
 
 </html>
