@@ -43,6 +43,8 @@ public interface RankManageRepository extends JpaRepository<CatererRank, Integer
 
     @Query("SELECT SUM(c.rankCPO) FROM CatererRank c")
     Double getTotalRankCPO();
-    
+
+    @Query("SELECT COUNT(c) FROM CatererRank c")
+    int countAllRanks();
 
 }

@@ -250,8 +250,7 @@ public class AdminController {
                 result.put("status", "Invalid");
                 return result;
             }
-        } 
-        else {
+        } else {
             parsedBirthday = null;
         }
         if (point < 0) {
@@ -821,7 +820,7 @@ public class AdminController {
     public String showAddCatererRankForm(ModelMap model) {
         model.addAttribute("catererRank", new CatererRank());
         setTabAdminPage(model, "admincatererrank", "Manage Caterer Rank");
-        
+
         return "AdminPage/CatererRank/addCatererRank";
     }
 
@@ -856,11 +855,15 @@ public class AdminController {
         int averageRankMaxDish = rankManageService.averageRankMaxDish();
         int maxRankMaxDish = rankManageService.maxRankMaxDish();
         int minRankMaxDish = rankManageService.minRankMaxDish();
-        
+        int totalRank = rankManageService.getTotalRankCount();
 
-        
+        Map<Integer, Integer> rankCounts = catererService.getCountsForRanks();
+        int countRank1 = rankCounts.get(1);
+        int countRank2 = rankCounts.get(2);
+        int countRank3 = rankCounts.get(3);
+
         model.addAttribute("averageRankFee", averageRankFee);
-        model.addAttribute("maxRankFee", maxRankFee);   
+        model.addAttribute("maxRankFee", maxRankFee);
         model.addAttribute("minRankFee", minRankFee);
         model.addAttribute("averageRankCPO", averageRankCPO);
         model.addAttribute("maxRankCPO", maxRankCPO);
@@ -868,7 +871,11 @@ public class AdminController {
         model.addAttribute("averageRankMaxDish", averageRankMaxDish);
         model.addAttribute("maxRankMaxDish", maxRankMaxDish);
         model.addAttribute("minRankMaxDish", minRankMaxDish);
+        model.addAttribute("totalRank", totalRank);
 
+        model.addAttribute("countRank1", countRank1);
+        model.addAttribute("countRank2", countRank2);
+        model.addAttribute("countRank3", countRank3);
         return "AdminPage/CatererRank/rankStatisticalReport";
     }
 

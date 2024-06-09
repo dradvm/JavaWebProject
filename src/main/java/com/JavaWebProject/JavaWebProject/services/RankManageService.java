@@ -74,5 +74,8 @@ public class RankManageService {
     public int minRankMaxDish() {
         return rankManageRepository.minRankMaxDish();
     }
+    public int getTotalRankCount() {
+        return rankManageRepository.countAllRanks();
+    }
 
 }

@@ -113,7 +113,9 @@ function initPieChart(labels, data) {
                     display: true,
                     text: "Feedback Comparison"
                 }
-            }
+            },
+            aspectRatio: 0.35, // Set the aspect ratio to 1:1 (square)
+            maintainAspectRatio: false // Disable automatic aspect ratio calculation
         }
     });
 }

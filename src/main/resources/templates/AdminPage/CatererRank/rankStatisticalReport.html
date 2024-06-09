@@ -11,131 +11,122 @@
 
             function drawVisualization() {
                 var data = google.visualization.arrayToDataTable([
-                ['Rank Type', 'Average', { role: 'annotation' }, 'Min', { role: 'annotation' }, 'Max', { role: 'annotation' }],
-                ['Rank Fee', [[${averageRankFee}
-                ]], [[${averageRankFee}
-                ]], [[${minRankFee}
-                ]], [[${minRankFee}
-                ]], [[${maxRankFee}
-                ]], [[${maxRankFee}
-                ]]],
-                ['Rank CPO', [[${averageRankCPO}
-                ]], [[${averageRankCPO}
-                ]], [[${minRankCPO}
-                ]], [[${minRankCPO}
-                ]], [[${maxRankCPO}
-                ]], [[${maxRankCPO}
-                ]]],
-                ['Rank Max Dish', [[${averageRankMaxDish}
-                ]], [[${averageRankMaxDish}
-                ]], [[${minRankMaxDish}
-                ]], [[${minRankMaxDish}
-                ]], [[${maxRankMaxDish}
-                ]], [[${maxRankMaxDish}
+                ['Rank Type', 'Rank 1', 'Rank 2', 'Rank 3'],
+                ['Rank 1', [[${countRank1}
+                ]], null, null],
+                ['Rank 2', null, [[${countRank2}
+                ]], null],
+                ['Rank 3', null, null, [[${countRank3}
                 ]]]
                 ]);
 
                 var options = {
-                    title: 'Caterer Rank Statistics',
-                    seriesType: 'bars',
-                    series: {3: {type: 'line'}},
-                    width: '100%',
-                    height: 400
+                    title: 'Number of caterers using rank',
+                    width: '50%',
+                    height: 400,
+                    legend: {position: 'top', maxLines: 3},
+                    bars: 'vertical', // Hiển thị các cột theo chiều dọc
+                    bar: { groupWidth: '40%' },
+                    isStacked: true // Hiển thị các cột chồng lên nhau
                 };
 
-                var chart = new google.visualization.ComboChart(document.getElementById('catererRankChart'));
+                var chart = new google.visualization.ColumnChart(document.getElementById('catererRankChart'));
                 chart.draw(data, options);
             }
         </script>
-    </head>
-    <body>
-        <div layout:fragment="contentAdminPage">
-            <div class="m-3">
-                <div class="vstack gap-3">
-                    <div class="d-flex justify-content-between">
-                        <div class="bg-white rounded px-3 py-2" style="width: 65%;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="vstack">
-                                    <div class="fw-bold">Total Caterer Rank</div>
-                                    <div class="fs-7"></div>
-                                </div>
-                                <div>Export</div>
+
+
+
+    </script>
+</head>
+<body>
+    <div layout:fragment="contentAdminPage">
+        <div class="m-3">
+            <div class="vstack gap-3">
+                <div class="d-flex justify-content-between">
+                    <div class="bg-white rounded px-3 py-2" style="width: 65%;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="vstack">
+                                <div class="fw-bold">Total Caterer Rank</div>
+                                <div class="fs-7"></div>
                             </div>
-                            <div class="d-flex justify-content-between mt-3">
-                                <div class="rounded p-3" style="width: 23%; background-color: #FFE2E6;">
-                                    <div class="vstack">
-                                        <div class="d-flex align-items-center justify-content-around rounded-circle"
-                                             style="width: 34px; height: 34px; background-color: #FA5A7E;">
-                                            <i class="fs-7 fa-solid fa-hand-holding-dollar text-white"></i>
-                                        </div>
-                                        <div class="fs-5 fw-bold"></div>
-                                        <div>Total Number of Rank</div>
-                                        <div th:class="'fs-7 ' + ${totalRank >= 0 ? 'text-primary' : 'text-danger'}" th:text="${totalRank}"></div>
-                                    </div>
-                                </div>
-                                <div class="rounded p-3" style="width: 23%; background-color: #FFF4DE;">
-                                    <div class="vstack">
-                                        <div class="d-flex align-items-center justify-content-around rounded-circle"
-                                             style="width: 34px; height: 34px; background-color: #FF947A;">
-                                            <i class="fs-7 fa-solid fa-file-contract text-white"></i>
-                                        </div>
-                                        <div class="fs-5 fw-bold"></div>
-                                        <div>Average RankFee</div>
-                                        <div th:class="'fs-7 ' + ${averageRankFee >= 0 ? 'text-primary' : 'text-danger'}"
-                                             th:text="${#numbers.formatDecimal(averageRankFee, 1, 'COMMA', 2, 'POINT')}"></div>
-                                    </div>
-                                </div>
-                                <div class="rounded p-3" style="width: 23%; background-color: #DCFCE7;">
-                                    <div class="vstack">
-                                        <div class="d-flex align-items-center justify-content-around rounded-circle"
-                                             style="width: 34px; height: 34px; background-color: #3CD755;">
-                                            <i class="fs-7 fa-regular fa-bell text-white"></i>
-                                        </div>
-                                        <div class="fs-5 fw-bold" th:text="${numAciveBanner}"></div>
-                                        <div>Average RankCPO</div>
-                                        <div th:class="'fs-7 ' + ${averageRankCPO >= 0 ? 'text-primary' : 'text-danger'}"
-                                             th:text="${averageRankCPO}"></div>
-                                    </div>
-                                </div>
-                                <div class="rounded p-3" style="width: 23%; background-color: #F4E8FF;">
-                                    <div class="vstack">
-                                        <div class="d-flex align-items-center justify-content-around rounded-circle"
-                                             style="width: 34px; height: 34px; background-color: #BF83FF;">
-                                            <i class="fs-7 fa-solid fa-user-plus text-white"></i>
-                                        </div>
-                                        <div class="fs-5 fw-bold" th:text="${numActiveVoucher}"></div>
-                                        <div>Average RankMaxDish</div>
-                                        <div th:class="'fs-7 ' + ${averageRankMaxDish >= 0 ? 'text-primary' : 'text-danger'}"
-                                             th:text="${averageRankMaxDish}"></div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div>Export</div>
                         </div>
-                        <div class="bg-white rounded px-3 py-2" style="width: 33%;">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="fw-bold">New Caterer Rank</div>
-                                <select id="lineChartAdmin" class="form-select fs-7" style="width: 40%;">
-                                    <option class="fs-7" value="Day">By Day</option>
-                                    <option class="fs-7" value="Month">By Month</option>
-                                    <option class="fs-7" value="Year">By Year</option>
-                                </select>
+                        <div class="d-flex justify-content-between mt-3">
+                            <div class="rounded p-3" style="width: 23%; background-color: #FFE2E6;">
+                                <div class="vstack">
+                                    <div class="d-flex align-items-center justify-content-around rounded-circle"
+                                         style="width: 34px; height: 34px; background-color: #FA5A7E;">
+                                        <i class="fs-7 fa-solid fa-hand-holding-dollar text-white"></i>
+                                    </div>
+                                    <div class="fs-5 fw-bold"></div>
+                                    <div>Total Number of Rank</div>
+                                    <div th:class="'fs-7 ' + ${totalRank >= 0 ? 'text-primary' : 'text-danger'}" th:text="${totalRank}"></div>
+                                </div>
                             </div>
-                            <div class="pt-3">
-                                <canvas id="myChart"></canvas>
+                            <div class="rounded p-3" style="width: 23%; background-color: #FFF4DE;">
+                                <div class="vstack">
+                                    <div class="d-flex align-items-center justify-content-around rounded-circle"
+                                         style="width: 34px; height: 34px; background-color: #FF947A;">
+                                        <i class="fs-7 fa-solid fa-file-contract text-white"></i>
+                                    </div>
+                                    <div class="fs-5 fw-bold"></div>
+                                    <div>Average RankFee</div>
+                                    <div th:class="'fs-7 ' + ${averageRankFee >= 0 ? 'text-primary' : 'text-danger'}"
+                                         th:text="${#numbers.formatDecimal(averageRankFee, 1, 'COMMA', 2, 'POINT')}"></div>
+                                </div>
+                            </div>
+                            <div class="rounded p-3" style="width: 23%; background-color: #DCFCE7;">
+                                <div class="vstack">
+                                    <div class="d-flex align-items-center justify-content-around rounded-circle"
+                                         style="width: 34px; height: 34px; background-color: #3CD755;">
+                                        <i class="fs-7 fa-regular fa-bell text-white"></i>
+                                    </div>
+                                    <div class="fs-5 fw-bold" th:text="${numAciveBanner}"></div>
+                                    <div>Average RankCPO</div>
+                                    <div th:class="'fs-7 ' + ${averageRankCPO >= 0 ? 'text-primary' : 'text-danger'}"
+                                         th:text="${averageRankCPO}"></div>
+                                </div>
+                            </div>
+                            <div class="rounded p-3" style="width: 23%; background-color: #F4E8FF;">
+                                <div class="vstack">
+                                    <div class="d-flex align-items-center justify-content-around rounded-circle"
+                                         style="width: 34px; height: 34px; background-color: #BF83FF;">
+                                        <i class="fs-7 fa-solid fa-user-plus text-white"></i>
+                                    </div>
+                                    <div class="fs-5 fw-bold" th:text="${numActiveVoucher}"></div>
+                                    <div>Average RankMaxDish</div>
+                                    <div th:class="'fs-7 ' + ${averageRankMaxDish >= 0 ? 'text-primary' : 'text-danger'}"
+                                         th:text="${averageRankMaxDish}"></div>
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    <div class="d-flex justify-content-between">
-                        <div class="bg-white rounded px-3 py-2" style="width: 100%;">
-                            <div id="catererRankChart" style="width: 100%; height: 400px;"></div>
+                    <div class="bg-white rounded px-3 py-2" style="width: 33%;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="fw-bold">New Caterer Rank</div>
+                            <select id="lineChartAdmin" class="form-select fs-7" style="width: 40%;">
+                                <option class="fs-7" value="Day">By Day</option>
+                                <option class="fs-7" value="Month">By Month</option>
+                                <option class="fs-7" value="Year">By Year</option>
+                            </select>
+                        </div>
+                        <div class="pt-3">
+                            <canvas id="myChart"></canvas>
                         </div>
                     </div>
                 </div>
+
+                <div class="d-flex justify-content-between">
+                    <div class="bg-white rounded px-3 py-2" style="width: 100%;">
+                        <div id="catererRankChart" style="width: 100%; height: 400px;"></div>
+                    </div>
+                </div>
             </div>
-            <script th:src="@{/js/chart.js}"></script>
-            <script th:src="@{/js/statisticalreportrank.js}"></script>
         </div>
-    </body>
+        <script th:src="@{/js/chart.js}"></script>
+        <script th:src="@{/js/statisticalreportrank.js}"></script>
+    </div>
+</body>
 
 </html>

@@ -12,7 +12,9 @@ import java.time.Month;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,5 +108,17 @@ public class CatererService {
 
     public boolean existsByCatererEmail (String catererEmail) {
         return catererRepository.existsByCatererEmail (catererEmail);
+    }
+    public Map<Integer, Integer> getCountsForRanks() {
+        int countRank1 = catererRepository.countByRankID_RankID(1);
+        int countRank2 = catererRepository.countByRankID_RankID(2);
+        int countRank3 = catererRepository.countByRankID_RankID(3);
+
+        Map<Integer, Integer> rankCounts = new HashMap<>();
+        rankCounts.put(1, countRank1);
+        rankCounts.put(2, countRank2);
+        rankCounts.put(3, countRank3);
+
+        return rankCounts;
     }
     }
