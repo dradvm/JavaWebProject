@@ -20,32 +20,25 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="enddate">End Date</label>
-                        <input th:value="${banner.bannerEndDate}" readonly type="text" class="form-control" id="bannerEndDate"
-                               name="bannerEndDate" >
-                        <select required="true" class="form-control" id="enddate" name="enddate">
-                            <option value="15" th:selected="${banner.bannerEndDate == 15}">15 days</option>
-                            <option value="30" th:selected="${banner.bannerEndDate == 30}">1 month</option>
-                            <option value="90" th:selected="${banner.bannerEndDate == 90}">3 months</option>
-                            <option value="180" th:selected="${banner.bannerEndDate == 180}">6 months</option>
-                            <option value="270" th:selected="${banner.bannerEndDate == 270}">9 months</option>
-                            <option value="365" th:selected="${banner.bannerEndDate == 365}">1 year</option>
-                        </select>
+                        <label for="bannerStartDate">Start Date</label>
+                        <input th:value="${#dates.format(banner.bannerStartDate, 'yyyy-MM-dd')}" readonly type="text" class="form-control" id="bannerStartDate" name="bannerStartDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bannerEndDate">End Date</label>
+                        <input th:value="${#dates.format(banner.bannerEndDate, 'yyyy-MM-dd')}" readonly type="text" class="form-control" id="bannerEndDate" name="bannerEndDate">
                     </div>
 
                     <div class="form-group">
                         <label for="typeID">Banner Position</label>
-                        <select required="true" class="form-control" id="typeID" name="typeID">
-                            <option value="1" th:selected="${banner.typeID == 1}">On top</option>
-                            <option value="2" th:selected="${banner.typeID == 2}">On left</option>
-                            <option value="3" th:selected="${banner.typeID == 3}">On right</option>
-                            <option value="4" th:selected="${banner.typeID == 4}">At Bottom</option>
-                        </select>
+                        <input th:value="${banner.typeID.typeDescription}" readonly type="text" class="form-control" id="typeName" name="typeName">
                     </div>
+
                     <button type="submit" class="btn btn-primary">Save</button>
                     <a th:href="@{/caterer/myCaterer/banners}" class="btn btn-secondary">Cancel</a>
                 </form>
             </div>
         </div>
     </body>
+
 </html>

@@ -51,6 +51,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping(value = "/caterer")
 public class CatererController {
+
     @Autowired
     private AuthController user;
     @Autowired
@@ -80,6 +81,7 @@ public class CatererController {
     private ArrayList<String> labelsMonth;
     private ArrayList<String> labelsYear;
     private LocalDate today;
+
     @ModelAttribute
     public void addAttributes(Model model) {
         if (user != null && user.getRole() != null) {
@@ -89,6 +91,7 @@ public class CatererController {
             }
         }
     }
+
     @GetMapping(value = "/myCaterer/orders")
     public String orderPage(ModelMap model) {
         model.addAttribute("selectedNav", "myCaterer");
@@ -119,10 +122,10 @@ public class CatererController {
         model.addAttribute("listOrder", cateringOrderService.findAllByCaterer(catererService.findById(user.getUsername())));
         return "CatererPage/OrderPage/catererorders";
     }
-    
-    @GetMapping(value="/myCaterer/orders/getDataLineChart")
+
+    @GetMapping(value = "/myCaterer/orders/getDataLineChart")
     @ResponseBody
-    public Map<String,Object> getDataLineChart(@RequestParam("selectedValue") String selectedValue) {
+    public Map<String, Object> getDataLineChart(@RequestParam("selectedValue") String selectedValue) {
         Map<String, Object> data = new HashMap<>();
         Map<String, Object> dataChart = new HashMap<>();
         ArrayList<BigDecimal> dataRevenue = new ArrayList<BigDecimal>();
@@ -161,13 +164,13 @@ public class CatererController {
         data.put("data", dataChart);
         return data;
     }
-    
+
     @GetMapping(value = "/myCaterer/dishes")
     public String dishPage(ModelMap model) {
-        
+
         ArrayList data = new ArrayList<>();
         Map<String, Object> temp;
-        if (user != null ) {
+        if (user != null) {
             for (Dish d : dishService.findAllDishOfCaterer(catererService.findById(user.getUsername()), 1)) {
                 temp = new HashMap();
                 temp.put("dish", d);
@@ -186,24 +189,24 @@ public class CatererController {
         model.addAttribute("selectedPage", "catererdishes");
         return "CatererPage/DishesPage/catererdishes";
     }
+
     @GetMapping("/editDish")
-    public String editDishPage(@RequestParam("ID") int dishID,ModelMap model) {
+    public String editDishPage(@RequestParam("ID") int dishID, ModelMap model) {
         Dish dish = dishService.findByDishID(dishID);
         dish.setDishImage(cloudStorageService.getDishImg(dish.getDishImage()));
         model.addAttribute("dish", dish);
-        
+
         return addAndUpdateDishPage(model);
     }
-    
+
     @GetMapping("/myCaterer/dishes/addAndUpdateDishPage")
     public String addAndUpdateDishPage(ModelMap model) {
         model.addAttribute("selectedNav", "myCaterer");
         model.addAttribute("selectedPage", "catererdishes");
         return "CatererPage/DishesPage/catererdishesaddupdate";
     }
-        
-    
-    public void addAndUpdateDish(Dish dish, String dishName, MultipartFile dishImage, String dishDescription, double dishPrice ) {
+
+    public void addAndUpdateDish(Dish dish, String dishName, MultipartFile dishImage, String dishDescription, double dishPrice) {
         dish.setCatererEmail(catererService.findById(user.getUsername()));
         dish.setDishDescription(dishDescription);
         dish.setDishName(dishName);
@@ -213,10 +216,10 @@ public class CatererController {
             String fileName = cloudStorageService.generateFileName(dishImage, user.getUsername());
             dish.setDishImage(fileName);
             cloudStorageService.uploadFile("dish/" + fileName, dishImage);
-        } 
+        }
         dishService.save(dish);
     }
-    
+
     @PostMapping("/addDish")
     public String addDish(
             @RequestParam("dishName") String dishName,
@@ -227,17 +230,16 @@ public class CatererController {
             RedirectAttributes redirectAttributes
     ) {
         Dish dish = new Dish();
-        
+
         if (dishService.isReachMaxDish(catererService.findById(user.getUsername()))) {
             redirectAttributes.addFlashAttribute("message", "You have reached max dish!!");
-        }
-        else {
+        } else {
             addAndUpdateDish(dish, dishName, dishImage, dishDescription, dishPrice);
         }
-        
-        
+
         return "redirect:/caterer/myCaterer/dishes";
     }
+
     @PostMapping("/updateDish")
     public String updateDish(
             @RequestParam("dishID") int dishID,
@@ -249,25 +251,23 @@ public class CatererController {
     ) {
         Dish dish = dishService.findByDishID(dishID);
         addAndUpdateDish(dish, dishName, dishImage, dishDescription, dishPrice);
-        
+
         return "redirect:/caterer/myCaterer/dishes";
     }
-    
-    
+
     @GetMapping(value = "/deleteDish")
     public String deleteDish(@RequestParam int ID) {
         Dish dish = dishService.findByDishID(ID);
-        if (orderDetailsService.isExistDishInOrderDetails(ID)) { 
+        if (orderDetailsService.isExistDishInOrderDetails(ID)) {
             dish.setDishStatus(0);
             dishService.save(dish);
-        }
-        else {
+        } else {
             cloudStorageService.deleteFile("dish/" + dish.getDishImage());
             dishService.delete(dish);
         }
         return "redirect:/caterer/myCaterer/dishes";
     }
-    
+
     @GetMapping(value = "/myCaterer/dishes/barChartDish")
     @ResponseBody
     public ArrayList getDataLineChartDish() {
@@ -278,20 +278,20 @@ public class CatererController {
             temp.put("name", d.getDishName());
             temp.put("quantity", orderDetailsService.countQuanitySuccessWithDish(d.getDishID()));
             temp.put("order", orderDetailsService.countOrderSuccessWithDish(d.getDishID()));
-            
+
             data.add(temp);
         }
         return data;
     }
-    
+
     @GetMapping(value = "/myCaterer/dishes/report")
     public String reportPage(ModelMap model) {
-        
+
         model.addAttribute("selectedNav", "myCaterer");
         model.addAttribute("selectedPage", "catererdishes");
         return "/CatererPage/DishesPage/catererdishesreport";
     }
-    
+
     @PostMapping(value = "/editProfile")
     @ResponseBody
     public Map<String, Object> editProfile(
@@ -361,8 +361,7 @@ public class CatererController {
                 result.put("status", "Invalid");
                 return result;
             }
-        } 
-        else {
+        } else {
             parsedBirthday = null;
         }
         if (!profileImg.isEmpty()) {
@@ -375,8 +374,7 @@ public class CatererController {
             String fileName = cloudStorageService.generateFileName(profileImg);
             if (cloudStorageService.uploadFile("caterer/" + fileName, profileImg)) {
                 caterer.setProfileImage(fileName);
-            } 
-            else {
+            } else {
                 result.put("status", "Fail");
                 return result;
             }
@@ -396,6 +394,7 @@ public class CatererController {
         result.put("target", "/auth/toProfile");
         return result;
     }
+
     @GetMapping("/myCaterer/banners")
     public String bannerPage(ModelMap model, HttpSession session) {
 
@@ -458,8 +457,9 @@ public class CatererController {
         banner.setCatererEmail(catererService.findById(user.getUsername()));
         if (bannerImage != null && !bannerImage.isEmpty()) {
             String fileName = cloudStorageService.generateFileName(bannerImage, user.getUsername());
-            cloudStorageService.uploadFile("banner/" + fileName, bannerImage);
             banner.setBannerImage(fileName);
+            cloudStorageService.uploadFile("banner/" + fileName, bannerImage);
+
         }
 
         bannerManageService.save(banner);
@@ -471,23 +471,22 @@ public class CatererController {
         Banner banner = bannerManageService.findById(bannerID);
         if (banner == null) {
             // Xử lý khi không tìm thấy banner
-        } else {
-            // Truyền thông tin banner vào model để hiển thị trên form chỉnh sửa
-            model.addAttribute("banner", banner);
+            model.addAttribute("message", "Banner not found!");
+            return "redirect:/myCaterer/banners";
         }
+
+        // Truyền thông tin banner vào model để hiển thị trên form chỉnh sửa
+        model.addAttribute("banner", banner);
         model.addAttribute("bannerImageUrl", cloudStorageService.getBannerImg(banner.getBannerImage()));
         model.addAttribute("selectedNav", "myCaterer");
         model.addAttribute("selectedPage", "catererbanners");
         return "CatererPage/Banners/editbanner";
-
     }
 
     @PostMapping("/updateBanner")
     public String updateBanner(
             @RequestParam("bannerID") int bannerID,
             @RequestParam("bannerImage") MultipartFile bannerImage,
-            @RequestParam("enddate") int endDays,
-            @RequestParam("typeID") Integer typeID,
             HttpSession session,
             RedirectAttributes redirectAttributes
     ) {
@@ -496,26 +495,17 @@ public class CatererController {
             redirectAttributes.addFlashAttribute("message", "Banner not found!");
             return "redirect:/caterer/myCaterer/banners";
         }
-        // Thực hiện việc cập nhật thông tin của banner từ các tham số
-        Date currentDate = new Date();
-        banner.setBannerStartDate(currentDate);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(currentDate);
-        calendar.add(Calendar.DAY_OF_YEAR, endDays);
-        Date bannerEndDate = calendar.getTime();
-        banner.setBannerEndDate(bannerEndDate);
-        BannerType bannerType = bannerTypeService.findById(typeID);
-        if (bannerType != null) {
-            banner.setTypeID(bannerType);
-        } else {
-            throw new IllegalArgumentException("Invalid Banner Type ID");
-        }
+
+        // Chỉ cập nhật hình ảnh của banner nếu người dùng tải lên một hình ảnh mới
         if (bannerImage != null && !bannerImage.isEmpty()) {
             String fileName = cloudStorageService.generateFileName(bannerImage, user.getUsername());
-            cloudStorageService.uploadFile("banner/" + fileName, bannerImage);
             banner.setBannerImage(fileName);
+            cloudStorageService.uploadFile("banner/" + fileName, bannerImage);
+            redirectAttributes.addFlashAttribute("message", "Edit banner success!");
+            bannerManageService.save(banner);
         }
-        bannerManageService.save(banner);
+
+        
         return "redirect:/caterer/myCaterer/banners";
     }
 
