@@ -16,13 +16,29 @@ public class CatererRatingService {
     public void save(CatererRating catererRating) {
         catererRatingRepository.save(catererRating);
     }
-     public CatererRating findByOrderId(int orderID) {
+
+    public CatererRating findByOrderId(int orderID) {
         return catererRatingRepository.findByOrderID(orderID);
     }
 
-     public List<CatererRating> findAllBannersByCaterer(Caterer catererEmail) {
+    public List<CatererRating> findAllBannersByCaterer(Caterer catererEmail) {
         return catererRatingRepository.findByCatererEmail(catererEmail);
-    
+
     }
 
+    public double calculateAverageRatingByCatererEmail(Caterer catererEmail) {
+        List<CatererRating> catererRatings = catererRatingRepository.findByCatererEmail(catererEmail);
+        if (catererRatings.isEmpty()) {
+            return 0; // Trường hợp không có đánh giá nào
+        }
+
+        double totalRating = 0;
+        for (CatererRating rating : catererRatings) {
+            totalRating += rating.getRate();
+        }
+
+        double averageRating = totalRating / catererRatings.size();
+        return averageRating;
+
+    }
 }
